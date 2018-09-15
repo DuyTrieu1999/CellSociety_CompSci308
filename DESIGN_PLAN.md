@@ -1,7 +1,8 @@
 cell society
 ====
 
-###Introduction:
+##Introduction:
+
 * Problem: how to simulate these real world scenarios(the above chosen systems) 
 and observe how they interact with each other over a long period of time based 
 on the specific features that affect each entity. 
@@ -16,7 +17,8 @@ class that serves as a super class for different simulations of CAs we want to m
 The Grid.java class would be closed for internal modification and to update the Cells. 
  
  
-###Overview:
+##Overview:
+
 We plan to create two general classes, Cell and Grid, to represent a general CA simulation. 
 Cell represents a specific cell and the information tied to the cell. Grid represents the 
 overall grid of cells. There will also be two classes used to create the front-end interface, 
@@ -27,7 +29,7 @@ enforce its own set of rules on the simulation.
 
 
 
-###User Interface:
+##User Interface:
 
 For our Cell Society, the users would be able to determine the size (row & column) of 
 the grid. There will be a drop down that users can determine what simulation they want 
