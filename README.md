@@ -3,7 +3,7 @@ cell society
 
 This project implements a cellular automata simulator.
 
-Names:
+Names: Duy Trieu, Samuel Kubi, Austin Kao
 
 ### Timeline
 
