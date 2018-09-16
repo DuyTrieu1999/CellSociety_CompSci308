@@ -3,18 +3,14 @@ cell society
 
 ##Introduction:
 
-* Problem: how to simulate these real world scenarios(the above chosen systems) 
-and observe how they interact with each other over a long period of time based 
-on the specific features that affect each entity. 
+* Problem: Simulating real world scenarios and observing how cells interact with each other over a long period of time when given a certain set of features and parameters. 
 
-* Design goals: Model a general cell that any real world scenario can extend from. 
-This cell abstraction contains enough generic features(class fields) and cell 
-actions(class methods) possible. Model a generic grid that can create any number of 
-grids required for the specific real world scenario being modeled.
+* Design goals: Model a general cellular automata system that any real world scenario can extend from. 
+This cell abstraction will contain enough generic features(class fields) and cell actions(class methods) possible.
+Model a generic grid that can create any number of grids required for the specific real world scenario being modeled.
 
-* Primary architecture: The architecture of our project would consist of a Cell.java 
-class that serves as a super class for different simulations of CAs we want to make. 
-The Grid.java class would be closed for internal modification and to update the Cells. 
+* Primary architecture: The architecture of our project will consist of a Cell class that serves as a super class for the different CA simulations we want to make as well as a Grid class. 
+The Grid class would be closed for internal modification, since it simply holds cells that update each other. 
  
  
 ##Overview:
@@ -24,10 +20,10 @@ We plan to create two general classes, Cell and Grid, to represent a general CA 
 
 ##User Interface:
 
-For our Cell Society, the users would be able to determine the size (row & column) of 
-the grid. There will be a drop down that users can determine what simulation they want 
-to run, which will choose a class of simulation that will be run. We would have three 
-buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cell simulation. 
+For our Cell Society, users will be able to determine the size (row & column) of 
+the grid. There will be a drop down where users can determine what simulation they want 
+to run, which will initialize the CA simulation upon selection. We will also have three 
+buttons: PLAY, RESET, and PAUSE. These buttons will let the users control the current Cell simulation. 
 
 ![UI sketch design](UI_Design.png "An alternate design")
 
@@ -70,30 +66,28 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
     * Each simulation will override the update() method in Cell to fit the rules of the simulation
 
 ###Design Considerations:
-* Deliberation on where we want to create the grid for the cells. 
+* We are still deliberating exactly where we want to create the grid for the cells. 
 The Grid class, SimulationUI class and Main class are all possible options. 
-A possible way we could do is to call the Grid, and the SimulatioUI class inside the Main class.
+One possible way is to call both the Grid and the SimulationUI classes inside the Main class.
 
-* The storage of the previous cell states were ambiguous. The options were going for the instance 
+* The way we will store of the states of the cell previously is ambiguous. The options were going for the instance 
 where each cell stores its own previous and current state or have a new pointer point to the whole 
 previous generation 2D array. We settled for having former option since the latter seems more 
 complicated to implement. 
 
-* Another design consideration we made is to make a seperate class for each buttons in the UI interface. 
+* Another design consideration we made is to make a separate class for each buttons in the UI interface. 
 The pros this design brings is the ease in navigating around the buttons; the cons would be that since 
 each buttons only controls the flow of simulation, it would be better to put them in one class.
 
 ###Team Responsibilities:
-* All three members will work on the implementations of the Cell, and Grid class, 
-writing the methods, simulation flows according to the design above.
-* Each members in the team will take responsible for developing the specific extension
-classes from the Cell.java class to make the different simulation behaviors as 
-required. Each three member will take responsible for:
-  1. Samuel Appiah-Kubi:
-  2. Duy Trieu:
-  3. Austin Kao: 
-* Duy Trieu will be responsible for developing the UI buttons for simulation; he will
-layout the buttons and dropdown, then will add the functionalities of the buttons as 
-stated in the UI description above when the team has finished the Cell, and Grid
-implementation.
-   
+* All three members will work on the implementations of the Cell and Grid classes together according to the design above.
+* Each member of the team will take responsibility for developing the specific CA simulations extending from the Cell class.
+Each specific simulation should model the original CA model as closely as possible.
+*The simulation that each member is responsible for:
+  1. Samuel Appiah-Kubi: Wa-Tor World model of predator-prey relationships
+  2. Duy Trieu: Spreading of Fire
+  3. Austin Kao: Schelling's model of segregation
+* Duy Trieu will be responsible for developing the UI for the simulation, specifically
+the layout, the buttons, and the dropdown. The functionality for the buttons as 
+stated in the UI description above will be added when the team has finished implementing the Cell and Grid
+classes.
