@@ -34,19 +34,20 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
 ###Design Details:
 
 * **Cell**
-    * currState(field): Fields that define the current state of the cell
-    * prevState(field): Fields that define the previous state of the cell. When the cell updates, it will store the currState fields into the prevState fields and use the prevState fields to find the next currState fields.
+    * currState(field): Field that defines the current state of the cell
+    * prevState(field): Field that defines the previous state of the cell. When the cell updates, it will store the currState fields into the prevState fields and use the prevState fields to find the next currState fields.
     * image(field): Stores the name of the image file to display for the cell
     * update(method): Updates the prevState and currState fields in the cell. Will examine the currState of neighboring cells to determine how the cell will behave.
-    * getCurrState(method)
-    * getPrevState(method)
+    * getCurrState(method): Getter method for currState
+    * getPrevState(method): Getter method for prevState
+    * resources needed: image files for each of the different states of the cells
 * **Grid**
-    * myGrid(field)
-    * rows(field)
-    * columns(field)
-    * fillGrid(method)
-    * getRow(method)
-    * getColumn(method)
+    * myGrid(field): A two-dimensional Cell array where the simulation takes place
+    * rows(field): The total number of rows in the grid
+    * columns(field): The total number of columns in the grid
+    * fillGrid(method): A method that generates myGrid and the initial state of all cells
+    * getRow(method): Getter method that returns the total number of rows
+    * getColumn(method): Getter method that returns the total number of columns
 * **SimulationUI**
     * pauseButton, playButton, resetButton
     * dropDown
@@ -57,6 +58,12 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
     * playGame(method)
 * **Main**
     * createScene(method)
+* **Other simulation classes**
+    * Schelling's Model of Segregation
+    * Wa-Tor World Model of Predator-Prey Relationships
+    * Spread of Fire
+    * Each simulation will extend Cell
+    * Each simulation will override the update() method in Cell to fit the rules of the simulation
 
 ###Design Considerations:
 * Deliberation on where we want to create the grid for the cells. 
