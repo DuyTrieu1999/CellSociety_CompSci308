@@ -84,3 +84,16 @@ The pros this design brings is the ease in navigating around the buttons; the co
 each buttons only controls the flow of simulation, it would be better to put them in one class.
 
 ###Team Responsibilities:
+* All three members will work on the implementations of the Cell, and Grid class, 
+writing the methods, simulation flows according to the design above.
+* Each members in the team will take responsible for developing the specific extension
+classes from the Cell.java class to make the different simulation behaviors as 
+required. Each three member will take responsible for:
+  1. Samuel Appiah-Kubi:
+  2. Duy Trieu:
+  3. Austin Kao: 
+* Duy Trieu will be responsible for developing the UI buttons for simulation; he will
+layout the buttons and dropdown, then will add the functionalities of the buttons as 
+stated in the UI description above when the team has finished the Cell, and Grid
+implementation.
+   
