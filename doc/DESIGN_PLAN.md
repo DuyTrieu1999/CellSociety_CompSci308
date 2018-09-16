@@ -19,15 +19,8 @@ The Grid.java class would be closed for internal modification and to update the 
  
 ##Overview:
 
-We plan to create two general classes, Cell and Grid, to represent a general CA simulation. 
-Cell represents a specific cell and the information tied to the cell. Grid represents the 
-overall grid of cells. There will also be two classes used to create the front-end interface, 
-SimulationUI, which contains buttons, dropdowns, the user input fields, and the pane for cells, 
-and Main, which will create a stage, scene, grid, and launch the application. Any specific CA 
-simulation will extend the Cell class. Each simulation will override the update() method to 
-enforce its own set of rules on the simulation.
-
-
+We plan to create two general classes, Cell and Grid, to represent a general CA simulation. Cell represents a specific cell and the information tied to the cell. Grid represents the overall grid of cells, and will contain a two dimensional Cell array. There will also be two classes used for the front end: SimulationUI, which contains buttons, dropdowns, user input fields, and the pane for cells, and Main, which will create a stage, scene, grid, and launch the application. Any specific CA simulation will extend the Cell class. Each simulation will override the update() method to enforce its own set of rules on the simulation.
+![Overall Class Design](Overall_Design.JPG "Current Design")
 
 ##User Interface:
 
@@ -41,10 +34,10 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
 ###Design Details:
 
 * **Cell**
-    * currState(field)
-    * prevState(field)
-    * image(field)
-    * update(method)
+    * currState(field): Fields that define the current state of the cell
+    * prevState(field): Fields that define the previous state of the cell. When the cell updates, it will store the currState fields into the prevState fields and use the prevState fields to find the next currState fields.
+    * image(field): Stores the name of the image file to display for the cell
+    * update(method): Updates the prevState and currState fields in the cell. Will examine the currState of neighboring cells to determine how the cell will behave.
     * getCurrState(method)
     * getPrevState(method)
 * **Grid**
@@ -64,7 +57,6 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
     * playGame(method)
 * **Main**
     * createScene(method)
-    
 
 ###Design Considerations:
 * Deliberation on where we want to create the grid for the cells. 
