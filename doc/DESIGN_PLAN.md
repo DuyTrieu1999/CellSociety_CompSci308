@@ -41,6 +41,7 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
     * getCurrState(method): Getter method for currState
     * getPrevState(method): Getter method for prevState
     * resources needed: image files for each of the different states of the cells
+    * Can extend Cell to fit any number of simulations
 * **Grid**
     * myGrid(field): A two-dimensional Cell array where the simulation takes place
     * rows(field): The total number of rows in the grid
@@ -48,16 +49,19 @@ buttons: PLAY, RESET, and PAUSE, that will let the users control the current Cel
     * fillGrid(method): A method that generates myGrid and the initial state of all cells
     * getRow(method): Getter method that returns the total number of rows
     * getColumn(method): Getter method that returns the total number of columns
+    * The grid class contains the backend details and methods that organizes cells into a two-dimensional array, so making it a separate class helps organize the code
 * **SimulationUI**
-    * pauseButton, playButton, resetButton
-    * dropDown
-    * rowInputField, columnInputField
-    * paneForCells
-    * pauseGame(method)
-    * resetGame(method)
-    * playGame(method)
+    * createPauseButton, createPlayButton, createResetButton: creates the specified button. Clicking a button will call the appropriate method.
+    * createDropDown: creates a dropdown menu with the names of all available simulations to choose from. Selecting a simulation from the menu will automatically initialize the simulation.
+    * rowInputField, columnInputField: Fields where the user will enter a specified number of rows and columns.
+    * paneForCells: Creates a pane to display the two-dimensional grid. Will call on the Grid class to help determine how big the cells will be, and will call on the Cell class to determine which images to display.
+    * pauseSimulation(method): Method that will pause the simulation
+    * resetSimulation(method): Method that will revert the simulation back to its initial state
+    * playSimulation(method): Method that will start a simulation or continue a paused simulation
+    * This class creates the main front end components of the CA simulations, so keeping it separate from Main should help with organization
 * **Main**
-    * createScene(method)
+    * createScene(method): Sets a stage and scene according to the UI design.
+    * start(): Specifies what the application should do when it launches. Will set up a start screen that welcomes the user and have a "Start" button to bring the user to the main UI screen.
 * **Other simulation classes**
     * Schelling's Model of Segregation
     * Wa-Tor World Model of Predator-Prey Relationships
