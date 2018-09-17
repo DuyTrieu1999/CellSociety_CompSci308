@@ -21,7 +21,7 @@ Hours Spent:
 
 ### Running the Program
 
-Main class:
+MainSimulation class:
 
 Data files needed: 
 

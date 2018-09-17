@@ -15,7 +15,7 @@ The Grid class will be closed for internal modification, since it simply holds c
 ##Overview:
 We plan to create two general classes, Cell and Grid, to represent a general CA simulation. Cell represents a specific cell and the information tied to the cell. 
 Grid represents the overall grid of cells, and will contain a two dimensional Cell array.
-There will also be two classes used for the front end: SimulationUI, which contains buttons, dropdowns, user input fields, and the pane for cells, and Main, which will create a stage, scene, grid, and launch the application.
+There will also be two classes used for the front end: SimulationUI, which contains buttons, dropdowns, user input fields, and the pane for cells, and MainSimulation, which will create a stage, scene, grid, and launch the application.
 Any specific CA simulation will extend the Cell class. Each simulation will override the update() method to enforce its own set of rules on the simulation.
 ![Overall Class Design](Overall_Design.JPG "Current Design")
 
@@ -55,8 +55,8 @@ buttons: PLAY, RESET, and PAUSE. These buttons will let the users control the cu
     * pauseSimulation(method): Method that will pause the simulation
     * resetSimulation(method): Method that will revert the simulation back to its initial state
     * playSimulation(method): Method that will start a simulation or continue a paused simulation
-    * This class creates the main front end components of the CA simulations, so keeping it separate from Main should help with organization
-* **Main**
+    * This class creates the main front end components of the CA simulations, so keeping it separate from MainSimulation should help with organization
+* **MainSimulation**
     * createScene(method): Sets a stage and scene according to the UI design.
     * start(): Specifies what the application should do when it launches. Will set up a start screen that welcomes the user and have a "Start" button to bring the user to the main UI screen.
 * **Other simulation classes**
@@ -70,8 +70,8 @@ buttons: PLAY, RESET, and PAUSE. These buttons will let the users control the cu
 * There are several options for how we should create the grid and run different simulations. 
 One option is to call and run the Cell simulations inside the Grid class. We would want to create the SimulationUI
 class to handle the simulations of the Cell on the Grid class onscreen in this case.
-Another option is to call both the Grid and the SimulationUI classes inside the Main class.
-For our implementation, we decide to call the Grid class and SimulationUI class inside a Main 
+Another option is to call both the Grid and the SimulationUI classes inside the MainSimulation class.
+For our implementation, we decide to call the Grid class and SimulationUI class inside a MainSimulation 
 class that runs the whole program.
 
 * The way we will store the previous states of the cell is ambiguous. One option we considered was to use the instance 
