@@ -9,13 +9,18 @@ cell society
 This cell abstraction will contain enough generic features(class fields) and cell actions(class methods) possible.
 Model a generic grid that can create any number of grids required for the specific real world scenario being modeled.
 
-* Primary architecture: The architecture of our project will consist of a Cell class that serves as a super class for the different CA simulations we want to make as well as a Grid class. 
-The Grid class would be closed for internal modification, since it simply holds cells that update each other. 
+* Primary architecture: The architecture of our project will consist of a Cell class that serves as a super class for the different CA simulations we want to make. 
+A Grid class is designed that would update the cells for each simulation. The Grid class would be closed for internal modification, since it simply holds cells that 
+update each other. The Cell class and its extension classes would be open for modification of more simulations.
  
  
 ##Overview:
 
-We plan to create two general classes, Cell and Grid, to represent a general CA simulation. Cell represents a specific cell and the information tied to the cell. Grid represents the overall grid of cells, and will contain a two dimensional Cell array. There will also be two classes used for the front end: SimulationUI, which contains buttons, dropdowns, user input fields, and the pane for cells, and Main, which will create a stage, scene, grid, and launch the application. Any specific CA simulation will extend the Cell class. Each simulation will override the update() method to enforce its own set of rules on the simulation.
+We plan to create two general classes, Cell and Grid, to represent a general CA simulation. Cell represents a specific cell and the information tied to the cell. 
+Grid represents the overall grid of cells, and will contain a two dimensional Cell array. There will also be two classes used for the front end: SimulationUI, 
+which contains buttons, dropdowns, user input fields, and the pane for cells, and Main, which will create a stage, scene, grid, and launch the application. 
+Any specific CA simulation will extend the Cell class. Each simulation will override the update() method to enforce its own set of rules on the simulation.
+
 ![Overall Class Design](Overall_Design.JPG "Current Design")
 
 ##User Interface:
@@ -66,9 +71,12 @@ buttons: PLAY, RESET, and PAUSE. These buttons will let the users control the cu
     * Each simulation will override the update() method in Cell to fit the rules of the simulation
 
 ###Design Considerations:
-* We are still deliberating exactly where we want to create the grid for the cells. 
-The Grid class, SimulationUI class and Main class are all possible options. 
+* Many options are made to decide where we should create the grid and run different simulations. 
+We could call and run the Cell simulations inside the Grid class. We also want to make a SimulationUI
+class that would update the simulations of the Cell on the Grid class.
 One possible way is to call both the Grid and the SimulationUI classes inside the Main class.
+For our implementation, we decide to call the Grid class and SimulationUI class inside a Main 
+class that serves to run the whole program.
 
 * The way we will store of the states of the cell previously is ambiguous. The options were going for the instance 
 where each cell stores its own previous and current state or have a new pointer point to the whole 
