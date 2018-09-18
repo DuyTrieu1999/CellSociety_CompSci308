@@ -7,6 +7,7 @@ public class SimuButton extends Button {
 
     public SimuButton (String buttonName) {
         this.buttonName = buttonName;
+        this.setText(buttonName);
     }
 
     public String getButtonName () {

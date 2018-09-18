@@ -19,5 +19,12 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Grid {
+    private Cell[][] grid;
+    private int row;
+    private int col;
+
+    public Grid () {
+
+    }
 
 }

@@ -99,9 +99,9 @@ public class SimulationUI {
     }
 
     private void setDimensions(SimuButton btn) {
-        // TODO: Set size for buttons. Set default to 250 / 2
-        btn.setMinWidth(250 / 2);
-        btn.setMaxWidth(250 / 2);
+        // TODO: Set size for buttons. Set default to 240
+        btn.setMinWidth(240);
+        btn.setMaxWidth(240);
     }
 
 }
