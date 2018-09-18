@@ -24,8 +24,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class SimulationUI {
-    public static final int SIZE_X = 800;
-    public static final int SIZE_Y = 700;
     public static final Paint BACKGROUND = Color.AZURE;
 
     private Scene myScene;
@@ -34,45 +32,35 @@ public class SimulationUI {
 
     public Scene sceneInit () {
         myRoot = new Group();
-        myScene = new Scene(myRoot, SIZE_X, SIZE_Y, BACKGROUND);
-        makeButton();
-        myScene.getStylesheets().add("view/SimulationUIStyle.css");
+        myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
+        makeAllButton();
+        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
 
-    private void makeButton () {
-        // TODO: add spacing for VBox and HBox, set default to be 10
-        VBox buttonContainer = new VBox(10);
-        HBox hbox1 = new HBox(10);
-        HBox hbox2 = new HBox(10);
-        HBox hbox3 = new HBox(10);
-        HBox hbox4 = new HBox(10);
+    private void makeAllButton () {
+        VBox buttonContainer = new VBox(SceneENUM.HBOX_GRID.getVal());
+        HBox hbox1 = new HBox(SceneENUM.HBOX_GRID.getVal());
+        HBox hbox2 = new HBox(SceneENUM.HBOX_GRID.getVal());
+        HBox hbox3 = new HBox(SceneENUM.HBOX_GRID.getVal());
+        HBox hbox4 = new HBox(SceneENUM.HBOX_GRID.getVal());
         ChoiceBox cb = makeChoiceBox();
-        SimuButton startButton = new SimuButton("Play");
-        setDimensions(startButton);
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
+        SimuButton startButton = makeButton("Play", new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: add Start function
-                System.out.println("start simulation");
+                startButtonHandler();
             }
         });
-        SimuButton stopButton = new SimuButton("Pause");
-        setDimensions(stopButton);
-        stopButton.setOnAction(new EventHandler<ActionEvent>() {
+        SimuButton stopButton = makeButton("Stop", new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: add Stop function
-                System.out.println("Stop simulation");
+                stopButtonHandler();
             }
         });
-        SimuButton resetButton = new SimuButton("Reset");
-        setDimensions(resetButton);
-        resetButton.setOnAction(new EventHandler<ActionEvent>() {
+        SimuButton resetButton = makeButton("Reset", new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //TODO: add Reset function
-                System.out.println("Reset current simulation");
+                resetButtonHandler();
             }
         });
         hbox1.getChildren().add(cb);
@@ -81,6 +69,13 @@ public class SimulationUI {
         hbox4.getChildren().add(resetButton);
         buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4);
         myRoot.getChildren().add(buttonContainer);
+    }
+
+    public SimuButton makeButton (String buttonName, EventHandler<ActionEvent> event) {
+        SimuButton button = new SimuButton(buttonName);
+        setDimensions(button);
+        button.setOnAction(event);
+        return button;
     }
 
     private ChoiceBox makeChoiceBox () {
@@ -99,9 +94,17 @@ public class SimulationUI {
     }
 
     private void setDimensions(SimuButton btn) {
-        // TODO: Set size for buttons. Set default to 240
-        btn.setMinWidth(240);
-        btn.setMaxWidth(240);
+        btn.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
+        btn.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
     }
 
+    private void startButtonHandler () {
+        System.out.println("Start simulation");
+    }
+    private void stopButtonHandler () {
+        System.out.println("Stop simulation");
+    }
+    private void resetButtonHandler () {
+        System.out.println("Reset simulation");
+    }
 }
