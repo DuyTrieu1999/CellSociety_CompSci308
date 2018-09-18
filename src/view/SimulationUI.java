@@ -2,18 +2,18 @@ package view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.control.Button;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import javafx.scene.text.Text;
@@ -41,8 +41,13 @@ public class SimulationUI {
     }
 
     private void makeButton () {
+        // TODO: add spacing for VBox and HBox, set default to be 10
         VBox buttonContainer = new VBox(10);
-        HBox hbox = new HBox(10);
+        HBox hbox1 = new HBox(10);
+        HBox hbox2 = new HBox(10);
+        HBox hbox3 = new HBox(10);
+        HBox hbox4 = new HBox(10);
+        ChoiceBox cb = makeChoiceBox();
         SimuButton startButton = new SimuButton("Play");
         setDimensions(startButton);
         startButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -52,12 +57,49 @@ public class SimulationUI {
                 System.out.println("start simulation");
             }
         });
-        hbox.getChildren().add(startButton);
-        buttonContainer.getChildren().add(hbox);
+        SimuButton stopButton = new SimuButton("Pause");
+        setDimensions(stopButton);
+        stopButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: add Stop function
+                System.out.println("Stop simulation");
+            }
+        });
+        SimuButton resetButton = new SimuButton("Reset");
+        setDimensions(resetButton);
+        resetButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: add Reset function
+                System.out.println("Reset current simulation");
+            }
+        });
+        hbox1.getChildren().add(cb);
+        hbox2.getChildren().add(startButton);
+        hbox3.getChildren().add(stopButton);
+        hbox4.getChildren().add(resetButton);
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4);
         myRoot.getChildren().add(buttonContainer);
     }
 
+    private ChoiceBox makeChoiceBox () {
+        ChoiceBox<String> cb = new ChoiceBox<String>();
+        cb.getItems().add("Wa-Tor World model");
+        cb.getItems().add("Spreading of Fire");
+        cb.getItems().add("Schelling's model of segregation");
+        cb.setValue("Wa-Tor World model");
+        cb.setOnAction(e -> getChoice(cb));
+        return cb;
+    }
+
+    private void getChoice(ChoiceBox<String> cb) {
+        String name = cb.getValue();
+        System.out.println(name);
+    }
+
     private void setDimensions(SimuButton btn) {
+        // TODO: Set size for buttons. Set default to 250 / 2
         btn.setMinWidth(250 / 2);
         btn.setMaxWidth(250 / 2);
     }
