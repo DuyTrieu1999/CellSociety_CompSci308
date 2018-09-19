@@ -20,11 +20,31 @@ import java.util.*;
 
 public class Grid {
     private Cell[][] grid;
+    private Cell cellType;
     private int row;
     private int col;
 
-    public Grid () {
-
+    public Grid (int r, int c, Cell subCell) {
+        row = r;
+        col = c;
+        cellType = subCell;
+        fillGrid();
     }
 
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    private void fillGrid() {
+        grid = new Cell[row][col];
+        for(int i = 0; i < col; i++) {
+            for(int j = 0; j < row; j++) {
+                grid[i][j] = cellType;
+            }
+        }
+    }
 }
