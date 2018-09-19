@@ -1,39 +1,40 @@
 package view;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Line;
-import javafx.util.Duration;
-import javafx.scene.text.Text;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
 
 public class SimulationUI {
     public static final Paint BACKGROUND = Color.AZURE;
 
     private Scene myScene;
     private Group myRoot;
+    private Pane myCellPane;
 
+    private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
+            SceneENUM.PADDING.getVal(),
+            (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
+            -SceneENUM.PADDING.getVal());
+
+    private Insets cellPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
+            0,
+            (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
+            SceneENUM.PADDING.getVal());
 
     public Scene sceneInit () {
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
+        //createCellPane();
         myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
@@ -44,6 +45,7 @@ public class SimulationUI {
         HBox hbox2 = new HBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox3 = new HBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox4 = new HBox(SceneENUM.HBOX_GRID.getVal());
+        HBox hbox5 = new HBox(SceneENUM.HBOX_GRID.getVal());
         ChoiceBox cb = makeChoiceBox();
         SimuButton startButton = makeButton("Play", new EventHandler<ActionEvent>() {
             @Override
@@ -57,6 +59,12 @@ public class SimulationUI {
                 stopButtonHandler();
             }
         });
+        SimuButton resumeButton = makeButton("Resume", new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                resumeButtonHandler();
+            }
+        });
         SimuButton resetButton = makeButton("Reset", new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -66,9 +74,10 @@ public class SimulationUI {
         hbox1.getChildren().add(cb);
         hbox2.getChildren().add(startButton);
         hbox3.getChildren().add(stopButton);
-        hbox4.getChildren().add(resetButton);
-        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4);
-        myRoot.getChildren().add(buttonContainer);
+        hbox4.getChildren().add(resumeButton);
+        hbox5.getChildren().addAll(resetButton);
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5);
+        createButtonPane(buttonContainer);
     }
 
     public SimuButton makeButton (String buttonName, EventHandler<ActionEvent> event) {
@@ -87,7 +96,7 @@ public class SimulationUI {
         cb.setOnAction(e -> getChoice(cb));
         return cb;
     }
-
+    //TODO: Implement a better choice box since this is shitty af
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
         System.out.println(name);
@@ -106,5 +115,25 @@ public class SimulationUI {
     }
     private void resetButtonHandler () {
         System.out.println("Reset simulation");
+    }
+    private void resumeButtonHandler () {
+        System.out.println("Resume simulation");
+    }
+
+    private void createCellPane () {
+        myCellPane = new Pane();
+        myCellPane.setPadding(cellPane);
+        myCellPane.setMaxWidth(SceneENUM.GRID_WIDTH.getVal() + SceneENUM.PADDING.getVal());
+        myCellPane.setMinWidth(SceneENUM.GRID_WIDTH.getVal() + SceneENUM.PADDING.getVal());
+        myCellPane.setMaxHeight(SceneENUM.GRID_HEIGHT.getVal() + SceneENUM.PADDING.getVal());
+        myCellPane.setMinHeight(SceneENUM.GRID_HEIGHT.getVal() + SceneENUM.PADDING.getVal());
+        myRoot.getChildren().add(myCellPane);
+    }
+    private void createButtonPane (VBox buttonContainer) {
+        buttonContainer.setPadding(buttonPane);
+        buttonContainer.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
+        buttonContainer.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
+        buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - SceneENUM.BUTTON_GRID.getVal());
+        myRoot.getChildren().add(buttonContainer);
     }
 }

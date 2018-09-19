@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Cell {
+public abstract class Cell {
     private int rowPos;
     private int colPos;
     private String currState;
@@ -18,6 +18,12 @@ public class Cell {
     }
     public int getColPos() {
         return colPos;
+    }
+    public ArrayList<Cell> getNeighbors () {
+        return neighbors;
+    }
+    public void setNeighbors (ArrayList<Cell> neighbors) {
+        this.neighbors = neighbors;
     }
     public void setCurrState(String currState) {
         this.currState = currState;
