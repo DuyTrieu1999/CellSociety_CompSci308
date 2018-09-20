@@ -9,8 +9,8 @@ import javafx.scene.layout.Pane;
 public abstract class Grid {
 
     private Cell[][] grid;
-    private int rowLength = 20;
-    private int colLength = 15;
+    private int rowLength = 20; //Shouldn't we make these variables part of the constructor?
+    private int colLength = 15; //Shouldn't we make these variables part of the constructor?
     private double xPos;
     private double yPos;
 

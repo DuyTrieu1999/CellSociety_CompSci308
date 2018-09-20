@@ -8,7 +8,7 @@ public class MainSimulation extends Application{
     @Override
     public void start (Stage stage) {
         SimulationUI ui = new SimulationUI();
-        stage.setTitle("Breakout Game");
+        stage.setTitle("Cellular Automata Simulation");
         stage.setScene(ui.sceneInit());
         stage.show();
     }
