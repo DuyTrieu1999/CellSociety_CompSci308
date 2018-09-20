@@ -25,12 +25,16 @@ public class Grid {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
                 int neighborSum = 0;
-                for(int x = -1; x < 1; x++) {
-                    for (int y = -1; y < 1; y++) {
-                        grid[i + x][j + y].setPrevState(grid[i + x][j + y].getCurrState());
-                        neighborSum += grid[i + x][j + y].getCurrState();
-                    }
+                List<Cell> mi = grid[i][j].getNeighbors();
+                for(Cell m: mi) {
+                    neighborSum += m.getPrevState();
                 }
+//                for(int x = -1; x < 1; x++) {
+//                    for (int y = -1; y < 1; y++) {
+//                        grid[i + x][j + y].setPrevState(grid[i + x][j + y].getCurrState());
+//                        neighborSum += grid[i + x][j + y].getCurrState();
+//                    }
+//                }
                 neighborSum -= grid[i][j].getCurrState();
                 if      ((grid[i][j].getCurrState() == 1) && (neighborSum <  2)) grid[i][j].setCurrState(0);
                 else if ((grid[i][j].getCurrState() == 1) && (neighborSum >  3)) grid[i][j].setCurrState(0);
