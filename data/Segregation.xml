@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
 <simulation name="Segregation" author="team8">
+    <Cell>
+        <Map></Map>
+    </Cell>
+    <Grid>
 
+    </Grid>
 </simulation>
