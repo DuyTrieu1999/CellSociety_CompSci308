@@ -20,7 +20,9 @@ public class Grid {
     public void fillGrid (String cellName) {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                grid[i][j] = returnCell(cellName, i, j);
+                Cell temp = returnCell(cellName, i, j);
+                grid[i][j] = temp;
+
                 //TODO: Add in rules and stuffs
             }
         }
