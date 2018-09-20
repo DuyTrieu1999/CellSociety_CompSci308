@@ -1,4 +1,8 @@
 package model;
 
-public class FireCell {
+public class FireCell extends Cell {
+
+    public FireCell(int row, int col) {
+        super(row, col);
+    }
 }
