@@ -1,50 +1,46 @@
 package model;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Line;
-import javafx.util.Duration;
-import javafx.scene.text.Text;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class Grid {
+import javafx.scene.layout.Pane;
+
+public abstract class Grid {
+
     private Cell[][] grid;
-    private Cell cellType;
-    private int row;
-    private int col;
+    private int rowLength = 20;
+    private int colLength = 15;
+    private double xPos;
+    private double yPos;
 
-    public Grid (int r, int c, Cell subCell) {
-        row = r;
-        col = c;
-        cellType = subCell;
-        fillGrid();
+    public Grid () {
+        grid = new Cell[rowLength][colLength];
     }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    private void fillGrid() {
-        grid = new Cell[row][col];
-        for(int i = 0; i < col; i++) {
-            for(int j = 0; j < row; j++) {
-                grid[i][j] = cellType;
+    public void fillGrid (Pane pane) {
+        for (int i = 0; i<this.getRowNum(); i++) {
+            for (int j = 0; j<this.getColNum(); j++) {
+                Cell cell = grid[i][j];
+                //TODO: Add in rules and stuffs
             }
         }
+    }
+    private boolean rowOutOfBound (int row) {
+        return row < 0 || row > getRowNum();
+    }
+    private boolean colOutOfBound (int col) {
+        return col < 0 || col > getColNum();
+    }
+    private int getRowNum () {
+        return grid.length;
+    }
+    private int getColNum () {
+        return grid[0].length;
+    }
+    private void setCell (int row, int col, Cell myCell) {
+        grid[row][col] = myCell;
+    }
+    private Cell getCell (int row, int col) {
+        return grid[row][col];
     }
 }
