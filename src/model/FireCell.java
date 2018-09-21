@@ -1,8 +1,11 @@
 package model;
 
-public class FireCell extends Cell {
+import javafx.scene.paint.Color;
 
-    public FireCell(int row, int col) {
-        super(row, col);
+import java.util.Map;
+
+public class FireCell extends Cell {
+    public FireCell (int row, int col, double width) {
+        super(row, col, width);
     }
 }
