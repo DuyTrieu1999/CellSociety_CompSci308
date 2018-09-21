@@ -2,7 +2,7 @@ package model;
 
 public class PredCell extends Cell{
 
-    public PredCell() {
-        super(2,3);
+    public PredCell(int row, int col) {
+        super(row,col);
     }
 }
