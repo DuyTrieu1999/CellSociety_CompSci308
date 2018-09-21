@@ -13,6 +13,10 @@ import javafx.scene.paint.Paint;
 import model.Grid;
 import model.Cell;
 
+/**
+ *
+ * @author duytrieu
+ */
 public class SimulationUI {
     public static final Paint BACKGROUND = Color.AZURE;
 

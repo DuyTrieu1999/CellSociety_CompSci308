@@ -4,7 +4,10 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
+/**
+ *
+ * @author duytrieu
+ */
 public class Grid {
 
     private Cell[][] grid;

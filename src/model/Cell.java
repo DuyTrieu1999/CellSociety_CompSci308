@@ -5,7 +5,10 @@ import java.util.Map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
+/**
+ *
+ * @author duytrieu
+ */
 public class Cell extends Rectangle{
     private int rowPos;
     private int colPos;

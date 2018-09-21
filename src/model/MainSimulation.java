@@ -3,7 +3,10 @@ package model;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.SimulationUI;
-
+/**
+ *
+ * @author duytrieu
+ */
 public class MainSimulation extends Application{
     @Override
     public void start (Stage stage) {
