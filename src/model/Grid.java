@@ -25,6 +25,7 @@ public class Grid {
             }
         }
     }
+
     public void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
@@ -32,9 +33,7 @@ public class Grid {
             }
         }
     }
-    public void updateCell () {
 
-    }
     public void storeNeighbor (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
