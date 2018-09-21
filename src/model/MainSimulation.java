@@ -11,7 +11,7 @@ public class MainSimulation extends Application{
     @Override
     public void start (Stage stage) {
         SimulationUI ui = new SimulationUI();
-        stage.setTitle("Cell Society");
+        stage.setTitle("Cellular Automata Simulation");
         stage.setScene(ui.sceneInit());
         stage.show();
     }
