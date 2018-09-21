@@ -17,11 +17,13 @@ public class Cell extends Rectangle{
     private Map<Integer, Color> stateMap;
     private ArrayList<Cell> neighbors;
 
-    public Cell(int row, int col) {
+    public Cell(int row, int col, double width) {
         this.rowPos = row;
         this.colPos = col;
         //this.setFill(stateMap.get(currState));
         this.setFill(Color.BLACK);
+        this.setWidth(width);
+        this.setHeight(width);
     }
     public int getRowPos() {
         return rowPos;

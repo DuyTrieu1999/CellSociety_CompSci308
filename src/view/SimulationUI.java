@@ -42,9 +42,8 @@ public class SimulationUI {
         myGrid = new Grid();
         myGrid.fillGrid();
         addGridPane(myGrid);
-        addCellToGrid();
-        myRoot.getChildren().add(myGridPane);
         myScene.getStylesheets().add("./view/SimulationUIStyle.css");
+        System.out.println(myGridPane);
         return myScene;
     }
 
@@ -145,6 +144,10 @@ public class SimulationUI {
             ColumnConstraints col = new ColumnConstraints(360/(grid.getColNum()));
             myGridPane.getColumnConstraints().add(col);
         }
+        addCellToGrid();
+        //myGridPane.setStyle("-fx-grid-lines-visible: " + sim.gridVisibility());
+        myGridPane.setPadding(new Insets(60,60,60,50));
+        myRoot.getChildren().add(myGridPane);
     }
     private void addCellToGrid () {
         for (int i=0; i<myGrid.getRowNum();i++) {
