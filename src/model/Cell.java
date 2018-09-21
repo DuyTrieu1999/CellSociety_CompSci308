@@ -20,7 +20,7 @@ public class Cell extends Rectangle{
     public Cell(int row, int col, double width) {
         this.rowPos = row;
         this.colPos = col;
-        //this.setFill(stateMap.get(currState));
+        //this.setFill(stateMap.get(prevState));
         this.setFill(Color.BLACK);
         this.setWidth(width);
         this.setHeight(width);
@@ -49,8 +49,9 @@ public class Cell extends Rectangle{
     public int getPrevState() {
         return this.prevState;
     }
-    public void updateState () {
+    public void updateCell () {
         prevState = currState;
+        this.setFill(stateMap.get(prevState));
     }
     public void fillMap () {
 

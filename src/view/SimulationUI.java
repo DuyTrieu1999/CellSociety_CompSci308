@@ -1,5 +1,7 @@
 package view;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.util.Duration;
 import model.Grid;
 import model.Cell;
 
@@ -19,11 +22,16 @@ import model.Cell;
  */
 public class SimulationUI {
     public static final Paint BACKGROUND = Color.AZURE;
+    public double FRAMES_PER_SECOND = 1;
+    public double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+    public double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
 
     private Scene myScene;
     private Group myRoot;
     private GridPane myGridPane;
     private Grid myGrid;
+    private Timeline animation = new Timeline();
+    private KeyFrame frame;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
             SceneENUM.PADDING.getVal(),
@@ -36,15 +44,22 @@ public class SimulationUI {
             SceneENUM.PADDING.getVal());
 
     public Scene sceneInit () {
+        frame  = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+                e -> this.step(SECOND_DELAY));
+
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.getKeyFrames().add(frame);
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
         myGrid = new Grid();
-        myGrid.fillGrid();
         addGridPane(myGrid);
         myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         System.out.println(myGridPane);
         return myScene;
+    }
+    public void step (double elapsedTime) {
+        myGrid.updateCell();
     }
 
     private void makeAllButton () {
@@ -154,6 +169,7 @@ public class SimulationUI {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
                 myGridPane.add(cell, i,j);
+                System.out.println(cell);
             }
         }
     }
