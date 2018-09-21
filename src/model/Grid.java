@@ -25,6 +25,9 @@ public class Grid {
             }
         }
     }
+    public void updateCell () {
+
+    }
 
     public void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
