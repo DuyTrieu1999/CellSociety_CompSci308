@@ -2,11 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
-public abstract class Cell {
+public class Cell {
     private int rowPos;
     private int colPos;
     private String currState;
     private String prevState;
+    private String image;
     private ArrayList<Cell> neighbors;
 
     public Cell(int row, int col) {
@@ -36,5 +37,8 @@ public abstract class Cell {
     }
     public String getPrevState() {
         return this.prevState;
+    }
+    public Cell updateCell() {
+        return this;
     }
 }

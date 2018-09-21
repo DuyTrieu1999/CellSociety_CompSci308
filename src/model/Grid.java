@@ -10,12 +10,12 @@ public class Grid {
         grid = new Cell[rowLength][colLength];
     }
 
-    public void fillGrid (String cellName) {
+    public Cell[][] fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                Cell temp = returnCell(cellName, i, j);
+                //Temporary; replace when XML files are created
+                Cell temp = new Cell(i,j);
                 grid[i][j] = temp;
-
                 //TODO: Add in rules and stuffs
             }
         }
@@ -41,14 +41,11 @@ public class Grid {
                 else if ((grid[i][j].getCurrState() == 0) && (neighborSum == 3)) grid[i][j].setCurrState(1);
                 else grid[i][j].setCurrState(grid[i][j].getPrevState());
             }
-
         }
     }
-    private boolean rowOutOfBound (int row) {
-        return row < 0 || row > getRowNum() - 1;
-    }
-    private boolean colOutOfBound (int col) {
-        return col < 0 || col > getColNum() - 1;
+    //Merged rowOutOfBounds and colOutOfBounds
+    private boolean outOfBounds (int row, int col) {
+        return row < 0 || row > getRowNum() - 1 || col < 0 || col > getColNum() - 1;
     }
     private int getRowNum () {
         return grid.length;
