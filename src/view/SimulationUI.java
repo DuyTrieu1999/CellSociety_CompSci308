@@ -7,18 +7,23 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import model.Grid;
+import model.Cell;
 
+/**
+ *
+ * @author duytrieu
+ */
 public class SimulationUI {
     public static final Paint BACKGROUND = Color.AZURE;
 
     private Scene myScene;
     private Group myRoot;
-    private Pane myCellPane;
+    private GridPane myGridPane;
+    private Grid myGrid;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
             SceneENUM.PADDING.getVal(),
@@ -34,8 +39,11 @@ public class SimulationUI {
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
-        //createCellPane();
+        myGrid = new Grid();
+        myGrid.fillGrid();
+        addGridPane(myGrid);
         myScene.getStylesheets().add("./view/SimulationUIStyle.css");
+        System.out.println(myGridPane);
         return myScene;
     }
 
@@ -119,21 +127,34 @@ public class SimulationUI {
     private void resumeButtonHandler () {
         System.out.println("Resume simulation");
     }
-
-    private void createCellPane () {
-        myCellPane = new Pane();
-        myCellPane.setPadding(cellPane);
-        myCellPane.setMaxWidth(SceneENUM.GRID_WIDTH.getVal() + SceneENUM.PADDING.getVal());
-        myCellPane.setMinWidth(SceneENUM.GRID_WIDTH.getVal() + SceneENUM.PADDING.getVal());
-        myCellPane.setMaxHeight(SceneENUM.GRID_HEIGHT.getVal() + SceneENUM.PADDING.getVal());
-        myCellPane.setMinHeight(SceneENUM.GRID_HEIGHT.getVal() + SceneENUM.PADDING.getVal());
-        myRoot.getChildren().add(myCellPane);
-    }
     private void createButtonPane (VBox buttonContainer) {
         buttonContainer.setPadding(buttonPane);
         buttonContainer.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
         buttonContainer.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
         buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - SceneENUM.BUTTON_GRID.getVal());
         myRoot.getChildren().add(buttonContainer);
+    }
+    private void addGridPane (Grid grid) {
+        myGridPane = new GridPane();
+        for (int i=0; i< grid.getRowNum(); i++) {
+            RowConstraints row = new RowConstraints(360/(grid.getRowNum()));
+            myGridPane.getRowConstraints().add(row);
+        }
+        for (int i=0; i< grid.getColNum(); i++) {
+            ColumnConstraints col = new ColumnConstraints(360/(grid.getColNum()));
+            myGridPane.getColumnConstraints().add(col);
+        }
+        addCellToGrid();
+        //myGridPane.setStyle("-fx-grid-lines-visible: " + sim.gridVisibility());
+        myGridPane.setPadding(new Insets(60,60,60,50));
+        myRoot.getChildren().add(myGridPane);
+    }
+    private void addCellToGrid () {
+        for (int i=0; i<myGrid.getRowNum();i++) {
+            for(int j=0;j<myGrid.getColNum();j++) {
+                Cell cell = myGrid.getCell(i,j);
+                myGridPane.add(cell, i,j);
+            }
+        }
     }
 }

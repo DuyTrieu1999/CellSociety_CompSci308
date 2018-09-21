@@ -1,10 +1,20 @@
 package model;
 
+import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+/**
+ *
+ * @author duytrieu
+ */
 public class Grid {
 
     private Cell[][] grid;
     private int rowLength = 20;
-    private int colLength = 15;
+    private int colLength = 20;
+    private double xPos;
+    private double yPos;
 
     public Grid () {
         grid = new Cell[rowLength][colLength];
@@ -47,16 +57,16 @@ public class Grid {
     private boolean outOfBounds (int row, int col) {
         return row < 0 || row > getRowNum() - 1 || col < 0 || col > getColNum() - 1;
     }
-    private int getRowNum () {
+    public int getRowNum () {
         return grid.length;
     }
-    private int getColNum () {
+    public int getColNum () {
         return grid[0].length;
     }
-    private void setCell (int row, int col, Cell myCell) {
+    public void setCell (int row, int col, Cell myCell) {
         grid[row][col] = myCell;
     }
-    private Cell getCell (int row, int col) {
+    public Cell getCell (int row, int col) {
         return grid[row][col];
     }
 

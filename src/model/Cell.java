@@ -1,18 +1,29 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Map;
 
-public class Cell {
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+/**
+ *
+ * @author duytrieu
+ */
+public class Cell extends Rectangle{
     private int rowPos;
     private int colPos;
-    private String currState;
-    private String prevState;
-    private String image;
+    private int currState;
+    private int prevState;
+    private Map<Integer, Color> stateMap;
     private ArrayList<Cell> neighbors;
 
-    public Cell(int row, int col) {
+    public Cell(int row, int col, double width) {
         this.rowPos = row;
         this.colPos = col;
+        //this.setFill(stateMap.get(currState));
+        this.setFill(Color.BLACK);
+        this.setWidth(width);
+        this.setHeight(width);
     }
     public int getRowPos() {
         return rowPos;
@@ -26,19 +37,22 @@ public class Cell {
     public void setNeighbors (ArrayList<Cell> neighbors) {
         this.neighbors = neighbors;
     }
-    public void setCurrState(String currState) {
+    public void setCurrState(int currState) {
         this.currState = currState;
     }
-    public void setPrevState(String nextState) {
+    public void setPrevState(int nextState) {
         this.prevState = nextState;
     }
-    public String getCurrState() {
+    public int getCurrState() {
         return this.currState;
     }
-    public String getPrevState() {
+    public int getPrevState() {
         return this.prevState;
     }
-    public Cell updateCell() {
-        return this;
+    public void updateState () {
+        prevState = currState;
+    }
+    public void fillMap () {
+
     }
 }

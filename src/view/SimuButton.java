@@ -1,5 +1,8 @@
 package view;
-
+/**
+ *
+ * @author duytrieu
+ */
 import javafx.scene.control.Button;
 
 public class SimuButton extends Button {
