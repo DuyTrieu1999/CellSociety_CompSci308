@@ -11,15 +11,13 @@ import javafx.scene.shape.Rectangle;
 public abstract class Cell extends Rectangle {
     private int rowPos;
     private int colPos;
-    private StateENUM currState = StateENUM.ALIVE;
-    private StateENUM nextState = null;
+    private StateENUM currState;
+    private StateENUM nextState;
     private ArrayList<Cell> neighbors;
-
 
     public Cell(int row, int col, double width) {
         this.rowPos = row;
         this.colPos = col;
-        this.setFill(getStateColor(currState));
         this.setWidth(width);
         this.setHeight(width);
     }
@@ -35,6 +33,7 @@ public abstract class Cell extends Rectangle {
     public void setNeighbors (ArrayList<Cell> neighbors) {
         this.neighbors = neighbors;
     }
+
     public void setCurrState(StateENUM currState) {
         this.currState = currState;
     }
@@ -47,11 +46,8 @@ public abstract class Cell extends Rectangle {
     public StateENUM getNextState() {
         return this.nextState;
     }
-    public void updateCell () {
-
-    }
-    public Color getStateColor(StateENUM state) {
-        return null;
-    }
     public abstract void setStartState();
+    public abstract void updateCell ();
+    public abstract Color getStateColor(StateENUM state);
 }
+

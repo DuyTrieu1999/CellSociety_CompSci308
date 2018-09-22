@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,7 +11,11 @@ import javafx.scene.shape.Rectangle;
  * States:
  * FISH represents a cell occupied by fish
  * SHARK represents a cell occupied by a shark
+<<<<<<< HEAD
  * WATER represents an empty cell in the sea
+=======
+ * SEA represents an empty cell in the sea
+>>>>>>> master
  * @author Austin Kao
  */
 
@@ -26,10 +29,10 @@ public class PredatorPreyCell extends Cell {
     public PredatorPreyCell(int row, int col, double width) {
         super(row, col, width);
     }
+    @Override
     public void updateCell () {
         return;
     }
-
     public void setReproductionTime(int fishMatingCycleWait) {
         reproductionTime = fishMatingCycleWait;
     }

@@ -25,6 +25,7 @@ public class FireCell extends Cell {
         hasNeighborFire = false;
     }
 
+    @Override
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         for(Cell neighbor : currNeighbors) {

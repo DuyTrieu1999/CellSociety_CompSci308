@@ -17,6 +17,8 @@ import java.util.Random;
 public class GOLCell extends Cell {
     private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
+    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
+
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
     }
@@ -30,21 +32,19 @@ public class GOLCell extends Cell {
                 numAlive++;
             }
         }
-        if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2)) {
-            this.setNextState(StateENUM.DEAD);
-        } else if(this.getCurrState() == StateENUM.ALIVE && (numAlive > 3)) {
+        if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2 || numAlive > 3)) {
             this.setNextState(StateENUM.DEAD);
         } else if (this.getCurrState() == StateENUM.DEAD && numAlive == 3) {
             this.setNextState(StateENUM.ALIVE);
-        } else if(this.getCurrState() == StateENUM.ALIVE && (numAlive == 2 || numAlive == 3)) {
-            this.setNextState(StateENUM.ALIVE);
+        } else {
+            this.setNextState(this.getCurrState());
         }
         this.setFill(this.getStateColor(this.getNextState()));
     }
 
     @Override
     public Color getStateColor(StateENUM state) {
-        switch (state) {
+        switch(state) {
             case ALIVE:
                 return Color.WHITE;
             case DEAD:
