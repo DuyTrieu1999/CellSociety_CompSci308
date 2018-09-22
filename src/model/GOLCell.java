@@ -44,9 +44,9 @@ public class GOLCell extends Cell {
     public Color getStateColor(StateENUM state) {
         switch(state) {
             case ALIVE:
-                return Color.WHITE;
-            case DEAD:
                 return Color.BLACK;
+            case DEAD:
+                return Color.WHITE;
             default:
                 return null;
         }
