@@ -3,6 +3,7 @@ package model;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class implements a cell that would be part of the Game of Life simulation.
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  */
 
 public class GOLCell extends Cell {
+    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
@@ -50,5 +52,11 @@ public class GOLCell extends Cell {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public void setStartState() {
+        int rand = new Random().nextInt(states.length);
+        this.setCurrState(states[rand]);
     }
 }

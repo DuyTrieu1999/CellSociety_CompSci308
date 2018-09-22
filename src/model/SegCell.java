@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,6 +19,7 @@ public class SegCell extends Cell{
     private boolean satisfied;
     private double myThreshold;
     private int numAlike;
+    private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
     public SegCell(int row, int col, double width) {
         super(row, col, width);
@@ -55,5 +57,25 @@ public class SegCell extends Cell{
 
     public void setThreshold(double threshold) {
         myThreshold = threshold;
+    }
+
+    @Override
+    public Color getStateColor(StateENUM state) {
+        switch (state) {
+            case VACANT:
+                return Color.WHITE;
+            case AGENT1:
+                return Color.BLUE;
+            case AGENT2:
+                return Color.YELLOW;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void setStartState() {
+        int rand = new Random().nextInt(states.length);
+        this.setCurrState(states[rand]);
     }
 }
