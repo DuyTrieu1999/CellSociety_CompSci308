@@ -1,19 +1,16 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
 
 /**
- * This class implements a cell that would be part of the Game of Life simulation. Most of the initial testing should be with this simulation.
+ * This class implements a cell that would be part of the Game of Life simulation.
+ * Most of the initial testing should be with this simulation.
  * @author Austin Kao
  */
 
 public class GOLCell extends Cell {
-    private int numAlive;
-
 
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
@@ -21,19 +18,34 @@ public class GOLCell extends Cell {
 
     @Override
     public void updateCell() {
+        int numAlive = 0;
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         for (Cell neighbor : currNeighbors) {
-            if (neighbor.getCurrState() == States.ALIVE) {
+            if (neighbor.getCurrState() == StateENUM.ALIVE) {
                 numAlive++;
             }
         }
-        if (this.getCurrState() == States.ALIVE && (numAlive < 1 || numAlive > 3)) {
-            this.setPrevState(States.ALIVE);
-            this.setCurrState(States.DEAD);
-        } else if (this.getCurrState() == States.DEAD && numAlive == 3) {
-            this.setPrevState(States.DEAD);
-            this.setCurrState(States.ALIVE);
+        if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2)) {
+            this.setNextState(StateENUM.DEAD);
+        } else if(this.getCurrState() == StateENUM.ALIVE && (numAlive > 3)) {
+            this.setNextState(StateENUM.DEAD);
+        } else if (this.getCurrState() == StateENUM.DEAD && numAlive == 3) {
+            this.setNextState(StateENUM.ALIVE);
+        } else if(this.getCurrState() == StateENUM.ALIVE && (numAlive == 2 || numAlive == 3)) {
+            this.setNextState(StateENUM.ALIVE);
         }
-        this.setFill(States.stateColor(getCurrState()));
+        this.setFill(this.getStateColor(this.getNextState()));
+    }
+
+    @Override
+    public Color getStateColor(StateENUM state) {
+        switch (state) {
+            case ALIVE:
+                return Color.WHITE;
+            case DEAD:
+                return Color.BLACK;
+            default:
+                return null;
+        }
     }
 }

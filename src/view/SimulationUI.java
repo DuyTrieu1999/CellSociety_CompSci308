@@ -33,6 +33,8 @@ public class SimulationUI {
     private Timeline animation = new Timeline();
     private KeyFrame frame;
 
+    private boolean isStoped = true;
+
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
             SceneENUM.PADDING.getVal(),
             (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
@@ -54,12 +56,11 @@ public class SimulationUI {
         makeAllButton();
         myGrid = new Grid();
         addGridPane(myGrid);
-        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
-        System.out.println(myGridPane);
+//        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
     public void step (double elapsedTime) {
-        myGrid.updateCell();
+        myGrid.updateGrid();
     }
 
     private void makeAllButton () {
@@ -82,10 +83,10 @@ public class SimulationUI {
                 stopButtonHandler();
             }
         });
-        SimuButton resumeButton = makeButton("Resume", new EventHandler<ActionEvent>() {
+        SimuButton stepButton = makeButton("Step", new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                resumeButtonHandler();
+                stepButtonHandler();
             }
         });
         SimuButton resetButton = makeButton("Reset", new EventHandler<ActionEvent>() {
@@ -97,7 +98,7 @@ public class SimulationUI {
         hbox1.getChildren().add(cb);
         hbox2.getChildren().add(startButton);
         hbox3.getChildren().add(stopButton);
-        hbox4.getChildren().add(resumeButton);
+        hbox4.getChildren().add(stepButton);
         hbox5.getChildren().addAll(resetButton);
         buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5);
         createButtonPane(buttonContainer);
@@ -132,15 +133,30 @@ public class SimulationUI {
 
     private void startButtonHandler () {
         System.out.println("Start simulation");
+        isStoped = false;
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.playFromStart();
     }
     private void stopButtonHandler () {
         System.out.println("Stop simulation");
+        pauseSim();
     }
     private void resetButtonHandler () {
         System.out.println("Reset simulation");
+        resetGrid();
     }
-    private void resumeButtonHandler () {
+    private void stepButtonHandler () {
         System.out.println("Resume simulation");
+        pauseSim();
+        myGrid.updateGrid();
+    }
+    private void pauseSim () {
+        animation.pause();
+        isStoped = true;
+    }
+    private void resetGrid () {
+        myRoot.getChildren().remove(myGridPane);
+        addGridPane(myGrid);
     }
     private void createButtonPane (VBox buttonContainer) {
         buttonContainer.setPadding(buttonPane);
@@ -160,7 +176,6 @@ public class SimulationUI {
             myGridPane.getColumnConstraints().add(col);
         }
         addCellToGrid();
-        //myGridPane.setStyle("-fx-grid-lines-visible: " + sim.gridVisibility());
         myGridPane.setPadding(new Insets(60,60,60,50));
         myRoot.getChildren().add(myGridPane);
     }
@@ -169,7 +184,6 @@ public class SimulationUI {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
                 myGridPane.add(cell, i,j);
-                System.out.println(cell);
             }
         }
     }

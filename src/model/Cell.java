@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -12,15 +11,15 @@ import javafx.scene.shape.Rectangle;
 public class Cell extends Rectangle{
     private int rowPos;
     private int colPos;
-    private States currState;
-    private States prevState;
+    private StateENUM currState = StateENUM.ALIVE;
+    private StateENUM nextState = null;
     private ArrayList<Cell> neighbors;
+
 
     public Cell(int row, int col, double width) {
         this.rowPos = row;
         this.colPos = col;
-        //this.setFill(stateMap.get(prevState));
-        this.setFill(Color.BLACK);
+        this.setFill(getStateColor(currState));
         this.setWidth(width);
         this.setHeight(width);
     }
@@ -36,19 +35,22 @@ public class Cell extends Rectangle{
     public void setNeighbors (ArrayList<Cell> neighbors) {
         this.neighbors = neighbors;
     }
-    public void setCurrState(States currState) {
+    public void setCurrState(StateENUM currState) {
         this.currState = currState;
     }
-    public void setPrevState(States nextState) {
-        this.prevState = nextState;
+    public void setNextState(StateENUM nextState) {
+        this.nextState = nextState;
     }
-    public States getCurrState() {
+    public StateENUM getCurrState() {
         return this.currState;
     }
-    public States getPrevState() {
-        return this.prevState;
+    public StateENUM getNextState() {
+        return this.nextState;
     }
     public void updateCell () {
 
+    }
+    public Color getStateColor(StateENUM state) {
+        return null;
     }
 }
