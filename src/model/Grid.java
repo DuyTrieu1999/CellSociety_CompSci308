@@ -15,6 +15,8 @@ public class Grid {
     private int colLength = 20;
     private double xPos;
     private double yPos;
+    private double thresholdValue;
+    private int numCells;
 
     public Grid () {
         grid = new Cell[rowLength][colLength];

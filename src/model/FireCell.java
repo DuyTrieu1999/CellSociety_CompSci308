@@ -23,16 +23,17 @@ public class FireCell extends Cell {
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         for(Cell neighbor : currNeighbors) {
-            if(neighbor.getCurrState() == 2) {
+            if(neighbor.getCurrState() == StateENUM.BURNING) {
                 hasNeighborFire = true;
             }
         }
-        if(hasNeighborFire && this.getCurrState() == 1) {
+        if(hasNeighborFire && this.getCurrState() == StateENUM.TREE) {
             double rn = Math.random();
-            this.setPrevState(1);
             if(rn < probCatch) {
-                this.setCurrState(2);
+                this.setNextState(StateENUM.BURNING);
             }
+        } else if(this.getCurrState() == StateENUM.BURNING) {
+            this.setNextState(StateENUM.DEFORESTED);
         }
     }
 

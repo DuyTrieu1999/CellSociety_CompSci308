@@ -37,16 +37,15 @@ public class SegCell extends Cell{
         }
         updateCell();
     }
-    // updateCell() assumes that there are two agents
+    // updateCell() assumes that there are only two types of agents
     public void updateCell() {
-        this.setPrevState(this.getCurrState());
         if(!satisfied) {
-            this.setCurrState(0);
+            this.setCurrState(StateENUM.VACANT);
         } else {
-            if(this.getCurrState() == 1) {
-                this.setCurrState(2);
-            } else if(this.getCurrState() == 2) {
-                this.setCurrState(1);
+            if(this.getCurrState() == StateENUM.AGENT1) {
+                this.setNextState(StateENUM.AGENT2);
+            } else if(this.getCurrState() == StateENUM.AGENT2) {
+                this.setNextState(StateENUM.AGENT1);
             }
         }
     }
