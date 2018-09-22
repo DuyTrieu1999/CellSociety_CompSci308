@@ -25,10 +25,16 @@ public class Grid {
             }
         }
     }
-    public void updateCell () {
+    public void updateGrid () {
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 grid[i][j].updateCell();
+            }
+        }
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                Cell cell = grid[i][j];
+                cell.setCurrState(cell.getNextState());
             }
         }
     }
@@ -36,7 +42,7 @@ public class Grid {
     public void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                grid[i][j] = new Cell(i, j, (double)360 / this.getColNum());
+                grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
             }
         }
     }

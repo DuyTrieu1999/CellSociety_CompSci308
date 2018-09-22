@@ -1,8 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,20 +11,15 @@ import javafx.scene.shape.Rectangle;
 public class Cell extends Rectangle{
     private int rowPos;
     private int colPos;
-    private int currState;
-    private int prevState;
-    private Map<Integer, Color> stateMap = new HashMap<>();
+    private StateENUM currState = StateENUM.ALIVE;
+    private StateENUM nextState = null;
     private ArrayList<Cell> neighbors;
-    private final int DEAD = 0;
-    private final int ALIVE = 1;
-    private int numAlive;
+
 
     public Cell(int row, int col, double width) {
         this.rowPos = row;
         this.colPos = col;
-        updateMap();
-        this.setFill(Color.WHITE);
-        System.out.println(stateMap);
+        this.setFill(getStateColor(currState));
         this.setWidth(width);
         this.setHeight(width);
     }
@@ -42,38 +35,22 @@ public class Cell extends Rectangle{
     public void setNeighbors (ArrayList<Cell> neighbors) {
         this.neighbors = neighbors;
     }
-    public void setCurrState(int currState) {
+    public void setCurrState(StateENUM currState) {
         this.currState = currState;
     }
-    public void setPrevState(int nextState) {
-        this.prevState = nextState;
+    public void setNextState(StateENUM nextState) {
+        this.nextState = nextState;
     }
-    public int getCurrState() {
+    public StateENUM getCurrState() {
         return this.currState;
     }
-    public int getPrevState() {
-        return this.prevState;
+    public StateENUM getNextState() {
+        return this.nextState;
     }
     public void updateCell () {
-//        prevState = currState;
-//        this.setFill(stateMap.get(prevState));
-        ArrayList<Cell> currNeighbors = this.getNeighbors();
-        for (Cell neighbor : currNeighbors) {
-            if (neighbor.getCurrState() == ALIVE) {
-                numAlive++;
-            }
-        }
-        if (this.getCurrState() == 1 && (numAlive < 1 || numAlive > 3)) {
-            this.setPrevState(ALIVE);
-            this.setCurrState(DEAD);
-        } else if (this.getCurrState() == 0 && numAlive == 3) {
-            this.setPrevState(DEAD);
-            this.setCurrState(ALIVE);
-        }
-        this.setFill(stateMap.get(prevState));
+
     }
-    private void updateMap () {
-        stateMap.put(ALIVE, Color.WHITE);
-        stateMap.put(DEAD, Color.BLACK);
+    public Color getStateColor(StateENUM state) {
+        return null;
     }
 }

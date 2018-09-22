@@ -56,12 +56,11 @@ public class SimulationUI {
         makeAllButton();
         myGrid = new Grid();
         addGridPane(myGrid);
-        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
-        System.out.println(myGridPane);
+//        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
     public void step (double elapsedTime) {
-        myGrid.updateCell();
+        myGrid.updateGrid();
     }
 
     private void makeAllButton () {
@@ -149,7 +148,7 @@ public class SimulationUI {
     private void stepButtonHandler () {
         System.out.println("Resume simulation");
         pauseSim();
-        myGrid.updateCell();
+        myGrid.updateGrid();
     }
     private void pauseSim () {
         animation.pause();
@@ -177,7 +176,6 @@ public class SimulationUI {
             myGridPane.getColumnConstraints().add(col);
         }
         addCellToGrid();
-        //myGridPane.setStyle("-fx-grid-lines-visible: " + sim.gridVisibility());
         myGridPane.setPadding(new Insets(60,60,60,50));
         myRoot.getChildren().add(myGridPane);
     }
