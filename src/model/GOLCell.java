@@ -12,9 +12,8 @@ import javafx.scene.shape.Rectangle;
  */
 
 public class GOLCell extends Cell {
-    private final int DEAD = 0;
-    private final int ALIVE = 1;
     private int numAlive;
+
 
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
@@ -24,16 +23,17 @@ public class GOLCell extends Cell {
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         for (Cell neighbor : currNeighbors) {
-            if (neighbor.getCurrState() == ALIVE) {
+            if (neighbor.getCurrState() == States.ALIVE) {
                 numAlive++;
             }
         }
-        if (this.getCurrState() == 1 && (numAlive < 1 || numAlive > 3)) {
-            this.setPrevState(ALIVE);
-            this.setCurrState(DEAD);
-        } else if (this.getCurrState() == 0 && numAlive == 3) {
-            this.setPrevState(DEAD);
-            this.setCurrState(ALIVE);
+        if (this.getCurrState() == States.ALIVE && (numAlive < 1 || numAlive > 3)) {
+            this.setPrevState(States.ALIVE);
+            this.setCurrState(States.DEAD);
+        } else if (this.getCurrState() == States.DEAD && numAlive == 3) {
+            this.setPrevState(States.DEAD);
+            this.setCurrState(States.ALIVE);
         }
+        this.setFill(States.stateColor(getCurrState()));
     }
 }

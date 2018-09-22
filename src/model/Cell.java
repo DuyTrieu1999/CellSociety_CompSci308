@@ -12,9 +12,8 @@ import javafx.scene.shape.Rectangle;
 public class Cell extends Rectangle{
     private int rowPos;
     private int colPos;
-    private int currState;
-    private int prevState;
-    private Map<Integer, Color> stateMap;
+    private States currState;
+    private States prevState;
     private ArrayList<Cell> neighbors;
 
     public Cell(int row, int col, double width) {
@@ -37,23 +36,19 @@ public class Cell extends Rectangle{
     public void setNeighbors (ArrayList<Cell> neighbors) {
         this.neighbors = neighbors;
     }
-    public void setCurrState(int currState) {
+    public void setCurrState(States currState) {
         this.currState = currState;
     }
-    public void setPrevState(int nextState) {
+    public void setPrevState(States nextState) {
         this.prevState = nextState;
     }
-    public int getCurrState() {
+    public States getCurrState() {
         return this.currState;
     }
-    public int getPrevState() {
+    public States getPrevState() {
         return this.prevState;
     }
     public void updateCell () {
-        prevState = currState;
-        this.setFill(stateMap.get(prevState));
-    }
-    public void fillMap () {
 
     }
 }
