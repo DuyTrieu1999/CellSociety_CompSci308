@@ -8,12 +8,16 @@ import java.util.Random;
 
 /**
  * This class implements the Spreading by Fire simulation.
+ * States:
+ * DEFORESTED represents a cell with no trees
+ * TREE represents a cell with trees
+ * BURNING represents a cell with trees that are currently burning
  * @author Austin Kao
  */
 
 public class FireCell extends Cell {
-    private double probCatch;
-    private boolean hasNeighborFire;
+    private double probCatch; //Probability of catching a fire
+    private boolean hasNeighborFire; //Check for a neighboring cell on fire
 
     public FireCell (int row, int col, double width) {
         super(row, col, width);

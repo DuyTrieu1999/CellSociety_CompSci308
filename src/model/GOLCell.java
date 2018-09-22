@@ -7,6 +7,9 @@ import java.util.ArrayList;
 /**
  * This class implements a cell that would be part of the Game of Life simulation.
  * Most of the initial testing should be with this simulation.
+ * States:
+ * ALIVE represents a populated area
+ * DEAD represents a depopulated area
  * @author Austin Kao
  */
 

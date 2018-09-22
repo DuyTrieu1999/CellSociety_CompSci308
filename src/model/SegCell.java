@@ -8,6 +8,9 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * This cell represents a cell in the Schelling's model of segregation simulation.
+ * States:
+ * VACANT represents a cell with no agents that occupy the space
+ * AGENT1, AGENT2 represent the two types of agents that will segregate
  * @author Austin Kao
  */
 
