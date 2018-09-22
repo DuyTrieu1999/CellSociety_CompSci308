@@ -57,7 +57,8 @@ public class SimulationUI {
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
         addGridPane();
-        addCellToGrid();
+        simulationName = myResources.getString("GOL");
+        addCellToGrid(simulationName);
         myRoot.getChildren().add(myGridPane);
         return myScene;
     }
@@ -70,7 +71,6 @@ public class SimulationUI {
         sizeSlider.setTextField();
         speedSlider = new SliderUI(myResources.getString("SetSpeed"), 100, 50, 150);
         speedSlider.setTextField();
-
     }
 
     private void makeAllButton () {
@@ -112,30 +112,33 @@ public class SimulationUI {
         cb.setOnAction(e -> getChoice(cb));
         return cb;
     }
-    //TODO: Implement a better choice box since this is shitty af
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
         System.out.println(name);
         if (name.equals(myResources.getString("GOL"))) {
-            setSimulation(myResources.getString("GOL"));
+            simulationName = myResources.getString("GOL");
+            setSimulation(simulationName);
         }
         else if (name.equals(myResources.getString("WaTor"))) {
-            setSimulation(myResources.getString("WaTor"));
+            simulationName = myResources.getString("WaTor");
+            setSimulation(simulationName);
         }
         else if (name.equals(myResources.getString("Fire"))) {
-            setSimulation(myResources.getString("Fire"));
+            simulationName = myResources.getString("Fire");
+            setSimulation(simulationName);
         }
         else {
-            setSimulation(myResources.getString("Segg"));
+            simulationName = myResources.getString("Segg");
+            setSimulation(simulationName);
         }
     }
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
         addGridPane();
-        addCellToGrid();
+        addCellToGrid(simuName);
         myRoot.getChildren().add(myGridPane);
-        startSim();
+        pauseSim();
     }
     private void setDimensions(SimuButton btn) {
         btn.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
@@ -149,7 +152,7 @@ public class SimulationUI {
         pauseSim();
     }
     private void resetButtonHandler () {
-        resetGrid();
+        setSimulation(simulationName);
     }
     private void stepButtonHandler () {
         pauseSim();
@@ -162,13 +165,13 @@ public class SimulationUI {
     private void pauseSim () {
         animation.pause();
     }
-    private void resetGrid () {
-        myRoot.getChildren().remove(myGridPane);
-        addGridPane();
-        addCellToGrid();
-        myRoot.getChildren().add(myGridPane);
-        pauseSim();
-    }
+//    private void resetGrid () {
+//        myRoot.getChildren().remove(myGridPane);
+//        addGridPane();
+//        addCellToGrid();
+//        myRoot.getChildren().add(myGridPane);
+//        pauseSim();
+//    }
     private void createButtonPane (VBox buttonContainer) {
         buttonContainer.setPadding(buttonPane);
         buttonContainer.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
@@ -188,8 +191,8 @@ public class SimulationUI {
         }
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
-    private void addCellToGrid () {
-        myGrid = new Grid(myResources.getString("GOL"), gridSize);
+    private void addCellToGrid (String simuName) {
+        myGrid = new Grid(simuName, gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
