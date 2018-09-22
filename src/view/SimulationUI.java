@@ -40,11 +40,6 @@ public class SimulationUI {
             (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
             -SceneENUM.PADDING.getVal());
 
-    private Insets cellPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
-            0,
-            (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
-            SceneENUM.PADDING.getVal());
-
     public Scene sceneInit () {
         frame  = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> this.step(SECOND_DELAY));
@@ -127,9 +122,25 @@ public class SimulationUI {
         String name = cb.getValue();
         System.out.println(name);
         if (name.equals("Game of Life")) {
-            myRoot.getChildren().remove(myGridPane);
-            System.out.println(myGrid);
+            setSimulation("Game of Life");
         }
+        else if (name.equals("Wa-Tor World model")) {
+            setSimulation("Wa-Tor World model");
+        }
+        else if (name.equals("Spreading of Fire")) {
+            setSimulation("Spreading of Fire");
+        }
+        else {
+            setSimulation("Schelling's model of segregation");
+        }
+    }
+
+    private void setSimulation (String simuName) {
+        myRoot.getChildren().remove(myGridPane);
+        System.out.println(myGrid);
+        myGrid = new Grid(simuName);
+        addGridPane(myGrid);
+        myRoot.getChildren().add(myGridPane);
     }
 
     private void setDimensions(SimuButton btn) {

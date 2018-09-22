@@ -45,7 +45,7 @@ public class Grid {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
                 grid[i][j] = chooseSimuCell(simulationName, i, j, (double)360 / this.getColNum());
-
+                grid[i][j].setStartState();
             }
         }
     }
