@@ -15,8 +15,8 @@ public class Grid {
     private int colLength = 20;
     private double xPos;
     private double yPos;
-    private double thresholdValue;
-    private int numCells;
+    private double thresholdValue; //for Fire, Segregation models
+    private int numCells; //for Segregation model
 
     public Grid () {
         grid = new Cell[rowLength][colLength];
