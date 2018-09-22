@@ -17,6 +17,8 @@ import model.Grid;
 import model.Cell;
 import model.SegGrid;
 
+import java.util.ResourceBundle;
+
 /**
  *
  * @author duytrieu
@@ -26,15 +28,19 @@ public class SimulationUI {
     public double FRAMES_PER_SECOND = 1;
     public double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
+    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
     private Scene myScene;
     private Group myRoot;
     private GridPane myGridPane;
     private Grid myGrid;
+    private SliderUI sizeSlider;
+    private SliderUI speedSlider;
     private Timeline animation = new Timeline();
     private KeyFrame frame;
-
-    private boolean isStopped = true;
+    private int gridSize = 20;
+    private String simulationName;
+    private ResourceBundle myResources;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
             SceneENUM.PADDING.getVal(),
@@ -44,20 +50,27 @@ public class SimulationUI {
     public Scene sceneInit () {
         frame  = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> this.step(SECOND_DELAY));
-
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
-        myGrid = new SegGrid("Schelling's Model of Segregation");
-        addGridPane(myGrid);
+        addGridPane();
+        addCellToGrid();
         myRoot.getChildren().add(myGridPane);
-//      myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
     public void step (double elapsedTime) {
         myGrid.updateGrid();
+    }
+
+    private void makeSlider () {
+        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
+        sizeSlider.setTextField();
+        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 100, 50, 150);
+        speedSlider.setTextField();
+
     }
 
     private void makeAllButton () {
@@ -68,36 +81,17 @@ public class SimulationUI {
         HBox hbox4 = new HBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox5 = new HBox(SceneENUM.HBOX_GRID.getVal());
         ChoiceBox cb = makeChoiceBox();
-        SimuButton startButton = makeButton("Play", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                startButtonHandler();
-            }
-        });
-        SimuButton stopButton = makeButton("Stop", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stopButtonHandler();
-            }
-        });
-        SimuButton stepButton = makeButton("Step", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stepButtonHandler();
-            }
-        });
-        SimuButton resetButton = makeButton("Reset", new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                resetButtonHandler();
-            }
-        });
+        SimuButton startButton = makeButton(myResources.getString("Play"), event -> startButtonHandler());
+        SimuButton stopButton = makeButton(myResources.getString("Stop"), event -> stopButtonHandler());
+        SimuButton stepButton = makeButton(myResources.getString("Step"), event -> stepButtonHandler());
+        SimuButton resetButton = makeButton(myResources.getString("Reset"), event -> resetButtonHandler());
+        makeSlider();
         hbox1.getChildren().add(cb);
         hbox2.getChildren().add(startButton);
         hbox3.getChildren().add(stopButton);
         hbox4.getChildren().add(stepButton);
         hbox5.getChildren().addAll(resetButton);
-        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5);
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider);
         createButtonPane(buttonContainer);
     }
 
@@ -110,11 +104,11 @@ public class SimulationUI {
 
     private ChoiceBox makeChoiceBox () {
         ChoiceBox<String> cb = new ChoiceBox<>();
-        cb.getItems().add("Game of Life");
-        cb.getItems().add("Wa-Tor World model");
-        cb.getItems().add("Spreading of Fire");
-        cb.getItems().add("Schelling's model of segregation");
-        cb.setValue("Game of Life");
+        cb.getItems().add(myResources.getString("GOL"));
+        cb.getItems().add(myResources.getString("WaTor"));
+        cb.getItems().add(myResources.getString("Fire"));
+        cb.getItems().add(myResources.getString("Segg"));
+        cb.setValue(myResources.getString("GOL"));
         cb.setOnAction(e -> getChoice(cb));
         return cb;
     }
@@ -122,59 +116,58 @@ public class SimulationUI {
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
         System.out.println(name);
-        if (name.equals("Game of Life")) {
-            setSimulation("Game of Life");
+        if (name.equals(myResources.getString("GOL"))) {
+            setSimulation(myResources.getString("GOL"));
         }
-        else if (name.equals("Wa-Tor World model")) {
-            setSimulation("Wa-Tor World model");
+        else if (name.equals(myResources.getString("WaTor"))) {
+            setSimulation(myResources.getString("WaTor"));
         }
-        else if (name.equals("Spreading of Fire")) {
-            setSimulation("Spreading of Fire");
+        else if (name.equals(myResources.getString("Fire"))) {
+            setSimulation(myResources.getString("Fire"));
         }
         else {
-            setSimulation("Schelling's model of segregation");
+            setSimulation(myResources.getString("Segg"));
         }
     }
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
-        System.out.println(myGrid);
-        myGrid = new Grid(simuName);
-        addGridPane(myGrid);
+        addGridPane();
+        addCellToGrid();
         myRoot.getChildren().add(myGridPane);
+        startSim();
     }
-
     private void setDimensions(SimuButton btn) {
         btn.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
         btn.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
     }
 
     private void startButtonHandler () {
-        System.out.println("Start simulation");
-        isStopped = false;
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.playFromStart();
+        startSim();
     }
     private void stopButtonHandler () {
-        System.out.println("Stop simulation");
         pauseSim();
     }
     private void resetButtonHandler () {
-        System.out.println("Reset simulation");
         resetGrid();
     }
     private void stepButtonHandler () {
-        System.out.println("Resume simulation");
         pauseSim();
         myGrid.updateGrid();
     }
+    private void startSim () {
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.playFromStart();
+    }
     private void pauseSim () {
         animation.pause();
-        isStopped = true;
     }
     private void resetGrid () {
         myRoot.getChildren().remove(myGridPane);
-        addGridPane(myGrid);
+        addGridPane();
+        addCellToGrid();
+        myRoot.getChildren().add(myGridPane);
+        pauseSim();
     }
     private void createButtonPane (VBox buttonContainer) {
         buttonContainer.setPadding(buttonPane);
@@ -183,20 +176,20 @@ public class SimulationUI {
         buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - SceneENUM.BUTTON_GRID.getVal());
         myRoot.getChildren().add(buttonContainer);
     }
-    private void addGridPane (Grid grid) {
+    private void addGridPane () {
         myGridPane = new GridPane();
-        for (int i=0; i< grid.getRowNum(); i++) {
-            RowConstraints row = new RowConstraints(360/(grid.getRowNum()));
+        for (int i=0; i< gridSize; i++) {
+            RowConstraints row = new RowConstraints(360/gridSize);
             myGridPane.getRowConstraints().add(row);
         }
-        for (int i=0; i< grid.getColNum(); i++) {
-            ColumnConstraints col = new ColumnConstraints(360/(grid.getColNum()));
+        for (int i=0; i< gridSize; i++) {
+            ColumnConstraints col = new ColumnConstraints(360/gridSize);
             myGridPane.getColumnConstraints().add(col);
         }
-        addCellToGrid();
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid () {
+        myGrid = new Grid(myResources.getString("GOL"), gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);

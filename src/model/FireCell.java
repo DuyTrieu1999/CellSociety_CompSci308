@@ -3,26 +3,18 @@ package model;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
-/**
- * This class implements the Spreading by Fire simulation.
- * States:
- * DEFORESTED represents a cell with no trees
- * TREE represents a cell with trees
- * BURNING represents a cell with trees that are currently burning
- * @author Austin Kao
- */
-
 public class FireCell extends Cell {
-    private double probCatch = 0.15; //Probability of catching a fire
-    private boolean hasNeighborFire; //Check for a neighboring cell on fire
-    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
 
-    public FireCell (int row, int col, double width) {
+    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
+    private boolean hasNeighborFire; //Check for a neighboring cell on fire
+    private double probCatch; //Probability of catching a fire
+
+    public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
+        probCatch = 0.15;
     }
 
     @Override
@@ -41,8 +33,9 @@ public class FireCell extends Cell {
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
-            this.setNextState(StateENUM.DEFORESTED);
+            this.setNextState(this.getCurrState());
         }
+        this.setFill(this.getStateColor(this.getNextState()));
     }
 
     public void setProbCatch(double probability) {

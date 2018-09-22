@@ -9,23 +9,22 @@ import java.util.ResourceBundle;
  * @author duytrieu
  */
 public class Grid {
+    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
     private Cell[][] grid;
-    private int rowLength = 20;
-    private int colLength = 20;
+    private int size;
     private double xPos;
     private double yPos;
     private double thresholdValue; //for Fire, Segregation models?
     private int numCells; //for Segregation model?
     private String simulationName;
+    private ResourceBundle myResources;
 
-    public Grid() {
-        simulationName = null;
-        grid = new Cell[rowLength][colLength];
-    }
-    public Grid (String simulationName) {
+    public Grid (String simulationName, int size) {
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
+        this.size = size;
         this.simulationName = simulationName;
-        grid = new Cell[rowLength][colLength];
+        grid = new Cell[size][size];
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
@@ -47,7 +46,7 @@ public class Grid {
         }
     }
 
-    public void fillGrid () {
+    private void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
                 grid[i][j] = chooseSimuCell(simulationName, i, j, (double)360 / this.getColNum());
@@ -55,15 +54,17 @@ public class Grid {
             }
         }
     }
-    public Cell chooseSimuCell (String simuName, int i, int j, double width) {
-        if (simuName.equals("Game of Life"))
+    private Cell chooseSimuCell (String simuName, int i, int j, double width) {
+        if (simuName.equals(myResources.getString("GOL")))
             return new GOLCell(i, j, width);
-        else if (simuName.equals("Wa-Tor World model"))
+        else if (simuName.equals(myResources.getString("WaTor")))
             return new PredatorPreyCell(i, j, width);
-        else if (simuName.equals("Spreading of Fire"))
+        else if (simuName.equals(myResources.getString("Fire")))
             return new FireCell(i, j, width);
-        else
+        else if (simuName.equals(myResources.getString("Segg")))
             return new SegCell(i, j, width);
+        else
+            return null;
     }
 
     public void storeNeighbors (Cell cell) {
