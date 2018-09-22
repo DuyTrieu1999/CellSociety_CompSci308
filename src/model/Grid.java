@@ -25,8 +25,9 @@ public class Grid {
             }
         }
     }
-    public void updateCell () {
-
+    public void updateGrid () {
+        for(this.rowLength)
+        return this;
     }
 
     public void fillGrid () {
