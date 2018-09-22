@@ -43,6 +43,7 @@ public class SegCell extends Cell{
         updateCell();
     }
     // updateCell() assumes that there are only two types of agents
+    @Override
     public void updateCell() {
         if(!satisfied) {
             this.setCurrState(StateENUM.VACANT);

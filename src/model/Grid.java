@@ -26,7 +26,7 @@ public class Grid {
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                storeNeighbor(grid[i][j]);
+                storeNeighbors(grid[i][j]);
             }
         }
     }
@@ -63,7 +63,7 @@ public class Grid {
             return new SegCell(i, j, width);
     }
 
-    public void storeNeighbor (Cell cell) {
+    public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
@@ -78,6 +78,16 @@ public class Grid {
         cell.setNeighbors(cellNeighbours);
 
     }
+    //For models that only act on the cells left, right, up, down
+    public void storeDirectNeighbors (Cell cell) {
+        ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
+        cellNeighbours.add(grid[cell.getRowPos()+1][cell.getColPos()]);
+        cellNeighbours.add(grid[cell.getRowPos()-1][cell.getColPos()]);
+        cellNeighbours.add(grid[cell.getRowPos()][cell.getColPos()+1]);
+        cellNeighbours.add(grid[cell.getRowPos()][cell.getColPos()-1]);
+        cell.setNeighbors(cellNeighbours);
+    }
+
     private boolean rowOutOfBound (int row) {
         return row < 0 || row > getRowNum();
     }

@@ -59,7 +59,7 @@ public class FireCell extends Cell {
             case BURNING:
                 return Color.RED;
                 default:
-                    return Color.BLACK;
+                    return null;
         }
     }
 
