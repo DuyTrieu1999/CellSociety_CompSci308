@@ -27,7 +27,7 @@ public class SegCell extends Cell{
     }
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
-    public boolean determineSatisfaction() {
+    public boolean isSatisfied() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         numAlike = 0;
         for(Cell neighbor : currNeighbors) {

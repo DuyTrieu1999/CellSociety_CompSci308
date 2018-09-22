@@ -19,6 +19,10 @@ public class Grid {
     private int numCells; //for Segregation model?
     private String simulationName;
 
+    public Grid() {
+        simulationName = null;
+        grid = new Cell[rowLength][colLength];
+    }
     public Grid (String simulationName) {
         this.simulationName = simulationName;
         grid = new Cell[rowLength][colLength];

@@ -13,7 +13,6 @@ public class SegGrid extends Grid {
 
     public SegGrid (String simulationName) {
         super(simulationName);
-        grid = (SegCell[][]) getGrid();
     }
 
     @Override
@@ -22,16 +21,16 @@ public class SegGrid extends Grid {
         boolean currentlySatisfied;
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                currentlySatisfied = grid[i][j].determineSatisfaction();
+                currentlySatisfied = grid[i][j].isSatisfied();
                 if(!currentlySatisfied && (grid[i][j].getCurrState() == StateENUM.AGENT1)) {
                     numDisatisfied1++;
                 } else if(!currentlySatisfied && (grid[i][j].getCurrState() == StateENUM.AGENT2)) {
                     numDisatisfied2++;
-                } else if(grid[i][j].getCurrState() == StateENUM.VACANT) {
+                } else if(getGrid()[i][j].getCurrState() == StateENUM.VACANT) {
                     vacancies.put(numVacant, grid[i][j]);
                     numVacant++;
                 }
-                grid[i][j].updateCell();
+                getGrid()[i][j].updateCell();
             }
         }
         for (int k=0; k<numDisatisfied1; k++) {
@@ -40,7 +39,7 @@ public class SegGrid extends Grid {
                 int rand = new Random().nextInt(vacancies.size());
                 SegCell move = vacancies.get(rand);
                 move.setCurrState(StateENUM.AGENT1);
-                if(move.determineSatisfaction()) {
+                if(move.isSatisfied()) {
                     currentlySatisfied = true;
                     move.updateCell();
                 } else {
@@ -54,7 +53,7 @@ public class SegGrid extends Grid {
                 int rand = new Random().nextInt(vacancies.size());
                 SegCell move = vacancies.get(rand);
                 move.setCurrState(StateENUM.AGENT2);
-                if(move.determineSatisfaction()) {
+                if(move.isSatisfied()) {
                     currentlySatisfied = true;
                     move.updateCell();
                 } else {
@@ -62,26 +61,10 @@ public class SegGrid extends Grid {
                 }
             }
         }
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                grid[i][j].setCurrState(grid[i][j].getNextState());
+            }
+        }
     }
-
-    @Override
-    //For models that only act on the cells left, right, up, down
-    public void storeNeighbors (Cell cell) {
-        ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
-        if(!outOfBounds(cell.getRowPos()+1, cell.getColPos())) {
-            cellNeighbours.add(getGrid()[cell.getRowPos()+1][cell.getColPos()]);
-        }
-        if(!outOfBounds(cell.getRowPos()-1, cell.getColPos())) {
-            cellNeighbours.add(getGrid()[cell.getRowPos()-1][cell.getColPos()]);
-        }
-        if(!outOfBounds(cell.getRowPos(), cell.getColPos()+1)) {
-            cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()+1]);
-        }
-        if(!outOfBounds(cell.getRowPos(), cell.getColPos()-1)) {
-            cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()-1]);
-        }
-        cell.setNeighbors(cellNeighbours);
-    }
-
-
 }
