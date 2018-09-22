@@ -27,7 +27,7 @@ public class SegCell extends Cell{
     }
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
-    public void determineSatisfaction() {
+    public boolean determineSatisfaction() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         numAlike = 0;
         for(Cell neighbor : currNeighbors) {
@@ -35,24 +35,20 @@ public class SegCell extends Cell{
                 numAlike++;
             }
         }
-        if(numAlike > myThreshold*currNeighbors.size()) {
+        if(numAlike >= myThreshold*currNeighbors.size()) {
             satisfied = true;
         } else {
             satisfied = false;
         }
-        updateCell();
+        return satisfied;
     }
     // updateCell() assumes that there are only two types of agents
     @Override
     public void updateCell() {
         if(!satisfied) {
-            this.setCurrState(StateENUM.VACANT);
+            this.setNextState(StateENUM.VACANT);
         } else {
-            if(this.getCurrState() == StateENUM.AGENT1) {
-                this.setNextState(StateENUM.AGENT2);
-            } else if(this.getCurrState() == StateENUM.AGENT2) {
-                this.setNextState(StateENUM.AGENT1);
-            }
+            this.setNextState(this.getCurrState());
         }
     }
 

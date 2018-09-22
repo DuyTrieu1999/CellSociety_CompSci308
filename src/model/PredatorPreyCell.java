@@ -13,11 +13,7 @@ import javafx.scene.shape.Rectangle;
  * States:
  * FISH represents a cell occupied by fish
  * SHARK represents a cell occupied by a shark
-<<<<<<< HEAD
  * WATER represents an empty cell in the sea
-=======
- * SEA represents an empty cell in the sea
->>>>>>> master
  * @author Austin Kao
  */
 
@@ -89,4 +85,7 @@ public class PredatorPreyCell extends Cell {
         cell = this;
         return temp;
     }
+
+    private int getReproductionTime() { return reproductionTime;}
+    private int getSharkEnergy() {return sharkEnergy;}
 }

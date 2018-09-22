@@ -19,7 +19,6 @@ public class Grid {
     private int numCells; //for Segregation model?
     private String simulationName;
 
-
     public Grid (String simulationName) {
         this.simulationName = simulationName;
         grid = new Cell[rowLength][colLength];
@@ -76,23 +75,10 @@ public class Grid {
         }
         cellNeighbours.remove(grid[cell.getRowPos()][cell.getColPos()]);
         cell.setNeighbors(cellNeighbours);
-
-    }
-    //For models that only act on the cells left, right, up, down
-    public void storeDirectNeighbors (Cell cell) {
-        ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
-        cellNeighbours.add(grid[cell.getRowPos()+1][cell.getColPos()]);
-        cellNeighbours.add(grid[cell.getRowPos()-1][cell.getColPos()]);
-        cellNeighbours.add(grid[cell.getRowPos()][cell.getColPos()+1]);
-        cellNeighbours.add(grid[cell.getRowPos()][cell.getColPos()-1]);
-        cell.setNeighbors(cellNeighbours);
     }
 
-    private boolean rowOutOfBound (int row) {
-        return row < 0 || row > getRowNum();
-    }
-    private boolean colOutOfBound (int col) {
-        return col < 0 || col > getColNum();
+    public boolean outOfBounds (int row, int col) {
+        return (row < 0 || row > getRowNum() || col < 0 || col > getColNum());
     }
     public int getRowNum () {
         return grid.length;
@@ -105,5 +91,8 @@ public class Grid {
     }
     public Cell getCell (int row, int col) {
         return grid[row][col];
+    }
+    public Cell[][] getGrid() {
+        return grid;
     }
 }
