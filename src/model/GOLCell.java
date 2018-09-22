@@ -8,10 +8,14 @@ import java.util.Random;
 /**
  * This class implements a cell that would be part of the Game of Life simulation.
  * Most of the initial testing should be with this simulation.
+ * States:
+ * ALIVE represents a populated area
+ * DEAD represents a depopulated area
  * @author Austin Kao
  */
 
 public class GOLCell extends Cell {
+    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
     private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 

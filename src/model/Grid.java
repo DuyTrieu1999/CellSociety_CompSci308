@@ -15,7 +15,10 @@ public class Grid {
     private int colLength = 20;
     private double xPos;
     private double yPos;
+    private double thresholdValue; //for Fire, Segregation models?
+    private int numCells; //for Segregation model?
     private String simulationName;
+
 
     public Grid (String simulationName) {
         this.simulationName = simulationName;

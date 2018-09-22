@@ -16,14 +16,15 @@ import java.util.Random;
  */
 
 public class FireCell extends Cell {
-    private StateENUM[] states = {StateENUM.TREE, StateENUM.DEFORESTED, StateENUM.BURNING};
-    private double probCatch; //Probability of catching a fire
+    private double probCatch = 0.15; //Probability of catching a fire
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
+    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
 
     public FireCell (int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
     }
+
     @Override
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
@@ -39,27 +40,32 @@ public class FireCell extends Cell {
             }
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
+        } else {
+            this.setNextState(StateENUM.DEFORESTED);
         }
     }
-    @Override
-    public void setStartState () {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-    }
-    @Override
-    public Color getStateColor (StateENUM state) {
-        switch (state) {
-            case TREE:
-                return Color.GREEN;
-            case DEFORESTED:
-                return Color.YELLOW;
-            case BURNING:
-                return Color.RED;
-            default:
-                return null;
-        }
-    }
+
     public void setProbCatch(double probability) {
         probCatch = probability;
+    }
+
+    @Override
+    public Color getStateColor(StateENUM state) {
+        switch (state) {
+            case DEFORESTED:
+                return Color.YELLOW;
+            case TREE:
+                return Color.GREEN;
+            case BURNING:
+                return Color.RED;
+                default:
+                    return Color.BLACK;
+        }
+    }
+
+    @Override
+    public void setStartState() {
+        int rand = new Random().nextInt(states.length);
+        this.setCurrState(states[rand]);
     }
 }

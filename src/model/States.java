@@ -5,9 +5,15 @@ import javafx.scene.paint.Color;
 public enum States {
     ALIVE,
     DEAD,
-    RACE1,
-    RACE2,
-    RACE3;
+    VACANT,
+    AGENT1,
+    AGENT2,
+    DEFORESTED,
+    TREE,
+    BURNING,
+    FISH,
+    SHARK,
+    WATER;
 
     public static Color stateColor(States state) {
         switch(state) {
@@ -15,12 +21,24 @@ public enum States {
                 return Color.WHITE;
             case DEAD:
                 return Color.BLACK;
-            case RACE1:
-                return Color.BLUE;
-            case RACE2:
+            case VACANT:
                 return Color.WHITE;
-            case RACE3:
+            case AGENT1:
+                return Color.BLUE;
+            case AGENT2:
+                return Color.YELLOW;
+            case DEFORESTED:
+                return Color.YELLOW;
+            case TREE:
+                return Color.GREEN;
+            case BURNING:
                 return Color.RED;
+            case FISH:
+                return Color.GREEN;
+            case SHARK:
+                return Color.GRAY;
+            case WATER:
+                return Color.BLUE;
             default:
                 return null;
         }
