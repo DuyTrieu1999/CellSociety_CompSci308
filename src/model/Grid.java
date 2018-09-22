@@ -9,14 +9,17 @@ import java.util.ResourceBundle;
  * @author duytrieu
  */
 public class Grid {
+    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
 
     private Cell[][] grid;
     private int size;
     private double xPos;
     private double yPos;
     private String simulationName;
+    private ResourceBundle myResources;
 
     public Grid (String simulationName, int size) {
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         this.size = size;
         this.simulationName = simulationName;
         grid = new Cell[size][size];
@@ -50,13 +53,13 @@ public class Grid {
         }
     }
     private Cell chooseSimuCell (String simuName, int i, int j, double width) {
-        if (simuName.equals("Game of Life"))
+        if (simuName.equals(myResources.getString("GOL")))
             return new GOLCell(i, j, width);
-        else if (simuName.equals("Wa-Tor World model"))
+        else if (simuName.equals(myResources.getString("WaTor")))
             return new PredatorPreyCell(i, j, width);
-        else if (simuName.equals("Spreading of Fire"))
+        else if (simuName.equals(myResources.getString("Fire")))
             return new FireCell(i, j, width);
-        else if (simuName.equals("Schelling's model of segregation"))
+        else if (simuName.equals(myResources.getString("Segg")))
             return new SegCell(i, j, width);
         else
             return null;
