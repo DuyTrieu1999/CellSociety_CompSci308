@@ -40,11 +40,6 @@ public class SimulationUI {
             (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
             -SceneENUM.PADDING.getVal());
 
-    private Insets cellPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
-            0,
-            (SceneENUM.SCENE_WIDTH.getVal()-SceneENUM.GRID_WIDTH.getVal()) / 2,
-            SceneENUM.PADDING.getVal());
-
     public Scene sceneInit () {
         frame  = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 e -> this.step(SECOND_DELAY));
@@ -54,8 +49,9 @@ public class SimulationUI {
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
-        myGrid = new Grid();
+        myGrid = new Grid("Game of Life");
         addGridPane(myGrid);
+        myRoot.getChildren().add(myGridPane);
 //        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
@@ -112,11 +108,12 @@ public class SimulationUI {
     }
 
     private ChoiceBox makeChoiceBox () {
-        ChoiceBox<String> cb = new ChoiceBox<String>();
+        ChoiceBox<String> cb = new ChoiceBox<>();
+        cb.getItems().add("Game of Life");
         cb.getItems().add("Wa-Tor World model");
         cb.getItems().add("Spreading of Fire");
         cb.getItems().add("Schelling's model of segregation");
-        cb.setValue("Wa-Tor World model");
+        cb.setValue("Game of Life");
         cb.setOnAction(e -> getChoice(cb));
         return cb;
     }
@@ -124,6 +121,26 @@ public class SimulationUI {
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
         System.out.println(name);
+        if (name.equals("Game of Life")) {
+            setSimulation("Game of Life");
+        }
+        else if (name.equals("Wa-Tor World model")) {
+            setSimulation("Wa-Tor World model");
+        }
+        else if (name.equals("Spreading of Fire")) {
+            setSimulation("Spreading of Fire");
+        }
+        else {
+            setSimulation("Schelling's model of segregation");
+        }
+    }
+
+    private void setSimulation (String simuName) {
+        myRoot.getChildren().remove(myGridPane);
+        System.out.println(myGrid);
+        myGrid = new Grid(simuName);
+        addGridPane(myGrid);
+        myRoot.getChildren().add(myGridPane);
     }
 
     private void setDimensions(SimuButton btn) {
@@ -177,7 +194,6 @@ public class SimulationUI {
         }
         addCellToGrid();
         myGridPane.setPadding(new Insets(60,60,60,50));
-        myRoot.getChildren().add(myGridPane);
     }
     private void addCellToGrid () {
         for (int i=0; i<myGrid.getRowNum();i++) {

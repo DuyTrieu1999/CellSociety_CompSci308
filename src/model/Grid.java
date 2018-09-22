@@ -15,8 +15,10 @@ public class Grid {
     private int colLength = 20;
     private double xPos;
     private double yPos;
+    private String simulationName;
 
-    public Grid () {
+    public Grid (String simulationName) {
+        this.simulationName = simulationName;
         grid = new Cell[rowLength][colLength];
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
@@ -42,9 +44,20 @@ public class Grid {
     public void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
+                grid[i][j] = chooseSimuCell(simulationName, i, j, (double)360 / this.getColNum());
+                grid[i][j].setStartState();
             }
         }
+    }
+    public Cell chooseSimuCell (String simuName, int i, int j, double width) {
+        if (simuName.equals("Game of Life"))
+            return new GOLCell(i, j, width);
+        else if (simuName.equals("Wa-Tor World model"))
+            return new PredatorPreyCell(i, j, width);
+        else if (simuName.equals("Spreading of Fire"))
+            return new FireCell(i, j, width);
+        else
+            return new SegCell(i, j, width);
     }
 
     public void storeNeighbor (Cell cell) {

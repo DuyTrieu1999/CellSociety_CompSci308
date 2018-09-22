@@ -5,7 +5,13 @@ import javafx.scene.paint.Color;
 public enum StateENUM {
     ALIVE,
     DEAD,
-    RACE1,
-    RACE2,
-    RACE3;
+    VACANT,
+    AGENT1,
+    AGENT2,
+    DEFORESTED,
+    TREE,
+    BURNING,
+    FISH,
+    WATER,
+    SHARK,
 }

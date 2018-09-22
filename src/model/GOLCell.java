@@ -3,6 +3,7 @@ package model;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class implements a cell that would be part of the Game of Life simulation.
@@ -11,6 +12,8 @@ import java.util.ArrayList;
  */
 
 public class GOLCell extends Cell {
+
+    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
@@ -25,21 +28,19 @@ public class GOLCell extends Cell {
                 numAlive++;
             }
         }
-        if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2)) {
-            this.setNextState(StateENUM.DEAD);
-        } else if(this.getCurrState() == StateENUM.ALIVE && (numAlive > 3)) {
+        if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2 || numAlive > 3)) {
             this.setNextState(StateENUM.DEAD);
         } else if (this.getCurrState() == StateENUM.DEAD && numAlive == 3) {
             this.setNextState(StateENUM.ALIVE);
-        } else if(this.getCurrState() == StateENUM.ALIVE && (numAlive == 2 || numAlive == 3)) {
-            this.setNextState(StateENUM.ALIVE);
+        } else {
+            this.setNextState(this.getCurrState());
         }
         this.setFill(this.getStateColor(this.getNextState()));
     }
 
     @Override
     public Color getStateColor(StateENUM state) {
-        switch (state) {
+        switch(state) {
             case ALIVE:
                 return Color.WHITE;
             case DEAD:
@@ -47,5 +48,11 @@ public class GOLCell extends Cell {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public void setStartState() {
+        int rand = new Random().nextInt(states.length);
+        this.setCurrState(states[rand]);
     }
 }
