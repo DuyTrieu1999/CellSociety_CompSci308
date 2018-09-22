@@ -11,15 +11,15 @@ import java.util.ResourceBundle;
 public class Grid {
 
     private Cell[][] grid;
-    private int rowLength = 20;
-    private int colLength = 20;
+    private int size;
     private double xPos;
     private double yPos;
     private String simulationName;
 
-    public Grid (String simulationName) {
+    public Grid (String simulationName, int size) {
+        this.size = size;
         this.simulationName = simulationName;
-        grid = new Cell[rowLength][colLength];
+        grid = new Cell[size][size];
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
@@ -41,7 +41,7 @@ public class Grid {
         }
     }
 
-    public void fillGrid () {
+    private void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
                 grid[i][j] = chooseSimuCell(simulationName, i, j, (double)360 / this.getColNum());
@@ -49,7 +49,7 @@ public class Grid {
             }
         }
     }
-    public Cell chooseSimuCell (String simuName, int i, int j, double width) {
+    private Cell chooseSimuCell (String simuName, int i, int j, double width) {
         if (simuName.equals("Game of Life"))
             return new GOLCell(i, j, width);
         else if (simuName.equals("Wa-Tor World model"))

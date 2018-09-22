@@ -32,6 +32,7 @@ public class SimulationUI {
     private Grid myGrid;
     private Timeline animation = new Timeline();
     private KeyFrame frame;
+    private int gridSize = 20;
 
     private boolean isStoped = true;
 
@@ -49,10 +50,9 @@ public class SimulationUI {
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
-        myGrid = new Grid("Game of Life");
-        addGridPane(myGrid);
+        addGridPane();
+        addCellToGrid();
         myRoot.getChildren().add(myGridPane);
-//        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
     public void step (double elapsedTime) {
@@ -137,9 +137,9 @@ public class SimulationUI {
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
-        System.out.println(myGrid);
-        myGrid = new Grid(simuName);
-        addGridPane(myGrid);
+        myGrid = new Grid(simuName, gridSize);
+        addGridPane();
+        addCellToGrid();
         myRoot.getChildren().add(myGridPane);
     }
 
@@ -173,7 +173,9 @@ public class SimulationUI {
     }
     private void resetGrid () {
         myRoot.getChildren().remove(myGridPane);
-        addGridPane(myGrid);
+        addGridPane();
+        addCellToGrid();
+        myRoot.getChildren().add(myGridPane);
     }
     private void createButtonPane (VBox buttonContainer) {
         buttonContainer.setPadding(buttonPane);
@@ -182,20 +184,20 @@ public class SimulationUI {
         buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - SceneENUM.BUTTON_GRID.getVal());
         myRoot.getChildren().add(buttonContainer);
     }
-    private void addGridPane (Grid grid) {
+    private void addGridPane () {
         myGridPane = new GridPane();
-        for (int i=0; i< grid.getRowNum(); i++) {
-            RowConstraints row = new RowConstraints(360/(grid.getRowNum()));
+        for (int i=0; i< gridSize; i++) {
+            RowConstraints row = new RowConstraints(360/gridSize);
             myGridPane.getRowConstraints().add(row);
         }
-        for (int i=0; i< grid.getColNum(); i++) {
-            ColumnConstraints col = new ColumnConstraints(360/(grid.getColNum()));
+        for (int i=0; i< gridSize; i++) {
+            ColumnConstraints col = new ColumnConstraints(360/gridSize);
             myGridPane.getColumnConstraints().add(col);
         }
-        addCellToGrid();
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid () {
+        myGrid = new Grid("Game of Life", gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
