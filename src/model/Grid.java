@@ -26,7 +26,11 @@ public class Grid {
         }
     }
     public void updateCell () {
-
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                grid[i][j].updateCell();
+            }
+        }
     }
 
     public void fillGrid () {

@@ -7,7 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- * This class implements a cell that would be part of the Game of Life simulation. Most of the initial testing should be with this simulation.
+ * This class implements a cell that would be part of the Game of Life simulation.
+ * Most of the initial testing should be with this simulation.
  * @author Austin Kao
  */
 
