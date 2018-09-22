@@ -33,8 +33,7 @@ public class SimulationUI {
     private Timeline animation = new Timeline();
     private KeyFrame frame;
     private int gridSize = 20;
-
-    private boolean isStoped = true;
+    private String simulationName;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
             SceneENUM.PADDING.getVal(),
@@ -123,21 +122,25 @@ public class SimulationUI {
         System.out.println(name);
         if (name.equals("Game of Life")) {
             setSimulation("Game of Life");
+            simulationName = "Game of Life";
         }
         else if (name.equals("Wa-Tor World model")) {
             setSimulation("Wa-Tor World model");
+            simulationName = "Wa-Tor World model";
         }
         else if (name.equals("Spreading of Fire")) {
             setSimulation("Spreading of Fire");
+            simulationName = "Spreading of Fire";
         }
         else {
             setSimulation("Schelling's model of segregation");
+            simulationName = "Schelling's model of segregation";
         }
     }
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
-        myGrid = new Grid(simuName, gridSize);
+        //myGrid = new Grid(simuName, gridSize);
         addGridPane();
         addCellToGrid();
         myRoot.getChildren().add(myGridPane);
@@ -149,13 +152,10 @@ public class SimulationUI {
     }
 
     private void startButtonHandler () {
-        System.out.println("Start simulation");
-        isStoped = false;
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.playFromStart();
     }
     private void stopButtonHandler () {
-        System.out.println("Stop simulation");
         pauseSim();
     }
     private void resetButtonHandler () {
@@ -169,13 +169,13 @@ public class SimulationUI {
     }
     private void pauseSim () {
         animation.pause();
-        isStoped = true;
     }
     private void resetGrid () {
         myRoot.getChildren().remove(myGridPane);
         addGridPane();
         addCellToGrid();
         myRoot.getChildren().add(myGridPane);
+        pauseSim();
     }
     private void createButtonPane (VBox buttonContainer) {
         buttonContainer.setPadding(buttonPane);

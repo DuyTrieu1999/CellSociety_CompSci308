@@ -56,8 +56,10 @@ public class Grid {
             return new PredatorPreyCell(i, j, width);
         else if (simuName.equals("Spreading of Fire"))
             return new FireCell(i, j, width);
-        else
+        else if (simuName.equals("Schelling's model of segregation"))
             return new SegCell(i, j, width);
+        else
+            return null;
     }
 
     public void storeNeighbor (Cell cell) {
