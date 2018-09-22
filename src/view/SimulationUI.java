@@ -15,6 +15,7 @@ import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.Grid;
 import model.Cell;
+import model.SegGrid;
 
 /**
  *
@@ -33,7 +34,7 @@ public class SimulationUI {
     private Timeline animation = new Timeline();
     private KeyFrame frame;
 
-    private boolean isStoped = true;
+    private boolean isStopped = true;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
             SceneENUM.PADDING.getVal(),
@@ -49,10 +50,10 @@ public class SimulationUI {
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
-        myGrid = new Grid("Game of Life");
+        myGrid = new SegGrid("Schelling's Model of Segregation");
         addGridPane(myGrid);
         myRoot.getChildren().add(myGridPane);
-//        myScene.getStylesheets().add("./view/SimulationUIStyle.css");
+//      myScene.getStylesheets().add("./view/SimulationUIStyle.css");
         return myScene;
     }
     public void step (double elapsedTime) {
@@ -150,7 +151,7 @@ public class SimulationUI {
 
     private void startButtonHandler () {
         System.out.println("Start simulation");
-        isStoped = false;
+        isStopped = false;
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.playFromStart();
     }
@@ -169,7 +170,7 @@ public class SimulationUI {
     }
     private void pauseSim () {
         animation.pause();
-        isStoped = true;
+        isStopped = true;
     }
     private void resetGrid () {
         myRoot.getChildren().remove(myGridPane);
