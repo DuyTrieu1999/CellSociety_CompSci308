@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * This class implements the Spreading by Fire simulation.
+ * @author Austin Kao
+ */
+
 public class FireCell extends Cell {
     private double probCatch;
     private boolean hasNeighborFire;

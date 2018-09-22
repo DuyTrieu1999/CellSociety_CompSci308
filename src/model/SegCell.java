@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- * This cell represents a cell in the Schelling's model of segration simulation.
+ * This cell represents a cell in the Schelling's model of segregation simulation.
  * @author Austin Kao
  */
 
