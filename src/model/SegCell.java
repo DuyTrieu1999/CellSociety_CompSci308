@@ -1,5 +1,4 @@
 package model;
-package view;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,9 +23,9 @@ public class SegCell extends Cell{
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
     public void determineSatisfaction() {
-        ArrayList<Cell> currNeighbors = this.getNeighbors;
+        ArrayList<Cell> currNeighbors = this.getNeighbors();
         numAlike = 0;
-        for(Cell neighbor = currNeighbors) {
+        for(Cell neighbor : currNeighbors) {
             if(this.getCurrState() == neighbor.getCurrState()) {
                 numAlike++;
             }
@@ -36,18 +35,23 @@ public class SegCell extends Cell{
         } else {
             satisfied = false;
         }
+        updateCell();
     }
-
+    // updateCell() assumes that there are two agents
     public void updateCell() {
-        if(satisfied) {
-            this.setPrevState(this.getCurrState());
-        } else {
-            this.setPrevState(this.getCurrState());
+        this.setPrevState(this.getCurrState());
+        if(!satisfied) {
             this.setCurrState(0);
+        } else {
+            if(this.getCurrState() == 1) {
+                this.setCurrState(2);
+            } else if(this.getCurrState() == 2) {
+                this.setCurrState(1);
+            }
         }
     }
 
-    public int setThreshold(double threshold) {
+    public void setThreshold(double threshold) {
         myThreshold = threshold;
     }
 }

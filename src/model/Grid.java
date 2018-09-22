@@ -26,8 +26,7 @@ public class Grid {
         }
     }
     public void updateGrid () {
-        for(this.rowLength)
-        return this;
+        return;
     }
 
     public void fillGrid () {
