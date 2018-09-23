@@ -98,4 +98,7 @@ public class Grid {
     public Cell getCell (int row, int col) {
         return grid[row][col];
     }
+    public int returnCol () {
+        return this.size;
+    }
 }

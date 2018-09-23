@@ -20,7 +20,7 @@ public class SliderUI extends VBox {
     protected Label nameLabel;
     protected HBox layoutBox;
 
-    public SliderUI (String name, int val, int min, int max) {
+    public SliderUI (String name, double val, double min, double max) {
         name = name;
         slider.setValue(val);
         slider.setMin(min);
