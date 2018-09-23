@@ -50,6 +50,7 @@ public class SegGrid extends Grid {
                 }
             }
         }
+        //Need to change this; agents should move as one (oops)
         moveAgents(numDissatisfied1, StateENUM.AGENT1);
         moveAgents(numDissatisfied2, StateENUM.AGENT2);
         for (int i=0; i<this.getRowNum(); i++) {

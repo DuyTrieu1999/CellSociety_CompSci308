@@ -7,39 +7,74 @@ import java.util.HashMap;
  * This class implements the grid for the Wa-Tor World of Predator Prey Relationships
  */
 public class PredatorPreyGrid extends Grid{
-    PredatorPreyCell[][] grid;
-    private HashMap<Integer, Fish> poorInnocentLittleFishies; //Must think of HashCodes
+    private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
+    private final int MAX_SHARK_ENERGY = 3;
+    private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
+    private final int ENERGY_FROM_EATING_FISH = 2;
+
+    private HashMap<Integer, Fish> poorInnocentLittleFishies; //Rename? lol
     private HashMap<Integer, Shark> sharks;
 
     public PredatorPreyGrid(int size) {
         super(size);
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                if(grid[i][j].getCurrState() == StateENUM.FISH) {
+                if(getGrid()[i][j].getCurrState() == StateENUM.FISH) {
                     poorInnocentLittleFishies.put(hashCode(i,j), new Fish());
-                } else if(grid[i][j].getCurrState() == StateENUM.SHARK) {
+                } else if(getGrid()[i][j].getCurrState() == StateENUM.SHARK) {
                     sharks.put(hashCode(i,j), new Shark());
                 }
             }
         }
     }
 
+    /**
+     * Make updateGrid() conform to the rules of the simulation
+     */
     @Override
     public void updateGrid() {
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                grid[i][j].updateCell();
-                if(poorInnocentLittleFishies.containsKey(hashCode(i,j))) {
-                    Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
-                    if(currentFish.getReproductionTime() <= 0) {
-                        //place code here
+                if(getGrid()[i][j].getCurrState() == StateENUM.SHARK) {
+                    getGrid()[i][j].updateCell();
+                    if(getGrid()[i][j].isMoving()) {
+                        PredatorPreyCell nextLocation = getGrid()[i][j].getMove();
+                        Shark temp = sharks.get(hashCode(i,j));
+                        if(getGrid()[i][j].isEating()) {
+                            poorInnocentLittleFishies.remove(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()));
+                            nextLocation.setCurrState(StateENUM.WATER);
+                        }
+                        if(temp.getReproductionTime() <= 0) {
+                            temp.setReproductionTime(SHARK_REPRODUCTION_CYCLE_WAIT);
+                        } else {
+                            temp.setReproductionTime(temp.getReproductionTime()-1);
+                        }
+                        sharks.remove(hashCode(i,j));
+                        sharks.put(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()), temp);
+                    } else {
+                        Shark currentShark = sharks.get(hashCode(i,j));
+                        if(currentShark.getReproductionTime() != 0) {
+                            currentShark.setReproductionTime(currentShark.getReproductionTime() - 1);
+                            currentShark.setSharkEnergy(currentShark.getSharkEnergy() - 1);
+                        }
                     }
                 }
             }
         }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                grid[i][j].setCurrState(grid[i][j].getNextState());
+                getGrid()[i][j].updateCell();
+                if(poorInnocentLittleFishies.containsKey(hashCode(i,j))) {
+                    Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
+                    if(currentFish.getReproductionTime() <= 0) {
+                        poorInnocentLittleFishies.remove(hashCode(i,j));
+                    }
+                }
+            }
+        }
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
             }
         }
     }
@@ -50,10 +85,12 @@ public class PredatorPreyGrid extends Grid{
     /**
      * The Fish class is intended to represent a fish in the simulation.
      * Fish have a reproduction time parameter which represents the number of chronons they take to reproduce
+     * Rules:
+     * At each chronon, fish will move to an adjacent water cell
+     * At each chronon, if a fish survives long enough, it will reproduce by leaving a new fish in the cell it leaves behind.
      */
     class Fish {
         private int reproductionTime;
-        private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
         public Fish() {
             reproductionTime = FISH_REPRODUCTION_CYCLE_WAIT;
         }
@@ -75,8 +112,6 @@ public class PredatorPreyGrid extends Grid{
     class Shark {
         private int reproductionTime;
         private int sharkEnergy;
-        private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
-        private final int MAX_SHARK_ENERGY = 3;
         private boolean hasDied;
         public Shark() {
             sharkEnergy = MAX_SHARK_ENERGY;
@@ -105,6 +140,11 @@ public class PredatorPreyGrid extends Grid{
         }
     }
 
+    /**
+     * The world of Wa-Tor is a torus, and wraps left to right, top to bottom.
+     * This means that any fish or shark that moves right at the rightmost square ends up on the leftmost square in the same row.
+     * @param cell is the current cell in question
+     */
     @Override
     public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
@@ -120,6 +160,28 @@ public class PredatorPreyGrid extends Grid{
         if(cell.getColPos()>0) {
             cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()-1]);
         }
+        if(cell.getRowPos() == this.getRowNum()) {
+            cellNeighbours.add(getGrid()[0][cell.getColPos()]);
+        }
+        if(cell.getRowPos() == 0) {
+            cellNeighbours.add(getGrid()[this.getRowNum()-1][cell.getColPos()]);
+        }
+        if(cell.getRowPos() == this.getColNum()) {
+            cellNeighbours.add(getGrid()[cell.getRowPos()][0]);
+        }
+        if(cell.getRowPos() == 0) {
+            cellNeighbours.add(getGrid()[cell.getRowPos()][this.getColNum()-1]);
+        }
         cell.setNeighbors(cellNeighbours);
+    }
+
+    @Override
+    public void fillGrid() {
+        for (int i = 0; i<this.getRowNum(); i++) {
+            for (int j = 0; j<this.getColNum(); j++) {
+                this.getGrid()[i][j] = new PredatorPreyCell(i, j, (double)360 / this.getColNum());
+                this.getGrid()[i][j].setStartState();
+            }
+        }
     }
 }
