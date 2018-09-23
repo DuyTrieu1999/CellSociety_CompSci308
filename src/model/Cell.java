@@ -52,5 +52,6 @@ public abstract class Cell extends Rectangle {
     public boolean isSatisfied() {
         return false;
     }
+
 }
 

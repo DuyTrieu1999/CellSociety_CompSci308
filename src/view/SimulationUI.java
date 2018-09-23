@@ -59,19 +59,25 @@ public class SimulationUI {
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
+        changeSpeed();
         myRoot.getChildren().add(myGridPane);
-        System.out.println(simulationName);
+        //System.out.println(simulationName);
         return myScene;
     }
     public void step (double elapsedTime) {
         myGrid.updateGrid();
         gridSize = (int)sizeSlider.getVal();
     }
+    private void changeSpeed () {
+        speedSlider.setOnMouseDragged(event -> {
+            animation.setRate(speedSlider.getVal());
+        });
+    }
 
     private void makeSlider () {
         sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
         sizeSlider.setTextField();
-        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 1, 0.5, 2);
+        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 10, 1, 20);
         speedSlider.setTextField();
     }
 
@@ -88,6 +94,7 @@ public class SimulationUI {
         SimuButton stepButton = new SimuButton(myResources.getString("Step"), event -> stepButtonHandler());
         SimuButton resetButton = new SimuButton(myResources.getString("Reset"), event -> resetButtonHandler());
         makeSlider();
+        changeSpeed();
         hbox1.getChildren().add(cb);
         hbox2.getChildren().add(startButton);
         hbox3.getChildren().add(stopButton);
@@ -109,25 +116,8 @@ public class SimulationUI {
     }
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
-        if (name.equals(myResources.getString("GOL"))) {
-            simulationName = myResources.getString("GOL");
-            setSimulation(simulationName);
-        }
-        else if (name.equals(myResources.getString("WaTor"))) {
-            simulationName = myResources.getString("WaTor");
-            System.out.println(simulationName);
-            setSimulation(simulationName);
-        }
-        else if (name.equals(myResources.getString("Fire"))) {
-            simulationName = myResources.getString("Fire");
-            System.out.println(simulationName);
-            setSimulation(simulationName);
-        }
-        else {
-            simulationName = myResources.getString("Segg");
-            System.out.println(simulationName);
-            setSimulation(simulationName);
-        }
+        simulationName = name;
+        setSimulation(simulationName);
     }
 
     private void setSimulation (String simuName) {
@@ -193,4 +183,5 @@ public class SimulationUI {
             }
         }
     }
+
 }

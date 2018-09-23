@@ -19,7 +19,7 @@ public class Grid {
     private String simulationName;
     private ResourceBundle myResources;
 
-    public Grid (String simulationName, int size) {
+    public Grid (int size) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         this.size = size;
         this.simulationName = simulationName;
@@ -45,25 +45,13 @@ public class Grid {
         }
     }
 
-    private void fillGrid () {
+    public void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                grid[i][j] = chooseSimuCell(simulationName, i, j, (double)360 / this.getColNum());
+                grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
                 grid[i][j].setStartState();
             }
         }
-    }
-    private Cell chooseSimuCell (String simuName, int i, int j, double width) {
-        if (simuName.equals(myResources.getString("GOL")))
-            return new GOLCell(i, j, width);
-        else if (simuName.equals(myResources.getString("WaTor")))
-            return new PredatorPreyCell(i, j, width);
-        else if (simuName.equals(myResources.getString("Fire")))
-            return new FireCell(i, j, width);
-        else if (simuName.equals(myResources.getString("Segg")))
-            return new SegCell(i, j, width);
-        else
-            return null;
     }
 
     //May or may not use!
@@ -102,9 +90,6 @@ public class Grid {
     public int getColNum () {
         return grid[0].length;
     }
-    public void setCell (int row, int col, Cell myCell) {
-        grid[row][col] = myCell;
-    }
     public Cell getCell (int row, int col) {
         return grid[row][col];
     }
@@ -115,4 +100,5 @@ public class Grid {
     public int returnCol () {
         return this.size;
     }
+
 }
