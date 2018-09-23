@@ -5,6 +5,10 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ *
+ * @author Samuel Appiah-Kubi
+ */
 public class FireCell extends Cell {
     private double probCatch = 0.15; //Probability of catching a fire
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
