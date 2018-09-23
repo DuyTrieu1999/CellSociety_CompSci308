@@ -13,8 +13,6 @@ public class Grid {
 
     private Cell[][] grid;
     private int size;
-    private double xPos;
-    private double yPos;
 
     private double thresholdValue; //for Fire, Segregation models?
     private int numCells; //for Segregation model?

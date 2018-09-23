@@ -62,7 +62,7 @@ public class SimulationUI {
         addCellToGrid(simulationName);
         changeSpeed();
         myRoot.getChildren().add(myGridPane);
-        System.out.println(simulationName);
+        //System.out.println(simulationName);
         return myScene;
     }
     public void step (double elapsedTime) {
@@ -171,11 +171,11 @@ public class SimulationUI {
         System.out.println(simuName);
         if (simuName.equals(myResources.getString("GOL")))
             myGrid = new Grid(gridSize);
-        else if (simuName.equals(myResources.getString("WaTor")))
+        if (simuName.equals(myResources.getString("WaTor")))
             myGrid = new PredatorPreyGrid(gridSize);
-        else if (simuName.equals(myResources.getString("Fire")))
+        if (simuName.equals(myResources.getString("Fire")))
             myGrid = new FireCellGrid(gridSize);
-        else
+        if (simuName.equals(myResources.getString("Segg")))
             myGrid = new SegGrid(gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {

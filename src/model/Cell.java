@@ -49,5 +49,9 @@ public abstract class Cell extends Rectangle {
     public abstract void setStartState();
     public abstract void updateCell ();
     public abstract Color getStateColor(StateENUM state);
+    public boolean isSatisfied() {
+        return false;
+    }
+
 }
 
