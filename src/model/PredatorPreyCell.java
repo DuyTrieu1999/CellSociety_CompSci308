@@ -17,10 +17,14 @@ import javafx.scene.shape.Rectangle;
 public class PredatorPreyCell extends Cell {
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
     private boolean hasEaten;
-    private Cell move;
+    private PredatorPreyCell move;
+    private boolean canMove;
+    private double cellWidth;
 
     public PredatorPreyCell(int row, int col, double width) {
         super(row, col, width);
+        canMove = false;
+        cellWidth = width;
     }
     @Override
     public void updateCell () {
@@ -28,23 +32,29 @@ public class PredatorPreyCell extends Cell {
             this.setNextState(StateENUM.WATER);
             return;
         }
-        boolean canMove = false;
-        TreeMap<Integer, Cell> currNeighborsMap = new TreeMap<Integer, Cell>();
+        TreeMap<Integer, PredatorPreyCell> currNeighborsMap = new TreeMap<Integer, PredatorPreyCell>();
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         int index = 0;
         for(Cell neighbor : currNeighbors) {
-            currNeighborsMap.put(index, neighbor);
-            index++;
-        }
-        while(!canMove) {
-            int rand = new Random().nextInt(currNeighbors.size());
-            move = currNeighborsMap.get(rand);
-            if(!(currNeighborsMap.get(rand).getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH) && (this.getCurrState() != currNeighborsMap.get(rand).getCurrState())) {
+            if(neighbor.getCurrState() != this.getCurrState() && !(neighbor.getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH)) {
                 canMove = true;
             }
+            PredatorPreyCell mappedNeighbor= new PredatorPreyCell(getRowPos(),getColPos(), cellWidth);
+            mappedNeighbor.setCurrState(neighbor.getCurrState());
+            mappedNeighbor.setNextState(neighbor.getNextState());
+            currNeighborsMap.put(index, mappedNeighbor);
+            index++;
         }
-        if(move != null) {
-            return;
+        if(canMove) {
+            //For when canMove
+            int rand = new Random().nextInt(currNeighbors.size());
+            move = currNeighborsMap.get(rand);
+            move.setNextState(this.getCurrState());
+            if(this.getNextState() == this.getCurrState()) {
+                this.setNextState(StateENUM.WATER);
+            }
+        } else {
+            this.setNextState(this.getCurrState());
         }
     }
 
@@ -75,5 +85,13 @@ public class PredatorPreyCell extends Cell {
         PredatorPreyCell temp = cell;
         cell = this;
         return temp;
+    }
+
+    public PredatorPreyCell getMove() {
+        if(move != null) {
+            return move;
+        } else {
+            return null;
+        }
     }
 }

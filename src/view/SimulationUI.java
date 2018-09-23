@@ -189,7 +189,7 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid () {
-        myGrid = new Grid(myResources.getString("GOL"), gridSize);
+        myGrid = new SegGrid(myResources.getString("GOL"), gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
