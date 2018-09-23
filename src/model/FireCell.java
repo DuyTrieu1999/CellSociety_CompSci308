@@ -17,7 +17,7 @@ public class FireCell extends Cell {
     public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
-        probCatch = 0.15;
+        probCatch = 1;
     }
 
     @Override
@@ -50,7 +50,6 @@ public class FireCell extends Cell {
 
     @Override
     public Color getStateColor(StateENUM state) {
-        System.out.println(state);
         switch (state) {
             case DEFORESTED:
                 return Color.YELLOW;

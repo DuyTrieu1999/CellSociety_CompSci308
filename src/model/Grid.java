@@ -82,7 +82,7 @@ public class Grid {
     }
 
     public boolean outOfBounds (int row, int col) {
-        return (row < 0 || row > getRowNum() || col < 0 || col > getColNum());
+        return (row < 0 || (row >= getRowNum()) || col < 0 || (col >= getColNum()));
     }
     public int getRowNum () {
         return grid.length;

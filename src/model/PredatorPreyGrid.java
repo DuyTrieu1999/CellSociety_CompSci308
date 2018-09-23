@@ -64,7 +64,6 @@ public class PredatorPreyGrid extends Grid{
             this.reproductionTime = reproductionTime;
         }
     }
-
     /**
      * The Shark class is intended to represent a shark in the simulation
      * Shark have a sharkEnergy parameter which represents the number of chronons they can continue living for without eating fish before dying

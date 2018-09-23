@@ -11,16 +11,17 @@ public class FireGrid extends Grid {
     @Override
     public void storeNeighbors(Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<>();
-        int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
-        int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
-        for (int row: rowCoord) {
-            for (int col: colCoord) {
-                if(Math.abs(row - col) == 1) {
-                    if (row>-1 && col>-1 && row<(this.getRowNum()) && col<(this.getColNum())) {
-                        cellNeighbours.add(this.getGrid()[row][col]);
-                    }
-                }
-            }
+        if(!outOfBounds(cell.getRowPos()+1, cell.getColPos())) {
+            cellNeighbours.add(getGrid()[cell.getRowPos()+1][cell.getColPos()]);
+        }
+        if(!outOfBounds(cell.getRowPos()-1, cell.getColPos())) {
+            cellNeighbours.add(getGrid()[cell.getRowPos()-1][cell.getColPos()]);
+        }
+        if(!outOfBounds(cell.getRowPos(), cell.getColPos()+1)) {
+            cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()+1]);
+        }
+        if(!outOfBounds(cell.getRowPos(), cell.getColPos()-1)) {
+            cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()-1]);
         }
         cell.setNeighbors(cellNeighbours);
     }
