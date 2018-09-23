@@ -42,54 +42,16 @@ public class SegGrid extends Grid {
                     numDissatisfied1++;
                 } else if(!currentlySatisfied && (getGrid()[i][j].getCurrState() == StateENUM.AGENT2)) {
                     numDissatisfied2++;
-                } else if(getGrid()[i][j].getCurrState() == StateENUM.VACANT) {
+                }
+                getGrid()[i][j].updateCell();
+                if(getGrid()[i][j].getCurrState() == StateENUM.VACANT) {
                     vacancies.put(numVacant, getGrid()[i][j]);
                     numVacant++;
                 }
-                getGrid()[i][j].updateCell();
             }
         }
-        System.out.println(numDissatisfied1);
-        System.out.println(numDissatisfied2);
-        System.out.println(vacancies.size());
-        for (int k = 0; k < numDissatisfied1; k++) {
-            currentlySatisfied = false;
-            while (!currentlySatisfied) {
-                if(vacancies.size() > 0) {
-                    int rand = new Random().nextInt(vacancies.size());
-                    Cell move = vacancies.get(rand);
-                    if(move.getCurrState() == StateENUM.VACANT) {
-                        move.setCurrState(StateENUM.AGENT1);
-                        if (move.isSatisfied()) {
-                            currentlySatisfied = true;
-                            move.updateCell();
-                        } else {
-                            move.setCurrState(StateENUM.VACANT);
-                        }
-                    }
-                } else {
-                    currentlySatisfied = true;
-                }
-            }
-        }
-        for(int l = 0; l < numDissatisfied2; l++) {
-            currentlySatisfied = false;
-            while (!currentlySatisfied) {
-                if(vacancies.size() > 0) {
-                    int rand = new Random().nextInt(vacancies.size());
-                    Cell move = vacancies.get(rand);
-                    move.setCurrState(StateENUM.AGENT2);
-                    if (move.isSatisfied()) {
-                        currentlySatisfied = true;
-                        move.updateCell();
-                    } else {
-                        move.setCurrState(StateENUM.VACANT);
-                    }
-                } else {
-                    currentlySatisfied = true;
-                }
-            }
-        }
+        moveAgents(numDissatisfied1, StateENUM.AGENT1);
+        moveAgents(numDissatisfied2, StateENUM.AGENT2);
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
@@ -103,6 +65,30 @@ public class SegGrid extends Grid {
             for (int j = 0; j<this.getColNum(); j++) {
                 this.getGrid()[i][j] = new SegCell(i, j, (double)360 / this.getColNum());
                 this.getGrid()[i][j].setStartState();
+            }
+        }
+    }
+
+    private void moveAgents(int num, StateENUM state) {
+        for (int k = 0; k < num; k++) {
+            boolean currentlySatisfied = false;
+            while (!currentlySatisfied) {
+                if (vacancies.size() > 0) {
+                    int rand = new Random().nextInt(numVacant);
+                    if (vacancies.containsKey(rand)) {
+                        Cell move = vacancies.get(rand);
+                        move.setCurrState(state);
+                        if (move.isSatisfied()) {
+                            currentlySatisfied = true;
+                            move.updateCell();
+                            vacancies.remove(rand);
+                        } else {
+                            move.setCurrState(StateENUM.VACANT);
+                        }
+                    }
+                } else {
+                    currentlySatisfied = true;
+                }
             }
         }
     }

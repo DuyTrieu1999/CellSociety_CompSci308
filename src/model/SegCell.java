@@ -48,6 +48,7 @@ public class SegCell extends Cell{
     public void updateCell() {
         if(!satisfied) {
             this.setNextState(StateENUM.VACANT);
+            this.setCurrState(StateENUM.VACANT);
         } else {
             this.setNextState(this.getCurrState());
         }
