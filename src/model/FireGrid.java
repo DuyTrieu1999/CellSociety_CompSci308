@@ -8,6 +8,7 @@ public class FireGrid extends Grid {
         super(simulationName, size);
     }
 
+    //For some reason, when testing the simulation, the other method would not work, so I replaced it with this one.
     @Override
     public void storeNeighbors(Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<>();

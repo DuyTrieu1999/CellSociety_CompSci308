@@ -11,6 +11,11 @@ import java.util.Random;
  * States:
  * ALIVE represents a populated area
  * DEAD represents a depopulated area
+ * Rules:
+ * A live cell surrounded by less than two living neighbors dies.
+ * A live cell surrounded by more than three living neighbors dies.
+ * A dead cell surrounded by exactly three living neighbors starts living again.
+ * A live cell surrounded by two or three living neighbors lives on.
  * @author Austin Kao
  */
 

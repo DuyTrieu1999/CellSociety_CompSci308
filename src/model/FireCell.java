@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
+ * This cell implements the Spreading by Fire simulation.
+ * States:
+ * DEFORESTED is land that does not have trees.
+ * TREE is land that is filled with trees that are not on fire.
+ * BURNING is land that is filled with burning trees.
  * @author Samuel Appiah-Kubi
+ * @author Austin Kao
  */
 public class FireCell extends Cell {
     private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
