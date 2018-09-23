@@ -35,7 +35,7 @@ public class FireCell extends Cell {
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
-            this.setNextState(this.getCurrState());
+            this.setNextState(StateENUM.DEFORESTED);
         }
         this.setFill(this.getStateColor(this.getNextState()));
     }
@@ -64,5 +64,4 @@ public class FireCell extends Cell {
                 return Color.BLACK;
         }
     }
-
 }

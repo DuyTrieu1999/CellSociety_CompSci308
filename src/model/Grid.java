@@ -15,6 +15,10 @@ public class Grid {
     private int size;
     private double xPos;
     private double yPos;
+
+    private double thresholdValue; //for Fire, Segregation models?
+    private int numCells; //for Segregation model?
+    private String simulationName;
     private ResourceBundle myResources;
 
     public Grid (int size) {

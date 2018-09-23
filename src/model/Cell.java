@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
  *
  * @author duytrieu
  */
-public abstract class Cell extends Rectangle{
+public abstract class Cell extends Rectangle {
     private int rowPos;
     private int colPos;
     private StateENUM currState;
