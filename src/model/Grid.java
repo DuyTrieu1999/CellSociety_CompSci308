@@ -23,7 +23,7 @@ public class Grid {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         this.size = size;
         this.simulationName = simulationName;
-        grid = new Cell[size][size];
+        grid = chooseSimuGrid(simulationName, size);
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
@@ -64,6 +64,18 @@ public class Grid {
             return new SegCell(i, j, width);
         else
             return null;
+    }
+
+    //May or may not use!
+    private Cell[][] chooseSimuGrid (String simuName, int size) {
+        if (simuName.equals(myResources.getString("WaTor")))
+            return new Cell[size][size];
+        else if (simuName.equals(myResources.getString("Fire")))
+            return new FireCell[size][size];
+        else if (simuName.equals(myResources.getString("Segg")))
+            return new SegCell[size][size];
+        else
+            return new Cell[size][size];
     }
 
     public void storeNeighbors (Cell cell) {

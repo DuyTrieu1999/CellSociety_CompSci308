@@ -56,6 +56,7 @@ public class PredatorPreyCell extends Cell {
         } else {
             this.setNextState(this.getCurrState());
         }
+        this.setFill(getStateColor(this.getCurrState()));
     }
 
     @Override
@@ -76,9 +77,7 @@ public class PredatorPreyCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
-        if(this.getCurrState() == StateENUM.FISH) {
-
-        }
+        this.setFill(getStateColor(this.getCurrState()));
     }
 
     public Cell swapCells(PredatorPreyCell cell) {
