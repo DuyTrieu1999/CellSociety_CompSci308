@@ -20,7 +20,7 @@ public class SliderUI extends VBox {
     protected Label nameLabel;
     protected HBox layoutBox;
 
-    public SliderUI (String name, int val, int min, int max) {
+    public SliderUI (String name, double val, double min, double max) {
         name = name;
         slider.setValue(val);
         slider.setMin(min);
@@ -28,8 +28,9 @@ public class SliderUI extends VBox {
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
         slider.setSnapToTicks(true);
-        slider.setMajorTickUnit(1);
+        slider.setMajorTickUnit((max - min) / 8);
         slider.setMinorTickCount(0);
+        slider.setPadding(new Insets(0, 10, 0, 10));
 
         nameLabel = new Label(name + ": ");
         valueText = new TextField(String.format("%.2f", slider.getValue()));
