@@ -8,7 +8,7 @@ public class FireCellGrid extends Grid{
     }
 
     @Override
-    public void storeNeighbor(Cell cell) {
+    public void storeNeighbors(Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};

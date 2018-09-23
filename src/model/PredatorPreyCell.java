@@ -93,14 +93,4 @@ public class PredatorPreyCell extends Cell {
             return null;
         }
     }
-
-    public Cell swapCells(PredatorPreyCell cell) {
-        PredatorPreyCell temp = cell;
-        cell = this;
-        return temp;
-    }
-
-    private int getReproductionTime() { return reproductionTime;}
-    private int getSharkEnergy() {return sharkEnergy;}
-
 }

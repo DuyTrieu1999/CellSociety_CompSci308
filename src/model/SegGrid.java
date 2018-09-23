@@ -18,8 +18,8 @@ public class SegGrid extends Grid {
     private TreeMap<Integer, Cell> vacancies;
     private int numVacant;
 
-    public SegGrid (String simulationName, int size) {
-        super(simulationName, size);
+    public SegGrid (int size) {
+        super(size);
     }
 
     @Override
@@ -49,6 +49,9 @@ public class SegGrid extends Grid {
                 getGrid()[i][j].updateCell();
             }
         }
+        System.out.println(numDissatisfied1);
+        System.out.println(numDissatisfied2);
+        System.out.println(vacancies.size());
         for (int k = 0; k < numDissatisfied1; k++) {
             currentlySatisfied = false;
             while (!currentlySatisfied) {
@@ -90,6 +93,16 @@ public class SegGrid extends Grid {
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
+            }
+        }
+    }
+
+    @Override
+    public void fillGrid () {
+        for (int i = 0; i<this.getRowNum(); i++) {
+            for (int j = 0; j<this.getColNum(); j++) {
+                this.getGrid()[i][j] = new SegCell(i, j, (double)360 / this.getColNum());
+                this.getGrid()[i][j].setStartState();
             }
         }
     }

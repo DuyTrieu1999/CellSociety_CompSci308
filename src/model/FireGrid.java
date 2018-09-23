@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class FireGrid extends Grid {
-    public FireGrid(String simulationName, int size) {
-        super(simulationName, size);
+    public FireGrid(int size) {
+        super(size);
     }
 
     //For some reason, when testing the simulation, the other method would not work, so I replaced it with this one.
@@ -25,5 +25,15 @@ public class FireGrid extends Grid {
             cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()-1]);
         }
         cell.setNeighbors(cellNeighbours);
+    }
+
+    @Override
+    public void fillGrid () {
+        for (int i = 0; i<this.getRowNum(); i++) {
+            for (int j = 0; j<this.getColNum(); j++) {
+                this.getGrid()[i][j] = new FireCell(i, j, (double)360 / this.getColNum());
+                this.getGrid()[i][j].setStartState();
+            }
+        }
     }
 }

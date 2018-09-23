@@ -14,16 +14,12 @@ public class Grid {
 
     private Cell[][] grid;
     private int size;
-    private double xPos;
-    private double yPos;
-    private String simulationName;
     private ResourceBundle myResources;
 
     public Grid (int size) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         this.size = size;
-        this.simulationName = simulationName;
-        grid = chooseSimuGrid(simulationName, size);
+        grid = new Cell[size][size];
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
@@ -93,12 +89,7 @@ public class Grid {
     public Cell getCell (int row, int col) {
         return grid[row][col];
     }
-
     public Cell[][] getGrid() {
         return grid;
     }
-    public int returnCol () {
-        return this.size;
-    }
-
 }

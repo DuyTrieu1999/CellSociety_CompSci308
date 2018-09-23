@@ -3,13 +3,16 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class implements the grid for the Wa-Tor World of Predator Prey Relationships
+ */
 public class PredatorPreyGrid extends Grid{
     PredatorPreyCell[][] grid;
     private HashMap<Integer, Fish> poorInnocentLittleFishies; //Must think of HashCodes
     private HashMap<Integer, Shark> sharks;
 
-    public PredatorPreyGrid(String stringName, int size) {
-        super(stringName, size);
+    public PredatorPreyGrid(int size) {
+        super(size);
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 if(grid[i][j].getCurrState() == StateENUM.FISH) {
@@ -103,19 +106,18 @@ public class PredatorPreyGrid extends Grid{
     }
 
     @Override
-    //For models that only act on the cells left, right, up, down
     public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
-        if(!outOfBounds(cell.getRowPos()+1, cell.getColPos())) {
-            cellNeighbours.add(getGrid()[cell.getRowPos()+1][cell.getColPos()]);
+        if(cell.getRowPos()<this.getRowNum() - 1) {
+            cellNeighbours.add(this.getGrid()[cell.getRowPos()+1][cell.getColPos()]);
         }
-        if(!outOfBounds(cell.getRowPos()-1, cell.getColPos())) {
+        if(cell.getRowPos() > 0) {
             cellNeighbours.add(getGrid()[cell.getRowPos()-1][cell.getColPos()]);
         }
-        if(!outOfBounds(cell.getRowPos(), cell.getColPos()+1)) {
+        if(cell.getColPos()<this.getColNum() - 1) {
             cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()+1]);
         }
-        if(!outOfBounds(cell.getRowPos(), cell.getColPos()-1)) {
+        if(cell.getColPos()>0) {
             cellNeighbours.add(getGrid()[cell.getRowPos()][cell.getColPos()-1]);
         }
         cell.setNeighbors(cellNeighbours);
