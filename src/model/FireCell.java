@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class FireCell extends Cell {
+    private double probCatch = 0.15; //Probability of catching a fire
+    private boolean hasNeighborFire; //Check for a neighboring cell on fire
+    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
 
     private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
     private boolean hasNeighborFire;
@@ -33,7 +36,7 @@ public class FireCell extends Cell {
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
-            this.setNextState(this.getCurrState());
+            this.setNextState(StateENUM.DEFORESTED);
         }
         this.setFill(this.getStateColor(this.getNextState()));
     }
@@ -44,22 +47,22 @@ public class FireCell extends Cell {
 
     @Override
     public Color getStateColor(StateENUM state) {
-        switch(state) {
-            case TREE:
-                return Color.GREEN;
+        switch (state) {
             case DEFORESTED:
                 return Color.YELLOW;
+            case TREE:
+                return Color.GREEN;
             case BURNING:
                 return Color.RED;
-            default:
-                return null;
+                default:
+                    return Color.BLACK;
         }
     }
 
     @Override
     public void setStartState() {
-        int rand = new Random().nextInt(this.states.length);
-        this.setCurrState(this.states[rand]);
+        int rand = new Random().nextInt(states.length);
+        this.setCurrState(states[rand]);
     }
 
 
