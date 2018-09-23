@@ -16,7 +16,6 @@ import javafx.scene.shape.Rectangle;
 
 public class PredatorPreyCell extends Cell {
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
-    private boolean hasEaten;
     private PredatorPreyCell move;
     private boolean canMove;
     private boolean fishNeighbor;
@@ -59,10 +58,10 @@ public class PredatorPreyCell extends Cell {
                 do {
                     int rand = new Random().nextInt(currNeighbors.size());
                     move = currNeighborsMap.get(rand);
-                    if(move.getCurrState() == StateENUM.VACANT && move.getNextState() != StateENUM.SHARK) {
+                    if(move.getCurrState() == StateENUM.WATER && move.getNextState() != StateENUM.SHARK) {
                         move.setNextState(this.getCurrState());
                     }
-                } while(move.getCurrState() != StateENUM.VACANT);
+                } while(move.getCurrState() != StateENUM.WATER);
             } else if(this.getCurrState() == StateENUM.SHARK) {
                 if(fishNeighbor) {
                     do {
@@ -95,7 +94,7 @@ public class PredatorPreyCell extends Cell {
             case WATER:
                 return Color.BLUE;
             default:
-                return null;
+                return Color.BLACK;
         }
     }
 
@@ -106,11 +105,6 @@ public class PredatorPreyCell extends Cell {
         this.setFill(getStateColor(this.getCurrState()));
     }
 
-    public Cell swapCells(PredatorPreyCell cell) {
-        PredatorPreyCell temp = cell;
-        cell = this;
-        return temp;
-    }
     @Override
     public PredatorPreyCell getMove() {
         if(move != null) {

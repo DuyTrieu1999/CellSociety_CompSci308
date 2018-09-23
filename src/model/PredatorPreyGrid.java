@@ -17,6 +17,8 @@ public class PredatorPreyGrid extends Grid{
 
     public PredatorPreyGrid(int size) {
         super(size);
+        poorInnocentLittleFishies = new HashMap<Integer, Fish>();
+        sharks = new HashMap<Integer, Shark>();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 if(getGrid()[i][j].getCurrState() == StateENUM.FISH) {
@@ -30,6 +32,7 @@ public class PredatorPreyGrid extends Grid{
 
     /**
      * Make updateGrid() conform to the rules of the simulation
+     * Sharks move before fish so that the fish that are eaten by sharks don't move.
      */
     @Override
     public void updateGrid() {
