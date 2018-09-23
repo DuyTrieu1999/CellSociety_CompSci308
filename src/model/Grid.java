@@ -2,6 +2,7 @@ package model;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 /**
@@ -15,8 +16,6 @@ public class Grid {
     private int size;
     private double xPos;
     private double yPos;
-    private double thresholdValue; //for Fire, Segregation models?
-    private int numCells; //for Segregation model?
     private String simulationName;
     private ResourceBundle myResources;
 
@@ -24,11 +23,11 @@ public class Grid {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         this.size = size;
         this.simulationName = simulationName;
-        grid = new Cell[size][size];
+        grid = chooseSimuGrid(simulationName, size);
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                storeNeighbor(grid[i][j]);
+                storeNeighbors(grid[i][j]);
             }
         }
     }
@@ -67,7 +66,19 @@ public class Grid {
             return null;
     }
 
-    public void storeNeighbor (Cell cell) {
+    //May or may not use!
+    private Cell[][] chooseSimuGrid (String simuName, int size) {
+        if (simuName.equals(myResources.getString("WaTor")))
+            return new Cell[size][size];
+        else if (simuName.equals(myResources.getString("Fire")))
+            return new FireCell[size][size];
+        else if (simuName.equals(myResources.getString("Segg")))
+            return new SegCell[size][size];
+        else
+            return new Cell[size][size];
+    }
+
+    public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
@@ -80,13 +91,10 @@ public class Grid {
         }
         cellNeighbours.remove(grid[cell.getRowPos()][cell.getColPos()]);
         cell.setNeighbors(cellNeighbours);
+    }
 
-    }
-    private boolean rowOutOfBound (int row) {
-        return row < 0 || row > getRowNum();
-    }
-    private boolean colOutOfBound (int col) {
-        return col < 0 || col > getColNum();
+    public boolean outOfBounds (int row, int col) {
+        return (row < 0 || (row >= getRowNum()) || col < 0 || (col >= getColNum()));
     }
     public int getRowNum () {
         return grid.length;
@@ -99,6 +107,10 @@ public class Grid {
     }
     public Cell getCell (int row, int col) {
         return grid[row][col];
+    }
+
+    public Cell[][] getGrid() {
+        return grid;
     }
     public int returnCol () {
         return this.size;

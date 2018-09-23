@@ -10,23 +10,20 @@ import java.util.Random;
  * @author Samuel Appiah-Kubi
  */
 public class FireCell extends Cell {
-    private double probCatch = 0.15; //Probability of catching a fire
+    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
-    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
-
-    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
-    private boolean hasNeighborFire;
-    private double probCatch;
+    private double probCatch; //Probability of catching a fire
 
     public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
-        probCatch = 0.15;
+        probCatch = 1;
     }
 
     @Override
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
+        hasNeighborFire = false;
         for(Cell neighbor : currNeighbors) {
             if(neighbor.getCurrState() == StateENUM.BURNING) {
                 hasNeighborFire = true;
@@ -36,13 +33,15 @@ public class FireCell extends Cell {
             double rn = Math.random();
             if(rn < probCatch) {
                 this.setNextState(StateENUM.BURNING);
+            } else {
+                this.setNextState(this.getCurrState());
             }
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
-            this.setNextState(StateENUM.DEFORESTED);
+            this.setNextState(this.getCurrState());
         }
-        this.setFill(this.getStateColor(this.getNextState()));
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     public void setProbCatch(double probability) {
@@ -58,8 +57,8 @@ public class FireCell extends Cell {
                 return Color.GREEN;
             case BURNING:
                 return Color.RED;
-                default:
-                    return Color.BLACK;
+            default:
+                return Color.BLACK;
         }
     }
 
@@ -67,7 +66,6 @@ public class FireCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
     }
-
-
 }

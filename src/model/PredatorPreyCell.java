@@ -1,8 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -11,34 +10,53 @@ import javafx.scene.shape.Rectangle;
  * States:
  * FISH represents a cell occupied by fish
  * SHARK represents a cell occupied by a shark
-<<<<<<< HEAD
  * WATER represents an empty cell in the sea
-=======
- * SEA represents an empty cell in the sea
->>>>>>> master
  * @author Austin Kao
  */
 
 public class PredatorPreyCell extends Cell {
-    private int reproductionTime;
-    private int sharkEnergy;
-    private final int REPRODUCTION_CYCLE_WAIT = 3;
-    private final int MAX_SHARK_ENERGY = 1;
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
+    private boolean hasEaten;
+    private PredatorPreyCell move;
+    private boolean canMove;
+    private double cellWidth;
 
     public PredatorPreyCell(int row, int col, double width) {
         super(row, col, width);
+        canMove = false;
+        cellWidth = width;
     }
     @Override
     public void updateCell () {
-        return;
-    }
-    public void setReproductionTime(int fishMatingCycleWait) {
-        reproductionTime = fishMatingCycleWait;
-    }
-
-    public void setSharkEnergy(int sharkStrength) {
-        sharkEnergy = sharkStrength;
+        if(this.getCurrState() == StateENUM.WATER) {
+            this.setNextState(StateENUM.WATER);
+            return;
+        }
+        TreeMap<Integer, PredatorPreyCell> currNeighborsMap = new TreeMap<Integer, PredatorPreyCell>();
+        ArrayList<Cell> currNeighbors = this.getNeighbors();
+        int index = 0;
+        for(Cell neighbor : currNeighbors) {
+            if(neighbor.getCurrState() != this.getCurrState() && !(neighbor.getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH)) {
+                canMove = true;
+            }
+            PredatorPreyCell mappedNeighbor= new PredatorPreyCell(getRowPos(),getColPos(), cellWidth);
+            mappedNeighbor.setCurrState(neighbor.getCurrState());
+            mappedNeighbor.setNextState(neighbor.getNextState());
+            currNeighborsMap.put(index, mappedNeighbor);
+            index++;
+        }
+        if(canMove) {
+            //For when canMove
+            int rand = new Random().nextInt(currNeighbors.size());
+            move = currNeighborsMap.get(rand);
+            move.setNextState(this.getCurrState());
+            if(this.getNextState() == this.getCurrState()) {
+                this.setNextState(StateENUM.WATER);
+            }
+        } else {
+            this.setNextState(this.getCurrState());
+        }
+        this.setFill(getStateColor(this.getCurrState()));
     }
 
     @Override
@@ -59,5 +77,20 @@ public class PredatorPreyCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
+    }
+
+    public Cell swapCells(PredatorPreyCell cell) {
+        PredatorPreyCell temp = cell;
+        cell = this;
+        return temp;
+    }
+
+    public PredatorPreyCell getMove() {
+        if(move != null) {
+            return move;
+        } else {
+            return null;
+        }
     }
 }

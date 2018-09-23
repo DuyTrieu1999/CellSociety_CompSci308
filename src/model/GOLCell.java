@@ -17,8 +17,6 @@ import java.util.Random;
 public class GOLCell extends Cell {
     private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
-    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
-
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
     }
@@ -46,9 +44,9 @@ public class GOLCell extends Cell {
     public Color getStateColor(StateENUM state) {
         switch(state) {
             case ALIVE:
-                return Color.WHITE;
-            case DEAD:
                 return Color.BLACK;
+            case DEAD:
+                return Color.WHITE;
             default:
                 return null;
         }
@@ -58,5 +56,6 @@ public class GOLCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
     }
 }

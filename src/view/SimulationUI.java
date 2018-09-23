@@ -13,7 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
-import model.Grid;
+import model.*;
 import model.Cell;
 
 import java.util.ResourceBundle;
@@ -39,7 +39,6 @@ public class SimulationUI {
     private KeyFrame frame;
     private int gridSize;
     private String simulationName;
-
     private ResourceBundle myResources;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
@@ -178,7 +177,15 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
-        myGrid = new Grid(simuName, gridSize);
+        if(simuName.equals(myResources.getString("Segg"))) {
+            myGrid = new SegGrid(simuName, gridSize);
+        } else if(simuName.equals(myResources.getString("Fire"))){
+            myGrid = new FireGrid(simuName,gridSize);
+        } else if(simuName.equals(myResources.getString("WaTor"))) {
+            myGrid = new Grid(simuName,gridSize);
+        } else {
+            myGrid = new Grid(simuName, gridSize);
+        }
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
