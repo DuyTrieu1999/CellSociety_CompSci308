@@ -17,8 +17,6 @@ import java.util.Random;
 public class GOLCell extends Cell {
     private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
-    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
-
     public GOLCell(int row, int col, double width) {
         super(row, col, width);
     }

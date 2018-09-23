@@ -3,11 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
-<<<<<<< HEAD
 import java.util.TreeMap;
 
-=======
->>>>>>> 6168cfa7f601ef24a4f175cc08d185289e0d93ba
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -27,18 +24,12 @@ import javafx.scene.shape.Rectangle;
 public class PredatorPreyCell extends Cell {
     private int reproductionTime;
     private int sharkEnergy;
-<<<<<<< HEAD
     private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
     private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
     private final int MAX_SHARK_ENERGY = 3;
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
     private boolean hasEaten;
     private Cell move;
-=======
-    private final int REPRODUCTION_CYCLE_WAIT = 3;
-    private final int MAX_SHARK_ENERGY = 1;
-    private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
->>>>>>> 6168cfa7f601ef24a4f175cc08d185289e0d93ba
 
     public PredatorPreyCell(int row, int col, double width) {
         super(row, col, width);
@@ -92,7 +83,6 @@ public class PredatorPreyCell extends Cell {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
     }
-<<<<<<< HEAD
 
     public Cell swapCells(PredatorPreyCell cell) {
         PredatorPreyCell temp = cell;
@@ -102,6 +92,5 @@ public class PredatorPreyCell extends Cell {
 
     private int getReproductionTime() { return reproductionTime;}
     private int getSharkEnergy() {return sharkEnergy;}
-=======
->>>>>>> 6168cfa7f601ef24a4f175cc08d185289e0d93ba
+
 }
