@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 public class SegCell extends Cell{
     private boolean satisfied;
-    private double myThreshold;
+    private double myThreshold = 0.3;
     private int numAlike;
     private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 

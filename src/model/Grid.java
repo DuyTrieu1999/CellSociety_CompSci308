@@ -2,6 +2,7 @@ package model;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 /**
@@ -15,8 +16,6 @@ public class Grid {
     private int size;
     private double xPos;
     private double yPos;
-    private double thresholdValue; //for Fire, Segregation models?
-    private int numCells; //for Segregation model?
     private String simulationName;
     private ResourceBundle myResources;
 

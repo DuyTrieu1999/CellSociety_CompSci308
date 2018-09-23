@@ -11,8 +11,8 @@ public class SegGrid extends Grid {
     private TreeMap<Integer, SegCell> vacancies;
     private int numVacant;
 
-    public SegGrid (String simulationName) {
-        super(simulationName);
+    public SegGrid (String simulationName, int size) {
+        super(simulationName, size);
     }
 
     @Override
