@@ -13,7 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
-import model.Grid;
+import model.*;
 import model.Cell;
 
 import java.util.ResourceBundle;
@@ -60,6 +60,7 @@ public class SimulationUI {
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
+        changeSpeed();
         myRoot.getChildren().add(myGridPane);
         System.out.println(simulationName);
         return myScene;
@@ -68,11 +69,16 @@ public class SimulationUI {
         myGrid.updateGrid();
         gridSize = (int)sizeSlider.getVal();
     }
+    private void changeSpeed () {
+        speedSlider.setOnMouseDragged(event -> {
+            animation.setRate(speedSlider.getVal());
+        });
+    }
 
     private void makeSlider () {
         sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
         sizeSlider.setTextField();
-        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 1, 0.5, 2);
+        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 10, 1, 20);
         speedSlider.setTextField();
     }
 
@@ -89,6 +95,7 @@ public class SimulationUI {
         SimuButton stepButton = new SimuButton(myResources.getString("Step"), event -> stepButtonHandler());
         SimuButton resetButton = new SimuButton(myResources.getString("Reset"), event -> resetButtonHandler());
         makeSlider();
+        changeSpeed();
         hbox1.getChildren().add(cb);
         hbox2.getChildren().add(startButton);
         hbox3.getChildren().add(stopButton);
@@ -110,25 +117,8 @@ public class SimulationUI {
     }
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
-        if (name.equals(myResources.getString("GOL"))) {
-            simulationName = myResources.getString("GOL");
-            setSimulation(simulationName);
-        }
-        else if (name.equals(myResources.getString("WaTor"))) {
-            simulationName = myResources.getString("WaTor");
-            System.out.println(simulationName);
-            setSimulation(simulationName);
-        }
-        else if (name.equals(myResources.getString("Fire"))) {
-            simulationName = myResources.getString("Fire");
-            System.out.println(simulationName);
-            setSimulation(simulationName);
-        }
-        else {
-            simulationName = myResources.getString("Segg");
-            System.out.println(simulationName);
-            setSimulation(simulationName);
-        }
+        simulationName = name;
+        setSimulation(simulationName);
     }
 
     private void setSimulation (String simuName) {
@@ -178,7 +168,15 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
-        myGrid = new Grid(simuName, gridSize);
+        System.out.println(simuName);
+        if (simuName.equals(myResources.getString("GOL")))
+            myGrid = new Grid(gridSize);
+        else if (simuName.equals(myResources.getString("WaTor")))
+            myGrid = new PredatorPreyGrid(gridSize);
+        else if (simuName.equals(myResources.getString("Fire")))
+            myGrid = new FireCellGrid(gridSize);
+        else
+            myGrid = new SegGrid(gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
@@ -186,4 +184,5 @@ public class SimulationUI {
             }
         }
     }
+
 }

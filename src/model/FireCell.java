@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class FireCell extends Cell {
-
+    private double probCatch; //Probability of catching a fire
+    private boolean hasNeighborFire; //Check for a neighboring cell on fire
     private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
-    private boolean hasNeighborFire;
-    private double probCatch;
 
     public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
-        probCatch = 0.15;
+        probCatch = 0.6;
     }
 
     @Override
@@ -22,14 +21,17 @@ public class FireCell extends Cell {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         for(Cell neighbor : currNeighbors) {
             if(neighbor.getCurrState() == StateENUM.BURNING) {
-                hasNeighborFire = true;
+                this.hasNeighborFire = true;
             }
         }
         if(hasNeighborFire && this.getCurrState() == StateENUM.TREE) {
             double rn = Math.random();
             if(rn < probCatch) {
                 this.setNextState(StateENUM.BURNING);
+            } else {
+                this.setNextState(StateENUM.TREE);
             }
+            this.hasNeighborFire = false;
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
@@ -37,30 +39,30 @@ public class FireCell extends Cell {
         }
         this.setFill(this.getStateColor(this.getNextState()));
     }
-
-    public void setProbCatch(double probability) {
-        probCatch = probability;
-    }
-
     @Override
-    public Color getStateColor(StateENUM state) {
-        switch(state) {
-            case TREE:
-                return Color.GREEN;
-            case DEFORESTED:
-                return Color.YELLOW;
-            case BURNING:
-                return Color.RED;
-            default:
-                return null;
+    public void setStartState () {
+        if (this.getColPos() == 0 || this.getRowPos() == 0) {
+            this.setCurrState(states[2]);
+            this.setFill(this.getStateColor(states[2]));
+        } else {
+            int rand = new Random().nextInt(states.length);
+            this.setCurrState(states[rand]);
+            this.setFill(this.getStateColor(this.getCurrState()));
         }
     }
 
     @Override
-    public void setStartState() {
-        int rand = new Random().nextInt(this.states.length);
-        this.setCurrState(this.states[rand]);
+    public Color getStateColor(StateENUM state) {
+        switch (state) {
+            case DEFORESTED:
+                return Color.YELLOW;
+            case TREE:
+                return Color.GREEN;
+            case BURNING:
+                return Color.RED;
+            default:
+                return Color.BLACK;
+        }
     }
-
 
 }
