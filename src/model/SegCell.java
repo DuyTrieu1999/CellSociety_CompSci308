@@ -27,6 +27,7 @@ public class SegCell extends Cell{
     }
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
+    @Override
     public boolean isSatisfied() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         numAlike = 0;
@@ -50,6 +51,7 @@ public class SegCell extends Cell{
         } else {
             this.setNextState(this.getCurrState());
         }
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     public void setThreshold(double threshold) {
@@ -74,5 +76,6 @@ public class SegCell extends Cell{
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
     }
 }

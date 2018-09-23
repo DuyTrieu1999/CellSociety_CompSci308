@@ -56,7 +56,7 @@ public class PredatorPreyCell extends Cell {
         } else {
             this.setNextState(this.getCurrState());
         }
-        this.setFill(getStateColor(this.getCurrState()));
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     @Override
