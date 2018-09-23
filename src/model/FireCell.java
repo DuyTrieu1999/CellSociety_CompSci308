@@ -23,6 +23,7 @@ public class FireCell extends Cell {
     @Override
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
+        hasNeighborFire = false;
         for(Cell neighbor : currNeighbors) {
             if(neighbor.getCurrState() == StateENUM.BURNING) {
                 hasNeighborFire = true;
@@ -32,13 +33,15 @@ public class FireCell extends Cell {
             double rn = Math.random();
             if(rn < probCatch) {
                 this.setNextState(StateENUM.BURNING);
+            } else {
+                this.setNextState(this.getCurrState());
             }
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
             this.setNextState(this.getCurrState());
         }
-        this.setFill(this.getStateColor(this.getNextState()));
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     public void setProbCatch(double probability) {
@@ -47,6 +50,7 @@ public class FireCell extends Cell {
 
     @Override
     public Color getStateColor(StateENUM state) {
+        System.out.println(state);
         switch (state) {
             case DEFORESTED:
                 return Color.YELLOW;
@@ -54,8 +58,8 @@ public class FireCell extends Cell {
                 return Color.GREEN;
             case BURNING:
                 return Color.RED;
-                default:
-                    return null;
+            default:
+                return Color.BLACK;
         }
     }
 
@@ -63,5 +67,6 @@ public class FireCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
     }
 }
