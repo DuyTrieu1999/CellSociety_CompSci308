@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="WaTor" author="team8">
-
+    <general>
+        <grid_size>10</grid_size>
+    </general>
+    <water_cell>
+        <cell_state>Water</cell_state>
+        <cell_number>60</cell_number>
+    </water_cell>
+    <fish_cell>
+        <cell_state>Fish</cell_state>
+        <cell_number>30</cell_number>
+    </fish_cell>
+    <shark_cell>
+        <cell_state>Shark</cell_state>
+        <cell_number>10</cell_number>
+    </shark_cell>
 </simulation>

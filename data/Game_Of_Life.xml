@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Game_Of_Life" author="team8">
 <!--This XML file sets up the initial configuration for John Horton Conway's Game of Life. Example format is shown below.-->
-<cell_name>Cell One</cell_name>
-    <cell_state>Alive/Dead</cell_state>
-    <cell_row>Put a number here</cell_row>
-    <cell_column>Put a number here</cell_column>
+    <general>
+        <grid_size>20</grid_size>
+    </general>
+    <living_cell>
+        <cell_state>Alive</cell_state>
+        <cell_number>150</cell_number>
+    </living_cell>
+    <dead_cell>
+        <cell_state>Dead</cell_state>
+        <cell_number>250</cell_number>
+    </dead_cell>
 </simulation>

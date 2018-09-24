@@ -18,7 +18,8 @@ import javafx.scene.shape.Rectangle;
 public class SegCell extends Cell{
     private boolean satisfied;
     private double myThreshold = 0.3;
-    private int numAlike;
+    private double numAlike;
+    private double agentNeighbors;
     private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
     public SegCell(int row, int col, double width) {
@@ -31,12 +32,16 @@ public class SegCell extends Cell{
     public boolean isSatisfied() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         numAlike = 0;
+        agentNeighbors = 0;
         for(Cell neighbor : currNeighbors) {
+            if(neighbor.getCurrState() == StateENUM.AGENT1 || neighbor.getCurrState() == StateENUM.AGENT2) {
+                agentNeighbors++;
+            }
             if(this.getCurrState() == neighbor.getCurrState()) {
                 numAlike++;
             }
         }
-        if(numAlike >= myThreshold*currNeighbors.size()) {
+        if(myThreshold >= numAlike/agentNeighbors) {
             satisfied = true;
         } else {
             satisfied = false;
@@ -78,5 +83,10 @@ public class SegCell extends Cell{
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
         this.setFill(getStateColor(this.getCurrState()));
+    }
+
+    @Override
+    public void setSatisfaction(boolean value) {
+        satisfied = value;
     }
 }
