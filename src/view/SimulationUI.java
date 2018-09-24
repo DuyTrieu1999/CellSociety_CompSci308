@@ -72,13 +72,14 @@ public class SimulationUI {
     private void changeSpeed () {
         speedSlider.setOnMouseDragged(event -> {
             animation.setRate(speedSlider.getVal());
+            System.out.println(speedSlider.getVal());
         });
     }
 
     private void makeSlider () {
         sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
         sizeSlider.setTextField();
-        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 10, 1, 20);
+        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 1, 1, 2);
         speedSlider.setTextField();
     }
 

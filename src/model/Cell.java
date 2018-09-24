@@ -52,6 +52,14 @@ public abstract class Cell extends Rectangle {
     public boolean isSatisfied() {
         return false;
     }
-
+    public PredatorPreyCell getMove() {
+        return null;
+    }
+    public boolean isEating() {
+        return false;
+    }
+    public boolean isMoving() {
+        return false;
+    }
 }
 

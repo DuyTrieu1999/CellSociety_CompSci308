@@ -28,8 +28,6 @@ public class SliderUI extends VBox {
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
         slider.setSnapToTicks(true);
-        slider.setMajorTickUnit((max - min) / 8);
-        slider.setMinorTickCount(0);
         slider.setPadding(new Insets(0, 10, 0, 10));
 
         nameLabel = new Label(name + ": ");
