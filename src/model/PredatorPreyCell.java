@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
  * FISH represents a cell occupied by fish
  * SHARK represents a cell occupied by a shark
  * WATER represents an empty cell in the sea
- * @author Austin Kao
+ * @author Austin Kao, Duy Trieu
  */
 
 public class PredatorPreyCell extends Cell {
@@ -46,16 +46,7 @@ public class PredatorPreyCell extends Cell {
                 this.setNextState(StateENUM.WATER);
             }
             else {
-                if (hasWater(currNeighbors)) {
-                    canMove = hasWater(currNeighbors);
-                    int rand = new Random().nextInt(waterNeighbors.size());
-                    move = currWaterMap.get(rand);
-                    move.setNextState(this.getCurrState());
-                    this.setNextState(StateENUM.WATER);
-                }
-                else {
-                    this.setNextState(this.getCurrState());
-                }
+                swim(this);
             }
         }
         if (this.getCurrState() == StateENUM.SHARK) {
@@ -67,19 +58,25 @@ public class PredatorPreyCell extends Cell {
                 this.setNextState(StateENUM.WATER);
             }
             else {
-                if (hasWater(currNeighbors)) {
-                    canMove = hasWater(currNeighbors);
-                    int rand = new Random().nextInt(waterNeighbors.size());
-                    move = currWaterMap.get(rand);
-                    move.setNextState(this.getCurrState());
-                    this.setNextState(StateENUM.WATER);
-                }
-                else {
-                    this.setNextState(this.getCurrState());
-                }
+                swim(this);
             }
         }
         this.setFill(getStateColor(this.getNextState()));
+    }
+    public void swim (Cell cell) {
+        ArrayList<Cell> currNeighbors = cell.getNeighbors();
+        ArrayList<Cell> waterNeighbors = getWater(cell);
+        TreeMap<Integer, PredatorPreyCell> currWaterMap = getMap(waterNeighbors);
+        if (hasWater(currNeighbors)) {
+            canMove = hasWater(currNeighbors);
+            int rand = new Random().nextInt(waterNeighbors.size());
+            move = currWaterMap.get(rand);
+            move.setNextState(cell.getCurrState());
+            cell.setNextState(StateENUM.WATER);
+        }
+        else {
+            cell.setNextState(cell.getCurrState());
+        }
     }
     public boolean hasShark (ArrayList<Cell> neighbors) {
         for (Cell cell: neighbors) {
@@ -91,7 +88,7 @@ public class PredatorPreyCell extends Cell {
     }
     public boolean hasWater (ArrayList<Cell> neighbors) {
         for (Cell cell: neighbors) {
-            if (cell.getCurrState() == StateENUM.WATER && !(cell.getCurrState() == StateENUM.SHARK && cell.getCurrState() == StateENUM.FISH)) {
+            if ((cell.getCurrState() == StateENUM.WATER && cell.getNextState() == StateENUM.WATER) || cell.getNextState() == StateENUM.WATER) {
                 return true;
             }
             return false;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 /**
  * This class implements the grid for the Wa-Tor World of Predator Prey Relationships
+ * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
     private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
@@ -17,7 +18,7 @@ public class PredatorPreyGrid extends Grid{
 
     public PredatorPreyGrid(int size) {
         super(size);
-        poorInnocentLittleFishies = new HashMap<Integer, Fish>();
+        poorInnocentLittleFishies = new HashMap<>();
         sharks = new HashMap<Integer, Shark>();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
