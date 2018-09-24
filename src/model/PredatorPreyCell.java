@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -22,16 +24,37 @@ import javafx.scene.shape.Rectangle;
 public class PredatorPreyCell extends Cell {
     private int reproductionTime;
     private int sharkEnergy;
-    private final int REPRODUCTION_CYCLE_WAIT = 3;
-    private final int MAX_SHARK_ENERGY = 1;
+    private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
+    private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
+    private final int MAX_SHARK_ENERGY = 3;
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
+    private boolean hasEaten;
+    private Cell move;
 
     public PredatorPreyCell(int row, int col, double width) {
         super(row, col, width);
     }
     @Override
     public void updateCell () {
-        return;
+        if(this.getCurrState() == StateENUM.WATER) {
+            this.setNextState(StateENUM.WATER);
+            return;
+        }
+        boolean canMove = false;
+        TreeMap<Integer, Cell> currNeighborsMap = new TreeMap<>();
+        ArrayList<Cell> currNeighbors = this.getNeighbors();
+        int index = 0;
+        for(Cell neighbor : currNeighbors) {
+            currNeighborsMap.put(index, neighbor);
+            index++;
+        }
+        while(!canMove) {
+            int rand = new Random().nextInt(currNeighbors.size());
+            move = currNeighborsMap.get(rand);
+            if(!(currNeighborsMap.get(rand).getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH) && (this.getCurrState() != currNeighborsMap.get(rand).getCurrState())) {
+                canMove = true;
+            }
+        }
     }
     public void setReproductionTime(int fishMatingCycleWait) {
         reproductionTime = fishMatingCycleWait;
@@ -60,4 +83,14 @@ public class PredatorPreyCell extends Cell {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
     }
+
+    public Cell swapCells(PredatorPreyCell cell) {
+        PredatorPreyCell temp = cell;
+        cell = this;
+        return temp;
+    }
+
+    private int getReproductionTime() { return reproductionTime;}
+    private int getSharkEnergy() {return sharkEnergy;}
+
 }

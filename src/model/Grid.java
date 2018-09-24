@@ -103,4 +103,10 @@ public class Grid {
     public int returnCol () {
         return this.size;
     }
+    public Cell[][] getGrid() {return this.grid;}
+
+    public boolean outOfBounds (int row, int col) {
+        return (row < 0 || row > getRowNum() || col < 0 || col > getColNum());
+    }
+
 }

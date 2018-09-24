@@ -14,10 +14,6 @@ public class FireCell extends Cell {
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
     private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
 
-    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
-    private boolean hasNeighborFire;
-    private double probCatch;
-
     public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
