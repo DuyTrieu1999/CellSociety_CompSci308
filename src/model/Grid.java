@@ -1,6 +1,9 @@
 package model;
 
 import java.util.*;
+import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 /**
  *
@@ -47,18 +50,6 @@ public class Grid {
         }
     }
 
-    //May or may not use!
-    private Cell[][] chooseSimuGrid (String simuName, int size) {
-        if (simuName.equals(myResources.getString("WaTor")))
-            return new Cell[size][size];
-        else if (simuName.equals(myResources.getString("Fire")))
-            return new FireCell[size][size];
-        else if (simuName.equals(myResources.getString("Segg")))
-            return new SegCell[size][size];
-        else
-            return new Cell[size][size];
-    }
-
     public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
@@ -73,9 +64,8 @@ public class Grid {
         cellNeighbours.remove(grid[cell.getRowPos()][cell.getColPos()]);
         cell.setNeighbors(cellNeighbours);
     }
-
     public boolean outOfBounds (int row, int col) {
-        return (row < 0 || (row >= getRowNum()) || col < 0 || (col >= getColNum()));
+        return (row < 0 || row >= getRowNum() || col < 0 || col >= getColNum());
     }
     public int getRowNum () {
         return grid.length;

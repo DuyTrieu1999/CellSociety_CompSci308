@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import javafx.scene.paint.Color;
@@ -11,7 +12,7 @@ import javafx.scene.shape.Rectangle;
  * FISH represents a cell occupied by fish
  * SHARK represents a cell occupied by a shark
  * WATER represents an empty cell in the sea
- * @author Austin Kao
+ * @author Austin Kao, Duy Trieu
  */
 
 public class PredatorPreyCell extends Cell {
@@ -30,58 +31,112 @@ public class PredatorPreyCell extends Cell {
     public void updateCell () {
         canMove = false;
         fishNeighbor = false;
-        if(this.getCurrState() == StateENUM.WATER && this.getNextState() != StateENUM.SHARK) {
+        if(this.getCurrState() == StateENUM.WATER && (this.getNextState() != StateENUM.SHARK || this.getNextState() != StateENUM.FISH)) {
             this.setNextState(StateENUM.WATER);
             return;
         } else if (this.getCurrState() == StateENUM.SHARK) {
 
         }
-        TreeMap<Integer, PredatorPreyCell> currNeighborsMap = new TreeMap<Integer, PredatorPreyCell>();
         ArrayList<Cell> currNeighbors = this.getNeighbors();
+        ArrayList<Cell> waterNeighbors = getWater(this);
+        ArrayList<Cell> fishNeighbors = getFish(this);
+        TreeMap<Integer, PredatorPreyCell> currNeighborsMap = getMap(currNeighbors);
+        TreeMap<Integer, PredatorPreyCell> currWaterMap = getMap(waterNeighbors);
+        TreeMap<Integer, PredatorPreyCell> currFishMap = getMap(fishNeighbors);
+        if (this.getCurrState() == StateENUM.FISH) {
+            if (hasShark(currNeighbors)) {
+                this.setNextState(StateENUM.WATER);
+            }
+            else {
+                swim(this);
+            }
+        }
+        if (this.getCurrState() == StateENUM.SHARK) {
+            if (hasFish(currNeighbors)) {
+                fishNeighbor = hasFish(currNeighbors);
+                int rand = new Random().nextInt(fishNeighbors.size());
+                move = currFishMap.get(rand);
+                move.setNextState(this.getCurrState());
+                this.setNextState(StateENUM.WATER);
+            }
+            else {
+                swim(this);
+            }
+        }
+        this.setFill(getStateColor(this.getNextState()));
+    }
+    public void swim (Cell cell) {
+        ArrayList<Cell> currNeighbors = cell.getNeighbors();
+        ArrayList<Cell> waterNeighbors = getWater(cell);
+        TreeMap<Integer, PredatorPreyCell> currWaterMap = getMap(waterNeighbors);
+        if (hasWater(currNeighbors)) {
+            canMove = hasWater(currNeighbors);
+            int rand = new Random().nextInt(waterNeighbors.size());
+            move = currWaterMap.get(rand);
+            move.setNextState(cell.getCurrState());
+            cell.setNextState(StateENUM.WATER);
+        }
+        else {
+            cell.setNextState(cell.getCurrState());
+        }
+    }
+    public boolean hasShark (ArrayList<Cell> neighbors) {
+        for (Cell cell: neighbors) {
+            if (cell.getCurrState() == StateENUM.SHARK)
+                return true;
+            return false;
+        }
+        return false;
+    }
+    public boolean hasWater (ArrayList<Cell> neighbors) {
+        for (Cell cell: neighbors) {
+            if ((cell.getCurrState() == StateENUM.WATER && cell.getNextState() == StateENUM.WATER) || cell.getNextState() == StateENUM.WATER) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    public boolean hasFish (ArrayList<Cell> neighbors) {
+        for (Cell cell: neighbors) {
+            if (cell.getCurrState() == StateENUM.FISH) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    public TreeMap<Integer, PredatorPreyCell> getMap (ArrayList<Cell> cellList) {
+        TreeMap<Integer, PredatorPreyCell> map = new TreeMap<>();
         int index = 0;
-        for(Cell neighbor : currNeighbors) {
-            if(neighbor.getCurrState() != this.getCurrState() && !(neighbor.getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH)) {
-                canMove = true;
-            }
-            if(this.getCurrState() == StateENUM.SHARK && neighbor.getCurrState() == StateENUM.FISH) {
-                fishNeighbor = true;
-            }
+        for(Cell neighbor : cellList) {
             PredatorPreyCell mappedNeighbor= new PredatorPreyCell(getRowPos(),getColPos(), cellWidth);
             mappedNeighbor.setCurrState(neighbor.getCurrState());
             mappedNeighbor.setNextState(neighbor.getNextState());
-            currNeighborsMap.put(index, mappedNeighbor);
+            map.put(index, mappedNeighbor);
             index++;
         }
-        if(canMove) {
-            //For when canMove
-            if(this.getCurrState() == StateENUM.FISH) {
-                do {
-                    int rand = new Random().nextInt(currNeighbors.size());
-                    move = currNeighborsMap.get(rand);
-                    if(move.getCurrState() == StateENUM.WATER && move.getNextState() != StateENUM.SHARK) {
-                        move.setNextState(this.getCurrState());
-                    }
-                } while(move.getCurrState() != StateENUM.WATER);
-            } else if(this.getCurrState() == StateENUM.SHARK) {
-                if(fishNeighbor) {
-                    do {
-                        int rand = new Random().nextInt(currNeighbors.size());
-                        move = currNeighborsMap.get(rand);
-                        if(move.getCurrState() == StateENUM.FISH) {
-                            move.setNextState(this.getCurrState());
-                        }
-                    } while(move.getCurrState() != StateENUM.FISH);
-                } else {
-
-                }
-                if(this.getNextState() != null && this.getNextState() == this.getCurrState()) {
-                    this.setNextState(StateENUM.WATER);
-                }
+        return map;
+    }
+    public ArrayList<Cell> getWater (Cell cell) {
+        ArrayList<Cell> neighbors = cell.getNeighbors();
+        ArrayList<Cell> result = new ArrayList<>();
+        for (Cell c: neighbors) {
+            if (c.getCurrState() == StateENUM.WATER) {
+                result.add(c);
             }
-        } else {
-            this.setNextState(this.getCurrState());
         }
-        this.setFill(getStateColor(this.getNextState()));
+        return result;
+    }
+    public ArrayList<Cell> getFish (Cell cell) {
+        ArrayList<Cell> neighbors = cell.getNeighbors();
+        ArrayList<Cell> result = new ArrayList<>();
+        for (Cell c: neighbors) {
+            if (c.getCurrState() == StateENUM.FISH) {
+                result.add(c);
+            }
+        }
+        return result;
     }
 
     @Override

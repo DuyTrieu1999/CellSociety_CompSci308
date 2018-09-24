@@ -49,6 +49,7 @@ public class SimulationUI {
     private KeyFrame frame;
     private int gridSize;
     private String simulationName;
+
     private ResourceBundle myResources;
 
     private Insets buttonPane = new Insets((SceneENUM.SCENE_HEIGHT.getVal()-SceneENUM.GRID_HEIGHT.getVal()) / 2,
@@ -85,13 +86,14 @@ public class SimulationUI {
     private void changeSpeed () {
         speedSlider.setOnMouseDragged(event -> {
             animation.setRate(speedSlider.getVal());
+            System.out.println(speedSlider.getVal());
         });
     }
 
     private void makeSlider () {
         sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
         sizeSlider.setTextField();
-        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 10, 1, 20);
+        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 1, 1, 2);
         speedSlider.setTextField();
     }
 
@@ -182,13 +184,20 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
+<<<<<<< HEAD
         //System.out.println(simuName);
+=======
+>>>>>>> DuyBranch
         if (simuName.equals(myResources.getString("GOL")))
             myGrid = new Grid(gridSize);
         if (simuName.equals(myResources.getString("WaTor")))
             myGrid = new PredatorPreyGrid(gridSize);
         if (simuName.equals(myResources.getString("Fire")))
+<<<<<<< HEAD
             myGrid = new FireGrid(gridSize);
+=======
+            myGrid = new FireCellGrid(gridSize);
+>>>>>>> DuyBranch
         if (simuName.equals(myResources.getString("Segg")))
             myGrid = new SegGrid(gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
