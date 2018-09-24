@@ -11,7 +11,7 @@ Start Date: 09/17/2018
 
 Finish Date: 09/24/2018
 
-Hours Spent: 45 Hours
+Hours Spent: 85 Hours(altogether)
 
 ### Primary Roles
 Duy Trieu: SimulationUI and Models
@@ -38,7 +38,7 @@ Assumptions or Simplifications: In FireCell, assume fire starts at multiple rand
 
 Known Bugs: Incomplete logic and implementation in PredatorPrey Cell and Grid
 
-Extra credit: 
+Extra credit: None
 
 
 ### Notes
