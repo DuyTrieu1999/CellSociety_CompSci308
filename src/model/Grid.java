@@ -1,9 +1,6 @@
 package model;
 
-import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.ResourceBundle;
 /**
  *
