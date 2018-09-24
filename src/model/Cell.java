@@ -61,5 +61,6 @@ public abstract class Cell extends Rectangle {
     public boolean isEating() {
         return false;
     }
+    public void setSatisfaction(boolean value) {}
 }
 

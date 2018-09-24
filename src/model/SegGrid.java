@@ -15,6 +15,7 @@ import java.util.TreeMap;
 public class SegGrid extends Grid {
     private int numDissatisfied1;
     private int numDissatisfied2;
+    private int numDissatisfiedTotal;
     private TreeMap<Integer, Cell> vacancies;
     private int numVacant;
 
@@ -51,8 +52,39 @@ public class SegGrid extends Grid {
             }
         }
         //Need to change this; agents should move as one (oops)
-        moveAgents(numDissatisfied1, StateENUM.AGENT1);
-        moveAgents(numDissatisfied2, StateENUM.AGENT2);
+        numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
+        System.out.println(numDissatisfiedTotal);
+        while(numDissatisfiedTotal > 0) {
+            if (vacancies.size() > 0) {
+                boolean canMove = false;
+                while(!canMove) {
+                    int rand = new Random().nextInt(numVacant);
+                    if (vacancies.containsKey(rand)) {
+                        canMove = true;
+                        Cell move = vacancies.get(rand);
+                        int rand2 = new Random().nextInt(numDissatisfiedTotal);
+                        //System.out.println(rand2);
+                        if (rand2 < numDissatisfied1) {
+                            move.setCurrState(StateENUM.AGENT1);
+                            move.setNextState(StateENUM.AGENT1);
+                        } else {
+                            move.setCurrState(StateENUM.AGENT2);
+                            move.setNextState(StateENUM.AGENT2);
+                        }
+                        move.setSatisfaction(true);
+                        move.updateCell();
+                        vacancies.remove(rand);
+                        if (move.getCurrState() == StateENUM.AGENT1) {
+                            numDissatisfied1--;
+                        } else {
+                            numDissatisfied2--;
+                        }
+                    }
+                }
+            }
+            numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
+            System.out.println("Total: "+numDissatisfiedTotal);
+        }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
@@ -66,30 +98,6 @@ public class SegGrid extends Grid {
             for (int j = 0; j<this.getColNum(); j++) {
                 this.getGrid()[i][j] = new SegCell(i, j, (double)360 / this.getColNum());
                 this.getGrid()[i][j].setStartState();
-            }
-        }
-    }
-
-    private void moveAgents(int num, StateENUM state) {
-        for (int k = 0; k < num; k++) {
-            boolean currentlySatisfied = false;
-            while (!currentlySatisfied) {
-                if (vacancies.size() > 0) {
-                    int rand = new Random().nextInt(numVacant);
-                    if (vacancies.containsKey(rand)) {
-                        Cell move = vacancies.get(rand);
-                        move.setCurrState(state);
-                        if (move.isSatisfied()) {
-                            currentlySatisfied = true;
-                            move.updateCell();
-                            vacancies.remove(rand);
-                        } else {
-                            move.setCurrState(StateENUM.VACANT);
-                        }
-                    }
-                } else {
-                    currentlySatisfied = true;
-                }
             }
         }
     }
