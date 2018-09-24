@@ -1,67 +1,83 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
-
+import java.util.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
 /**
  * This class implements the Wa-Tor World of predator-prey relationships model.
  * States:
  * FISH represents a cell occupied by fish
  * SHARK represents a cell occupied by a shark
-<<<<<<< HEAD
  * WATER represents an empty cell in the sea
-=======
- * SEA represents an empty cell in the sea
->>>>>>> master
  * @author Austin Kao
  */
 
 public class PredatorPreyCell extends Cell {
-    private int reproductionTime;
-    private int sharkEnergy;
-    private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
-    private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
-    private final int MAX_SHARK_ENERGY = 3;
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
     private boolean hasEaten;
-    private Cell move;
+    private PredatorPreyCell move;
+    private boolean canMove;
+    private boolean fishNeighbor;
+    private double cellWidth;
 
     public PredatorPreyCell(int row, int col, double width) {
         super(row, col, width);
+        canMove = false;
+        cellWidth = width;
     }
     @Override
     public void updateCell () {
-        if(this.getCurrState() == StateENUM.WATER) {
+        canMove = false;
+        fishNeighbor = false;
+        if(this.getCurrState() == StateENUM.WATER && this.getNextState() != StateENUM.SHARK) {
             this.setNextState(StateENUM.WATER);
             return;
+        } else if (this.getCurrState() == StateENUM.SHARK) {
+
         }
-        boolean canMove = false;
-        TreeMap<Integer, Cell> currNeighborsMap = new TreeMap<>();
+        TreeMap<Integer, PredatorPreyCell> currNeighborsMap = new TreeMap<Integer, PredatorPreyCell>();
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         int index = 0;
         for(Cell neighbor : currNeighbors) {
-            currNeighborsMap.put(index, neighbor);
-            index++;
-        }
-        while(!canMove) {
-            int rand = new Random().nextInt(currNeighbors.size());
-            move = currNeighborsMap.get(rand);
-            if(!(currNeighborsMap.get(rand).getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH) && (this.getCurrState() != currNeighborsMap.get(rand).getCurrState())) {
+            if(neighbor.getCurrState() != this.getCurrState() && !(neighbor.getCurrState() == StateENUM.SHARK && this.getCurrState() == StateENUM.FISH)) {
                 canMove = true;
             }
+            if(this.getCurrState() == StateENUM.SHARK && neighbor.getCurrState() == StateENUM.FISH) {
+                fishNeighbor = true;
+            }
+            PredatorPreyCell mappedNeighbor= new PredatorPreyCell(getRowPos(),getColPos(), cellWidth);
+            mappedNeighbor.setCurrState(neighbor.getCurrState());
+            mappedNeighbor.setNextState(neighbor.getNextState());
+            currNeighborsMap.put(index, mappedNeighbor);
+            index++;
         }
-    }
-    public void setReproductionTime(int fishMatingCycleWait) {
-        reproductionTime = fishMatingCycleWait;
-    }
-
-    public void setSharkEnergy(int sharkStrength) {
-        sharkEnergy = sharkStrength;
+        if(canMove) {
+            //For when canMove
+            if(this.getCurrState() == StateENUM.FISH) {
+                do {
+                    int rand = new Random().nextInt(currNeighbors.size());
+                    move = currNeighborsMap.get(rand);
+                    if(move.getCurrState() == StateENUM.VACANT && move.getNextState() != StateENUM.SHARK) {
+                        move.setNextState(this.getCurrState());
+                    }
+                } while(move.getCurrState() != StateENUM.VACANT);
+            } else if(this.getCurrState() == StateENUM.SHARK) {
+                if(fishNeighbor) {
+                    do {
+                        int rand = new Random().nextInt(currNeighbors.size());
+                        move = currNeighborsMap.get(rand);
+                        if(move.getCurrState() == StateENUM.FISH) {
+                            move.setNextState(this.getCurrState());
+                        }
+                    } while(move.getCurrState() != StateENUM.FISH);
+                }
+                if(this.getNextState() != null && this.getNextState() == this.getCurrState()) {
+                    this.setNextState(StateENUM.WATER);
+                }
+            }
+        } else {
+            this.setNextState(this.getCurrState());
+        }
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     @Override
@@ -82,6 +98,24 @@ public class PredatorPreyCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
+    }
+
+    @Override
+    public PredatorPreyCell getMove() {
+        if(move != null) {
+            return move;
+        } else {
+            return null;
+        }
+    }
+    @Override
+    public boolean isEating() {
+        return fishNeighbor;
+    }
+    @Override
+    public boolean isMoving() {
+        return canMove;
     }
 
     public Cell swapCells(PredatorPreyCell cell) {
@@ -90,7 +124,7 @@ public class PredatorPreyCell extends Cell {
         return temp;
     }
 
-    private int getReproductionTime() { return reproductionTime;}
-    private int getSharkEnergy() {return sharkEnergy;}
+//    private int getReproductionTime() { return reproductionTime;}
+//    private int getSharkEnergy() {return sharkEnergy;}
 
 }

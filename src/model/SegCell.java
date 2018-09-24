@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 public class SegCell extends Cell{
     private boolean satisfied;
-    private double myThreshold;
+    private double myThreshold = 0.3;
     private int numAlike;
     private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
@@ -27,7 +27,8 @@ public class SegCell extends Cell{
     }
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
-    public void determineSatisfaction() {
+    @Override
+    public boolean isSatisfied() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         numAlike = 0;
         for(Cell neighbor : currNeighbors) {
@@ -35,24 +36,23 @@ public class SegCell extends Cell{
                 numAlike++;
             }
         }
-        if(numAlike > myThreshold*currNeighbors.size()) {
+        if(numAlike >= myThreshold*currNeighbors.size()) {
             satisfied = true;
         } else {
             satisfied = false;
         }
-        updateCell();
+        return satisfied;
     }
     // updateCell() assumes that there are only two types of agents
+    @Override
     public void updateCell() {
         if(!satisfied) {
+            this.setNextState(StateENUM.VACANT);
             this.setCurrState(StateENUM.VACANT);
         } else {
-            if(this.getCurrState() == StateENUM.AGENT1) {
-                this.setNextState(StateENUM.AGENT2);
-            } else if(this.getCurrState() == StateENUM.AGENT2) {
-                this.setNextState(StateENUM.AGENT1);
-            }
+            this.setNextState(this.getCurrState());
         }
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     public void setThreshold(double threshold) {
@@ -77,5 +77,6 @@ public class SegCell extends Cell{
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
     }
 }

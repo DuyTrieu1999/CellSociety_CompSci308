@@ -64,4 +64,7 @@ public class SliderUI extends VBox {
     public double getVal () {
         return this.slider.getValue();
     }
+    public Slider getSlider () {
+        return slider;
+    }
 }

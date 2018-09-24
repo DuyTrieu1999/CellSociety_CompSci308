@@ -2,6 +2,7 @@ package model;
 
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 /**
@@ -13,22 +14,16 @@ public class Grid {
 
     private Cell[][] grid;
     private int size;
-    private double xPos;
-    private double yPos;
-    private double thresholdValue; //for Fire, Segregation models?
-    private int numCells; //for Segregation model?
-    private String simulationName;
     private ResourceBundle myResources;
 
-    public Grid (String simulationName, int size) {
+    public Grid (int size) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
         this.size = size;
-        this.simulationName = simulationName;
         grid = new Cell[size][size];
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                storeNeighbor(grid[i][j]);
+                storeNeighbors(grid[i][j]);
             }
         }
     }
@@ -46,28 +41,28 @@ public class Grid {
         }
     }
 
-    private void fillGrid () {
+    public void fillGrid () {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                grid[i][j] = chooseSimuCell(simulationName, i, j, (double)360 / this.getColNum());
+                grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
                 grid[i][j].setStartState();
             }
         }
     }
-    private Cell chooseSimuCell (String simuName, int i, int j, double width) {
-        if (simuName.equals(myResources.getString("GOL")))
-            return new GOLCell(i, j, width);
-        else if (simuName.equals(myResources.getString("WaTor")))
-            return new PredatorPreyCell(i, j, width);
+
+    //May or may not use!
+    private Cell[][] chooseSimuGrid (String simuName, int size) {
+        if (simuName.equals(myResources.getString("WaTor")))
+            return new Cell[size][size];
         else if (simuName.equals(myResources.getString("Fire")))
-            return new FireCell(i, j, width);
+            return new FireCell[size][size];
         else if (simuName.equals(myResources.getString("Segg")))
-            return new SegCell(i, j, width);
+            return new SegCell[size][size];
         else
-            return null;
+            return new Cell[size][size];
     }
 
-    public void storeNeighbor (Cell cell) {
+    public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
@@ -80,28 +75,16 @@ public class Grid {
         }
         cellNeighbours.remove(grid[cell.getRowPos()][cell.getColPos()]);
         cell.setNeighbors(cellNeighbours);
+    }
 
-    }
-    private boolean rowOutOfBound (int row) {
-        return row < 0 || row > getRowNum();
-    }
-    private boolean colOutOfBound (int col) {
-        return col < 0 || col > getColNum();
-    }
     public int getRowNum () {
         return grid.length;
     }
     public int getColNum () {
         return grid[0].length;
     }
-    public void setCell (int row, int col, Cell myCell) {
-        grid[row][col] = myCell;
-    }
     public Cell getCell (int row, int col) {
         return grid[row][col];
-    }
-    public int returnCol () {
-        return this.size;
     }
     public Cell[][] getGrid() {return this.grid;}
 

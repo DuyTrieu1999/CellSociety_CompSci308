@@ -49,5 +49,17 @@ public abstract class Cell extends Rectangle {
     public abstract void setStartState();
     public abstract void updateCell ();
     public abstract Color getStateColor(StateENUM state);
+    public boolean isSatisfied() {
+        return false;
+    }
+    public PredatorPreyCell getMove() {
+        return null;
+    }
+    public boolean isMoving() {
+        return false;
+    }
+    public boolean isEating() {
+        return false;
+    }
 }
 

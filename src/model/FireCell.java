@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
+ * This cell implements the Spreading by Fire simulation.
+ * States:
+ * DEFORESTED is land that does not have trees.
+ * TREE is land that is filled with trees that are not on fire.
+ * BURNING is land that is filled with burning trees.
  * @author Samuel Appiah-Kubi
+ * @author Austin Kao
  */
 public class FireCell extends Cell {
     private double probCatch = 0.15; //Probability of catching a fire
@@ -17,12 +22,13 @@ public class FireCell extends Cell {
     public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
-        probCatch = 0.15;
+        probCatch = 1;
     }
 
     @Override
     public void updateCell() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
+        hasNeighborFire = false;
         for(Cell neighbor : currNeighbors) {
             if(neighbor.getCurrState() == StateENUM.BURNING) {
                 hasNeighborFire = true;
@@ -32,13 +38,15 @@ public class FireCell extends Cell {
             double rn = Math.random();
             if(rn < probCatch) {
                 this.setNextState(StateENUM.BURNING);
+            } else {
+                this.setNextState(this.getCurrState());
             }
         } else if(this.getCurrState() == StateENUM.BURNING) {
             this.setNextState(StateENUM.DEFORESTED);
         } else {
-            this.setNextState(StateENUM.DEFORESTED);
+            this.setNextState(this.getCurrState());
         }
-        this.setFill(this.getStateColor(this.getNextState()));
+        this.setFill(getStateColor(this.getNextState()));
     }
 
     public void setProbCatch(double probability) {
@@ -54,8 +62,8 @@ public class FireCell extends Cell {
                 return Color.GREEN;
             case BURNING:
                 return Color.RED;
-                default:
-                    return Color.BLACK;
+            default:
+                return Color.BLACK;
         }
     }
 
@@ -63,7 +71,6 @@ public class FireCell extends Cell {
     public void setStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
+        this.setFill(getStateColor(this.getCurrState()));
     }
-
-
 }
