@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Spreading_fire" author="team8">
-    <number_of_tree_cells>350</number_of_tree_cells>
-    <number_of_fire_cells>10</number_of_fire_cells>
-    <probability_of_catching_fire>0.15</probability_of_catching_fire>
-    <grid_size>20</grid_size>
-    <cell_name>Deforested cell</cell_name>
-    <cell_state>Deforested</cell_state>
-    <cell_name>Tree cell</cell_name>
-    <cell_state>Tree</cell_state>
-    <cell_name>Burning cell</cell_name>
-    <cell_state>Burning</cell_state>
+    <general>
+        <probability_of_catching_fire>0.15</probability_of_catching_fire>
+        <grid_size>20</grid_size>
+    </general>
+    <deforested_cell>
+        <cell_state>Deforested</cell_state>
+        <cell_number>40</cell_number>
+    </deforested_cell>
+    <tree_cell>
+        <cell_state>Tree</cell_state>
+        <cell_number>350</cell_number>
+    </tree_cell>
+    <burning_cell>
+        <cell_state>Burning</cell_state>
+        <cell_number>10</cell_number>
+    </burning_cell>
 </simulation>
