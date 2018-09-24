@@ -14,7 +14,7 @@ Finish Date: 09/24/2018
 Hours Spent: 45 Hours
 
 ### Primary Roles
-Duy Trieu: SimulationUI
+Duy Trieu: SimulationUI and Models
 Samuel Appiah-Kubi: Simulation Backend and Models
 Austin Kao: Simulation Backend and XML
 
@@ -27,13 +27,13 @@ MainSimulation class: MainSimulation.java
 
 Data files needed: Game_of_Life.xml, WaTor.xml, Segregation.xml, Spreading_Fire.xml
 
-Interesting data files: 
+Interesting data files: None
 
-Features implemented:
+Features implemented: Slider Feature
 
-Assumptions or Simplifications:
+Assumptions or Simplifications: In FireCell, assume fire starts at multiple random locations at the same time
 
-Known Bugs: 
+Known Bugs:
 
 Extra credit:
 
