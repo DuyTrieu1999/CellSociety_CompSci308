@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Segregation" author="team8">
-    <Cell>
-        <Map></Map>
-    </Cell>
-    <Grid>
-
-    </Grid>
+    <number_of_Agent_1_cells>100</number_of_Agent_1_cells>
+    <number_of_Agent_2_cells>100</number_of_Agent_2_cells>
+    <threshold_value>0.3</threshold_value>
+    <grid_size>20</grid_size>
+    <cell_name>Vacant cell</cell_name>
+    <cell_state>Vacant</cell_state>
+    <cell_name>Agent cell 1</cell_name>
+    <cell_state>Agent 1</cell_state>
+    <cell_name>Agent cell 2</cell_name>
+    <cell_state>Agent 2</cell_state>
 </simulation>
