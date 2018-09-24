@@ -15,8 +15,18 @@ import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
+import org.w3c.dom.Document;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.*;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 /**
  *
@@ -56,6 +66,10 @@ public class SimulationUI {
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
         gridSize = (int)sizeSlider.getVal();
+        //XMLtoString xmlStringGetter = new XMLtoString();
+        //String gridSizeString = readSizeFromFile(xmlStringGetter.getXmlString());
+        //gridSize = Integer.parseInt(gridSizeString);
+        //System.out.print(gridSize);
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
@@ -100,7 +114,7 @@ public class SimulationUI {
         hbox3.getChildren().add(stopButton);
         hbox4.getChildren().add(stepButton);
         hbox5.getChildren().addAll(resetButton);
-        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider);
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider); //Omitted sizeSlider
         createButtonPane(buttonContainer);
     }
 
@@ -122,6 +136,7 @@ public class SimulationUI {
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
+
         addGridPane();
         addCellToGrid(simuName);
         myRoot.getChildren().add(myGridPane);
@@ -182,5 +197,32 @@ public class SimulationUI {
                 myGridPane.add(cell, i,j);
             }
         }
+    }
+
+    private String readSizeFromFile(String xmlString) {
+        /*readFile
+        File fXmlFile = new File(filename);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(fXmlFile);
+        DocumentBuilder.parse(new InputStream(new StringReader(fXmlFile.toString())));
+        */
+        System.out.println("Reading XML");
+        Scanner scanner = new Scanner(xmlString);
+        String s = scanner.nextLine();
+        System.out.println(s);
+        while(!s.contains("grid_size") && scanner.hasNextLine()) {
+            s = scanner.nextLine();
+            System.out.println(s);
+        }
+        if(!scanner.hasNextLine()) {
+            return "";
+        }
+        String[] result1 = s.split("<grid_size>");
+        String[] result2 = s.split("<");
+        for(int i = 0; i < result2.length; i++) {
+            System.out.println(result2[i]);
+        }
+        return result2[0];
     }
 }

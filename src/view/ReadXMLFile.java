@@ -13,41 +13,78 @@ import java.io.File;
  * Code taken from https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
  */
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 public class ReadXMLFile {
-    public static void main(String argv[]) {
+    public void readFile(String filename) {
         try {
-            File fXmlFile = new File("/Users/mkyong/staff.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
 
-            //optional, but recommended
-            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-            doc.getDocumentElement().normalize();
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            SAXParser saxParser = saxParserFactory.newSAXParser();
 
-            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            DefaultHandler defaultHandler = new DefaultHandler() {
 
-            NodeList nList = doc.getElementsByTagName("staff");
+                boolean empId = false;
+                boolean firstName = false;
+                boolean lastName = false;
+                boolean designation = false;
 
-            System.out.println("----------------------------");
-            for (int temp = 0; temp < nList.getLength(); temp++) {
+                public void startElement(String uri, String localName, String elmt, Attributes attr)
+                        throws SAXException {
 
-                Node nNode = nList.item(temp);
+                    System.out.println("Start Element :" + elmt);
+                    if (elmt.equalsIgnoreCase("grid_size")) {
+                        empId = true;
+                    }
 
-                System.out.println("\nCurrent Element :" + nNode.getNodeName());
+                    if (elmt.equalsIgnoreCase("cell_state")) {
+                        firstName = true;
+                    }
 
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    if (elmt.equalsIgnoreCase("number_of_cells")) {
+                        lastName = true;
+                    }
 
-                    Element eElement = (Element) nNode;
-
-                    System.out.println("Staff id : " + eElement.getAttribute("id"));
-                    System.out.println("First Name : " + eElement.getElementsByTagName("firstname").item(0).getTextContent());
-                    System.out.println("Last Name : " + eElement.getElementsByTagName("lastname").item(0).getTextContent());
-                    System.out.println("Nick Name : " + eElement.getElementsByTagName("nickname").item(0).getTextContent());
-                    System.out.println("Salary : " + eElement.getElementsByTagName("salary").item(0).getTextContent());
+                    if (elmt.equalsIgnoreCase("DESIGNATION")) {
+                        designation = true;
+                    }
 
                 }
-            }
+
+                public void endElement(String uri, String localName, String elmt) throws SAXException {
+
+                    System.out.println("End Element :" + elmt);
+
+                }
+
+                public void characters(char chars[], int start, int len) throws SAXException {
+                    try{
+                        if (empId) {
+                            System.out.println("EMPLOYEE ID : " + new String(new String(chars, start, len)));
+                            empId = false;
+                        }
+                        if (firstName) {
+                            System.out.println("EMPLOYEE First Name : " + new String(chars, start, len));
+                            firstName = false;
+                        }
+                        if (lastName) {
+                            System.out.println("EMPLOYEE Last Name : " + new String(chars, start, len));
+                            lastName = false;
+                        }
+                        if (designation) {
+                            System.out.println("EMPLOYEE Designation : " + new String(chars, start, len));
+                            designation = false;
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            };
+            saxParser.parse(filename, defaultHandler);
         } catch (Exception e) {
             e.printStackTrace();
         }
