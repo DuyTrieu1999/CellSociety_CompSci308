@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Segregation" author="team8">
-    <general>
-        <grid_size>20</grid_size>
-        <threshold_value>0.3</threshold_value>
-    </general>
-    <vacant_cell>
-        <cell_state>Vacant</cell_state>
-        <cell_number>200</cell_number>
-    </vacant_cell>
-    <agent_cell_1>
-        <cell_state>Agent 1</cell_state>
-        <cell_number>100</cell_number>
-    </agent_cell_1>
-    <agent_cell_2>
-        <cell_state>Agent 2</cell_state>
-        <cell_number>100</cell_number>
-    </agent_cell_2>
+    <variables>
+        <variable>name = "neighborSimilar" value = "0.3"</variable>
+    </variables>
+    <Grid>
+        <size>20</size>
+    </Grid>
+    <Cells>
+        <cell>
+            <cell_state>Vacant</cell_state>
+            <cell_percent>50</cell_percent>
+        </cell>
+        <cell>
+            <cell_state>Agent 1</cell_state>
+            <cell_number>25</cell_number>
+        </cell>
+        <cell>
+            <cell_state>Agent 2</cell_state>
+            <cell_number>25</cell_number>
+        </cell>
+    </Cells>
 </simulation>

@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="WaTor" author="team8">
-    <general>
-        <grid_size>10</grid_size>
-    </general>
-    <water_cell>
-        <cell_state>Water</cell_state>
-        <cell_number>60</cell_number>
-    </water_cell>
-    <fish_cell>
-        <cell_state>Fish</cell_state>
-        <cell_number>30</cell_number>
-    </fish_cell>
-    <shark_cell>
-        <cell_state>Shark</cell_state>
-        <cell_number>10</cell_number>
-    </shark_cell>
+    <variables>
+        <variable>name = "sharkReproductionCycle" value="5"</variable>
+        <variable>name = "sharkEnergy" value="3"</variable>
+        <variable>name = "fishReproductionCycle" value="3"</variable>
+        <variable>name = "fishEnergyGained" value="2"</variable>
+    </variables>
+    <Grid>
+        <size>20</size>
+    </Grid>
+    <Cells>
+        <cell>
+            <cell_state>Water</cell_state>
+            <cell_percent>60</cell_percent>
+        </cell>
+        <cell>
+            <cell_state>Fish</cell_state>
+            <cell_percent>30</cell_percent>
+        </cell>
+        <cell>
+            <cell_state>Shark</cell_state>
+            <cell_percent>10</cell_percent>
+        </cell>
+    </Cells>
 </simulation>

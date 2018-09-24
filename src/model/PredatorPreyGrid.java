@@ -169,7 +169,7 @@ public class PredatorPreyGrid extends Grid{
      * @param cell is the current cell in question
      */
     @Override
-    public void storeNeighbor (Cell cell) {
+    public void storeNeighbors (Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
         if(cell.getRowPos()<this.getRowNum() - 1) {
             cellNeighbours.add(this.getGrid()[cell.getRowPos()+1][cell.getColPos()]);
