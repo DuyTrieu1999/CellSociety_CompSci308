@@ -53,7 +53,7 @@ public class SegGrid extends Grid {
         }
         //Need to change this; agents should move as one (oops)
         numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
-        System.out.println(numDissatisfiedTotal);
+        //System.out.println(numDissatisfiedTotal);
         while(numDissatisfiedTotal > 0) {
             if (vacancies.size() > 0) {
                 boolean canMove = false;
