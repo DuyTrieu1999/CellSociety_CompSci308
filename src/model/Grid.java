@@ -1,23 +1,26 @@
 package model;
 
-import java.util.*;
-import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 /**
  *
  * @author duytrieu
  */
 public class Grid {
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final String XML_FILE = "Game_Of_Life.xml";
 
     private Cell[][] grid;
     private int size;
     private ResourceBundle myResources;
+    private XMLReader xmlInput;
+    private HashMap<String, String> GOLConfig;
 
     public Grid (int size) {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
+        GOLConfig = new HashMap<>();
+        setInitialConfiguration(XML_FILE);
         this.size = size;
         grid = new Cell[size][size];
         fillGrid();
@@ -78,5 +81,9 @@ public class Grid {
     }
     public Cell[][] getGrid() {
         return grid;
+    }
+
+    public void setInitialConfiguration(String filename) {
+        xmlInput.loadFile(filename);
     }
 }
