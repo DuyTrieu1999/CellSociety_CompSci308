@@ -91,7 +91,7 @@ public class SimulationUI {
     }
 
     private void makeSlider () {
-        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
+        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),20, 10, 30);
         sizeSlider.setTextField();
         speedSlider = new SliderUI(myResources.getString("SetSpeed"), 1, 1, 2);
         speedSlider.setTextField();

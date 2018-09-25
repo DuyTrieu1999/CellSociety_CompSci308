@@ -34,8 +34,6 @@ public class PredatorPreyCell extends Cell {
         if(this.getCurrState() == StateENUM.WATER && (this.getNextState() != StateENUM.SHARK || this.getNextState() != StateENUM.FISH)) {
             this.setNextState(StateENUM.WATER);
             return;
-        } else if (this.getCurrState() == StateENUM.SHARK) {
-
         }
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         ArrayList<Cell> waterNeighbors = getWater(this);
@@ -80,6 +78,7 @@ public class PredatorPreyCell extends Cell {
             cell.setNextState(cell.getCurrState());
         }
     }
+
     public boolean hasShark (ArrayList<Cell> neighbors) {
         for (Cell cell: neighbors) {
             if (cell.getCurrState() == StateENUM.SHARK)
@@ -88,6 +87,7 @@ public class PredatorPreyCell extends Cell {
         }
         return false;
     }
+
     public boolean hasWater (ArrayList<Cell> neighbors) {
         for (Cell cell: neighbors) {
             if ((cell.getCurrState() == StateENUM.WATER && cell.getNextState() == StateENUM.WATER) || cell.getNextState() == StateENUM.WATER) {
@@ -97,6 +97,7 @@ public class PredatorPreyCell extends Cell {
         }
         return false;
     }
+
     public boolean hasFish (ArrayList<Cell> neighbors) {
         for (Cell cell: neighbors) {
             if (cell.getCurrState() == StateENUM.FISH) {
@@ -106,6 +107,7 @@ public class PredatorPreyCell extends Cell {
         }
         return false;
     }
+
     public TreeMap<Integer, PredatorPreyCell> getMap (ArrayList<Cell> cellList) {
         TreeMap<Integer, PredatorPreyCell> map = new TreeMap<>();
         int index = 0;
@@ -118,6 +120,7 @@ public class PredatorPreyCell extends Cell {
         }
         return map;
     }
+
     public ArrayList<Cell> getWater (Cell cell) {
         ArrayList<Cell> neighbors = cell.getNeighbors();
         ArrayList<Cell> result = new ArrayList<>();
@@ -128,6 +131,7 @@ public class PredatorPreyCell extends Cell {
         }
         return result;
     }
+
     public ArrayList<Cell> getFish (Cell cell) {
         ArrayList<Cell> neighbors = cell.getNeighbors();
         ArrayList<Cell> result = new ArrayList<>();

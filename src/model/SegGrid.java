@@ -53,7 +53,6 @@ public class SegGrid extends Grid {
         }
         //Need to change this; agents should move as one (oops)
         numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
-        //System.out.println(numDissatisfiedTotal);
         while(numDissatisfiedTotal > 0) {
             if (vacancies.size() > 0) {
                 boolean canMove = false;
@@ -63,7 +62,6 @@ public class SegGrid extends Grid {
                         canMove = true;
                         Cell move = vacancies.get(rand);
                         int rand2 = new Random().nextInt(numDissatisfiedTotal);
-                        //System.out.println(rand2);
                         if (rand2 < numDissatisfied1) {
                             move.setCurrState(StateENUM.AGENT1);
                             move.setNextState(StateENUM.AGENT1);
@@ -83,7 +81,6 @@ public class SegGrid extends Grid {
                 }
             }
             numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
-            System.out.println("Total: "+numDissatisfiedTotal);
         }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
