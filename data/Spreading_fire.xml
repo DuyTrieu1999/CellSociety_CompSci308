@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Spreading_fire" author="team8">
-    
+    <variables>
+        <variable> name = "probOfCatchingFire" value = "0.15"</variable>
+    </variables>
+    <Grid>
+        <size>15</size>
+    </Grid>
+    <Cells>
+        <cell>
+            <cell_state>Deforested</cell_state>
+            <cell_percent>20</cell_percent>
+        </cell>
+        <cell>
+            <cell_state>Tree</cell_state>
+            <cell_number>60</cell_number>
+        </cell>
+        <cell>
+            <cell_state>Burning</cell_state>
+            <cell_number>20</cell_number>
+        </cell>
+    </Cells>
 </simulation>

@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 
 public class FireCellGrid extends Grid{
+    private String file = "data/Spreading_fire.xml";
+
     public FireCellGrid(int size) {
         super(size);
     }

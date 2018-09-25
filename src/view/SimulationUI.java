@@ -169,6 +169,7 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
+        System.out.println(gridSize);
         if (simuName.equals(myResources.getString("GOL")))
             myGrid = new Grid(gridSize);
         if (simuName.equals(myResources.getString("WaTor")))

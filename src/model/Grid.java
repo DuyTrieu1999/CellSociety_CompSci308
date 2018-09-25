@@ -1,26 +1,28 @@
 package model;
 
-import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+
 /**
  *
  * @author duytrieu
  */
 public class Grid {
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
-
+    private XMLReader reader;
     private Cell[][] grid;
     private int size;
+    protected String configFile;
+    protected String defaultFile;
 
+    private ArrayList<String> state;
+    private ArrayList<String> var;
+    private ArrayList<Integer> percent;
+    private ArrayList<Double> val;
     private double thresholdValue; //for Fire, Segregation models?
     private int numCells; //for Segregation model?
-    private String simulationName;
-    private ResourceBundle myResources;
 
     public Grid (int size) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
+        reader = new XMLReader();
         this.size = size;
         grid = new Cell[size][size];
         fillGrid();
@@ -29,6 +31,19 @@ public class Grid {
                 storeNeighbor(grid[i][j]);
             }
         }
+    }
+    public void loadAttribute(String fileName, String defaultFile) {
+        state = new ArrayList<>();
+        var = new ArrayList<>();
+        percent = new ArrayList<>();
+        val = new ArrayList<>();
+        reader.loadDoc(fileName, defaultFile);
+        reader.addVariable(var, val);
+        reader.addCell(state, percent);
+    }
+    public void changeConfig (String configName) {
+        configFile = configName;
+        loadAttribute(configName, defaultFile);
     }
     public void updateGrid () {
         for (int i=0; i<this.getRowNum(); i++) {
