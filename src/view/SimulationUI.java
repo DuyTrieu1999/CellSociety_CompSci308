@@ -184,20 +184,12 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
-<<<<<<< HEAD
-        //System.out.println(simuName);
-=======
->>>>>>> DuyBranch
         if (simuName.equals(myResources.getString("GOL")))
             myGrid = new Grid(gridSize);
         if (simuName.equals(myResources.getString("WaTor")))
             myGrid = new PredatorPreyGrid(gridSize);
         if (simuName.equals(myResources.getString("Fire")))
-<<<<<<< HEAD
             myGrid = new FireGrid(gridSize);
-=======
-            myGrid = new FireCellGrid(gridSize);
->>>>>>> DuyBranch
         if (simuName.equals(myResources.getString("Segg")))
             myGrid = new SegGrid(gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
