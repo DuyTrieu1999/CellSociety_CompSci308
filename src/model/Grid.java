@@ -3,24 +3,26 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
 /**
  *
  * @author duytrieu
  */
 public class Grid {
-    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
-    private static final String XML_FILE = "Game_Of_Life.xml";
 
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/"; //May have to delete
+    private XMLReader reader;
     private Cell[][] grid;
     private int size;
-    private ResourceBundle myResources;
-    private XMLReader xmlInput;
-    private HashMap<String, String> GOLConfig;
+    protected String configFileName;
+    protected String defaultFileName;
+    private ArrayList<String> state;
+    private ArrayList<String> var;
+    private ArrayList<Integer> counts;
+    private ArrayList<Double> val;
 
     public Grid (int size) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "Button");
-        GOLConfig = new HashMap<>();
-        setInitialConfiguration(XML_FILE);
+        reader = new XMLReader();
         this.size = size;
         grid = new Cell[size][size];
         fillGrid();
@@ -29,6 +31,19 @@ public class Grid {
                 storeNeighbors(grid[i][j]);
             }
         }
+    }
+    public void loadAttribute(String fileName, String defaultFile) {
+        state = new ArrayList<>();
+        var = new ArrayList<>();
+        counts = new ArrayList<>();
+        val = new ArrayList<>();
+        reader.loadDoc(fileName, defaultFile);
+        reader.addVariable(var, val);
+        reader.addCell(state, counts);
+    }
+    public void changeConfig (String configName) {
+        configFileName = configName;
+        loadAttribute(configName, defaultFileName);
     }
     public void updateGrid () {
         for (int i=0; i<this.getRowNum(); i++) {
@@ -81,9 +96,5 @@ public class Grid {
     }
     public Cell[][] getGrid() {
         return grid;
-    }
-
-    public void setInitialConfiguration(String filename) {
-        xmlInput.loadFile(filename);
     }
 }
