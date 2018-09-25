@@ -67,10 +67,6 @@ public class SimulationUI {
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
         gridSize = (int)sizeSlider.getVal();
-        //XMLtoString xmlStringGetter = new XMLtoString();
-        //String gridSizeString = readSizeFromFile(xmlStringGetter.getXmlString());
-        //gridSize = Integer.parseInt(gridSizeString);
-        //System.out.print(gridSize);
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
