@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Segregation" author="team8">
-    <variables>
+    <parameters>
         <variable>name = "neighborSimilar" value = "0.3"</variable>
-    </variables>
+    </parameters>
     <Grid>
         <size>20</size>
     </Grid>
     <Cells>
         <cell>
             <cell_state>Vacant</cell_state>
-            <cell_percent>50</cell_percent>
+            <cell_number>50</cell_number>
         </cell>
         <cell>
             <cell_state>Agent 1</cell_state>

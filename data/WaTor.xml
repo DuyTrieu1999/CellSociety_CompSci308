@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="WaTor" author="team8">
-    <variables>
+    <parameters>
         <variable>name = "sharkReproductionCycle" value="5"</variable>
         <variable>name = "sharkEnergy" value="3"</variable>
         <variable>name = "fishReproductionCycle" value="3"</variable>
         <variable>name = "fishEnergyGained" value="2"</variable>
-    </variables>
+    </parameters>
     <Grid>
         <size>20</size>
     </Grid>

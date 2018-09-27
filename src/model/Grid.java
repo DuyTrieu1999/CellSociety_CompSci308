@@ -17,7 +17,7 @@ public class Grid {
     private int size;
     protected String configFileName;
     protected String defaultFileName;
-    private ArrayList<String> state;
+    private ArrayList<String> states;
     private ArrayList<String> var;
     private ArrayList<Integer> counts;
     private ArrayList<Double> val;
@@ -38,14 +38,15 @@ public class Grid {
     }
     public void loadConfig(String fileName, String defaultFile) {
         System.out.println("Started loading");
-        state = new ArrayList<>();
+        states = new ArrayList<>();
         var = new ArrayList<>();
         counts = new ArrayList<>();
         val = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
-        reader.determineGridSize(size);
-        //reader.addVariable(var, val);
-        reader.addCell(state, counts);
+        size = reader.determineGridSize(size);
+        System.out.println(size);
+        //reader.addParameters(var, val);
+        reader.addCell(states, counts);
     }
     public void changeConfig (String configName) {
         configFileName = configName;
@@ -66,10 +67,25 @@ public class Grid {
     }
 
     public void fillGrid () {
-        for (int i = 0; i<this.getRowNum(); i++) {
-            for (int j = 0; j<this.getColNum(); j++) {
-                grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
-                grid[i][j].setStartState();
+        /*
+        if(counts.size() > 0 && states.size() > 0) {
+            int total = 0;
+            for(int count : counts) {
+                total += count;
+            }
+            for (int i = 0; i<this.getRowNum(); i++) {
+                for (int j = 0; j<this.getColNum(); j++) {
+                    grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
+                    StateENUM state = states
+                    grid[i][j].setStartState(state);
+                }
+            } */
+         {
+            for (int i = 0; i<this.getRowNum(); i++) {
+                for (int j = 0; j<this.getColNum(); j++) {
+                    grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
+                    grid[i][j].setRandStartState();
+                }
             }
         }
     }

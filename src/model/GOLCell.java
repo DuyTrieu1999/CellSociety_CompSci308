@@ -58,7 +58,12 @@ public class GOLCell extends Cell {
     }
 
     @Override
-    public void setStartState() {
+    public void setStartState(StateENUM state) {
+        this.setCurrState(state);
+        this.setFill(getStateColor(state));
+    }
+    @Override
+    public void setRandStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
         this.setFill(getStateColor(this.getCurrState()));

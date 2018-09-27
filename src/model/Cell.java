@@ -46,7 +46,8 @@ public abstract class Cell extends Rectangle {
     public StateENUM getNextState() {
         return this.nextState;
     }
-    public abstract void setStartState();
+    public void setStartState(StateENUM state) {};
+    public abstract void setRandStartState();
     public abstract void updateCell ();
     public abstract Color getStateColor(StateENUM state);
     public boolean isSatisfied() {

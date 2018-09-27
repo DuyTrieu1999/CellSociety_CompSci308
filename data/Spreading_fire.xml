@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Spreading_fire" author="team8">
-    <variables>
+    <parameters>
         <variable> name = "probOfCatchingFire" value = "0.15"</variable>
-    </variables>
+    </parameters>
     <Grid>
         <size>15</size>
     </Grid>
     <Cells>
         <cell>
             <cell_state>Deforested</cell_state>
-            <cell_percent>20</cell_percent>
+            <cell_number>20</cell_number>
         </cell>
         <cell>
             <cell_state>Tree</cell_state>

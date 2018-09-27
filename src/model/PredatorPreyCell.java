@@ -158,7 +158,7 @@ public class PredatorPreyCell extends Cell {
     }
 
     @Override
-    public void setStartState() {
+    public void setRandStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);
         this.setFill(getStateColor(this.getCurrState()));

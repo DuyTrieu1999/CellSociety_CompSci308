@@ -29,7 +29,6 @@ public class XMLReader {
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
-            System.out.println(xmlDocument.toString());
         }
         catch (ParserConfigurationException | SAXException | IOException e) {
             System.out.println("Configuration file not found. Using default file instead.");
@@ -54,23 +53,35 @@ public class XMLReader {
             }
         }
     }
-    protected void addVariable (ArrayList<String> var, ArrayList<Double> val) {
-        NodeList variables = xmlDocument.getElementsByTagName("variable");
-        for (int i=0; i<variables.getLength(); i++) {
-            Element variable = (Element) variables.item(i);
+    protected void addParameters (ArrayList<String> var, ArrayList<Double> val) {
+        NodeList parameterList = xmlDocument.getElementsByTagName("variable");
+        for(int i = 0; i < parameterList.getLength(); i++) {
+            Node xmlNode = parameterList.item(i);
+            Element variable = (Element) xmlNode;
             String varName = variable.getAttribute("name");
             String varVal = variable.getAttribute("value");
-            var.add(varName);
-            val.add(Double.parseDouble(varVal));
+            System.out.println(varVal);
+            if(varName != null) {
+                var.add(varName);
+            }
+            if(varVal != null) {
+                val.add(Double.parseDouble(varVal));
+            }
         }
     }
-    protected void determineGridSize (int size) {
-        NodeList grid = xmlDocument.getElementsByTagName("Grid");
-        for(int i = 0; i<grid.getLength(); i++) {
-            Node xmlNode = grid.item(i);
-            Element gridSize = (Element) xmlNode;
-            size = Integer.parseInt(gridSize.toString());
-            System.out.print(size);
+    protected int determineGridSize (int size) {
+        NodeList gridSize = xmlDocument.getElementsByTagName("size");
+        for (int i = 0; i < gridSize.getLength(); i++) {
+            Node xmlNode = gridSize.item(i);
+            Element xmlElement = (Element) xmlNode;
+            if (xmlElement.getTagName().equals("size")) {
+                System.out.println("Current node is size");
+                String sizeString = xmlElement.getTextContent();
+                size = Integer.parseInt(sizeString);
+                return size;
+            }
         }
+        System.out.println("Could not determine grid size from file. Will keep original value.");
+        return size;
     }
 }
