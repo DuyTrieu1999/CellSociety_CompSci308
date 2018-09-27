@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 public class Grid {
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "resources/"; //May have to delete
+    private static final String DEFAULT_XML_FILE = "Game_Of_life.xml";
     private XMLReader reader;
     private Cell[][] grid;
     private int size;
@@ -21,10 +22,13 @@ public class Grid {
     private ArrayList<Integer> counts;
     private ArrayList<Double> val;
 
-    public Grid (int size) {
+    public Grid (String filename, int size) {
         reader = new XMLReader();
         this.size = size;
         grid = new Cell[size][size];
+        configFileName = filename;
+        defaultFileName = DEFAULT_XML_FILE;
+        loadConfig(configFileName, defaultFileName);
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
@@ -32,18 +36,20 @@ public class Grid {
             }
         }
     }
-    public void loadAttribute(String fileName, String defaultFile) {
+    public void loadConfig(String fileName, String defaultFile) {
+        System.out.println("Started loading");
         state = new ArrayList<>();
         var = new ArrayList<>();
         counts = new ArrayList<>();
         val = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
+        reader.determineGridSize(size);
         reader.addVariable(var, val);
         reader.addCell(state, counts);
     }
     public void changeConfig (String configName) {
         configFileName = configName;
-        loadAttribute(configName, defaultFileName);
+        loadConfig(configName, defaultFileName);
     }
     public void updateGrid () {
         for (int i=0; i<this.getRowNum(); i++) {
@@ -96,5 +102,8 @@ public class Grid {
     }
     public Cell[][] getGrid() {
         return grid;
+    }
+    public int getGridSize() {
+        return size;
     }
 }

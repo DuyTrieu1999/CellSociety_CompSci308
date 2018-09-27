@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,18 +23,18 @@ public class XMLReader {
 
     private Document xmlDocument;
     protected void loadDoc (String fileName, String defaultFile) {
-        File inputFile = new File(fileName);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbf.newDocumentBuilder();
-            Document doc = dBuilder.parse(inputFile);
+            Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
+            System.out.println(xmlDocument.toString());
         }
         catch (ParserConfigurationException | SAXException | IOException e) {
+            System.out.println("Configuration file not found. Using default file instead.");
             if (!fileName.equals(defaultFile)) {
                 loadDoc(defaultFile, defaultFile);
-                System.out.println("Configuration file not found. Using default file instead.");
             }
             e.printStackTrace();
         }
@@ -46,6 +47,8 @@ public class XMLReader {
                 Element cellEl = (Element) cellNode;
                 String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
                 String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
+                System.out.println(cellState);
+                System.out.println(cellNumber);
                 state.add(cellState);
                 counts.add(Integer.parseInt(cellNumber));
             }
@@ -61,7 +64,13 @@ public class XMLReader {
             val.add(Double.parseDouble(varVal));
         }
     }
-    protected void determineGridSize () {
-        NodeList gridSize = xmlDocument.getElementsByTagName("size");
+    protected void determineGridSize (int size) {
+        NodeList grid = xmlDocument.getElementsByTagName("Grid");
+        for(int i = 0; i<grid.getLength(); i++) {
+            Node xmlNode = grid.item(i);
+            Element gridSize = (Element) xmlNode;
+            size = Integer.parseInt(gridSize.toString());
+            System.out.print(size);
+        }
     }
 }

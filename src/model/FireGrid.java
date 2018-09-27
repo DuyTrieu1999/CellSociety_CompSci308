@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class FireGrid extends Grid {
-    public FireGrid(int size) {
-        super(size);
+    public FireGrid(String filename, int size) {
+        super(filename, size);
     }
 
     //For some reason, when testing the simulation, the other method would not work, so I replaced it with this one.

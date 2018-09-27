@@ -31,13 +31,19 @@ import java.util.Scanner;
 /**
  *
  * @author duytrieu
+ * IDEA: When main launches, choose the configuration file to use right away. This will automatically specify the grid sie and type of shape.
+ * EXTRA IDEA: When main launches, bring the user to a start screen where the XML File can be selected and have a launch button to then bring the user to the main UI screen.
  */
 public class SimulationUI {
-    public static final Paint BACKGROUND = Color.AZURE;
-    public double FRAMES_PER_SECOND = 1;
-    public double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final Paint BACKGROUND = Color.AZURE;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private double FRAMES_PER_SECOND = 1;
+    private double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+    private double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
+    private static final String GAME_OF_LIFE_XML = "Game_Of_Life.xml";
+    private static final String WA_TOR_WORLD_XML = "WaTor.xml";
+    private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
+    private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
 
     private Scene myScene;
     private Group myRoot;
@@ -66,7 +72,7 @@ public class SimulationUI {
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
-        gridSize = (int)sizeSlider.getVal();
+        gridSize = (int) sizeSlider.getVal();
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
@@ -134,7 +140,6 @@ public class SimulationUI {
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
-
         addGridPane();
         addCellToGrid(simuName);
         myRoot.getChildren().add(myGridPane);
@@ -180,47 +185,19 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
-        System.out.println(gridSize);
         if (simuName.equals(myResources.getString("GOL")))
-            myGrid = new Grid(gridSize);
+            myGrid = new Grid(GAME_OF_LIFE_XML, gridSize);
         if (simuName.equals(myResources.getString("WaTor")))
-            myGrid = new PredatorPreyGrid(gridSize);
+            myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize);
         if (simuName.equals(myResources.getString("Fire")))
-            myGrid = new FireGrid(gridSize);
+            myGrid = new FireGrid(SPREADING_FIRE_XML, gridSize);
         if (simuName.equals(myResources.getString("Segg")))
-            myGrid = new SegGrid(gridSize);
+            myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
                 myGridPane.add(cell, i,j);
             }
         }
-    }
-
-    private String readSizeFromFile(String xmlString) {
-        /*readFile
-        File fXmlFile = new File(filename);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(fXmlFile);
-        DocumentBuilder.parse(new InputStream(new StringReader(fXmlFile.toString())));
-        */
-        System.out.println("Reading XML");
-        Scanner scanner = new Scanner(xmlString);
-        String s = scanner.nextLine();
-        System.out.println(s);
-        while(!s.contains("grid_size") && scanner.hasNextLine()) {
-            s = scanner.nextLine();
-            System.out.println(s);
-        }
-        if(!scanner.hasNextLine()) {
-            return "";
-        }
-        String[] result1 = s.split("<grid_size>");
-        String[] result2 = s.split("<");
-        for(int i = 0; i < result2.length; i++) {
-            System.out.println(result2[i]);
-        }
-        return result2[0];
     }
 }

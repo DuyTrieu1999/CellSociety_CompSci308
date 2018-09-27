@@ -16,8 +16,8 @@ public class PredatorPreyGrid extends Grid{
     private HashMap<Integer, Fish> poorInnocentLittleFishies; //Rename? lol
     private HashMap<Integer, Shark> sharks;
 
-    public PredatorPreyGrid(int size) {
-        super(size);
+    public PredatorPreyGrid(String filename, int size) {
+        super(filename, size);
         poorInnocentLittleFishies = new HashMap<>();
         sharks = new HashMap<Integer, Shark>();
         for (int i=0; i<this.getRowNum(); i++) {
