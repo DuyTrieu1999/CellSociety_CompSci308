@@ -30,21 +30,21 @@ public abstract class Cell extends Rectangle {
     public ArrayList<Cell> getNeighbors () {
         return neighbors;
     }
-    public void setNeighbors (ArrayList<Cell> neighbors) {
-        this.neighbors = neighbors;
+    public void setNeighbors (ArrayList<Cell> neighborList) {
+        neighbors = neighborList;
     }
 
-    public void setCurrState(StateENUM currState) {
-        this.currState = currState;
+    public void setCurrState(StateENUM newCurrState) {
+        currState = newCurrState;
     }
-    public void setNextState(StateENUM nextState) {
-        this.nextState = nextState;
+    public void setNextState(StateENUM newNextState) {
+        nextState = newNextState;
     }
     public StateENUM getCurrState() {
-        return this.currState;
+        return currState;
     }
     public StateENUM getNextState() {
-        return this.nextState;
+        return nextState;
     }
     public abstract void setStartState();
     public abstract void updateCell ();

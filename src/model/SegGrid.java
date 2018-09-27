@@ -17,6 +17,7 @@ public class SegGrid extends Grid {
     private int numDissatisfied2;
     private int numDissatisfiedTotal;
     private int numVacant;
+    private TreeMap<Integer, Cell> vacancies;
 
     public SegGrid (int size) {
         super(size);
@@ -34,7 +35,7 @@ public class SegGrid extends Grid {
         numDissatisfied2 = 0;
         numVacant = 0;
         boolean currentlySatisfied;
-        TreeMap<Integer, Cell> vacancies = new TreeMap<Integer, Cell>();
+        vacancies = new TreeMap<Integer, Cell>();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 currentlySatisfied = getGrid()[i][j].isSatisfied();
@@ -52,35 +53,7 @@ public class SegGrid extends Grid {
         }
         //Need to change this; agents should move as one (oops)
         numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
-        while(numDissatisfiedTotal > 0) {
-            if (vacancies.size() > 0) {
-                boolean canMove = false;
-                while(!canMove) {
-                    int rand = new Random().nextInt(numVacant);
-                    if (vacancies.containsKey(rand)) {
-                        canMove = true;
-                        Cell move = vacancies.get(rand);
-                        int rand2 = new Random().nextInt(numDissatisfiedTotal);
-                        if (rand2 < numDissatisfied1) {
-                            move.setCurrState(StateENUM.AGENT1);
-                            move.setNextState(StateENUM.AGENT1);
-                        } else {
-                            move.setCurrState(StateENUM.AGENT2);
-                            move.setNextState(StateENUM.AGENT2);
-                        }
-                        move.setSatisfaction(true);
-                        move.updateCell();
-                        vacancies.remove(rand);
-                        if (move.getCurrState() == StateENUM.AGENT1) {
-                            numDissatisfied1--;
-                        } else {
-                            numDissatisfied2--;
-                        }
-                    }
-                }
-            }
-            numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
-        }
+        relocateCells(numDissatisfiedTotal, numDissatisfied1, numDissatisfied2);
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
@@ -95,6 +68,38 @@ public class SegGrid extends Grid {
                 this.getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum());
                 this.getGrid()[i][j].setStartState();
             }
+        }
+    }
+
+    private void relocateCells(int numTotal, int num1, int num2) {
+        while(numTotal > 0) {
+            if (vacancies.size() > 0) {
+                boolean canMove = false;
+                while(!canMove) {
+                    int rand = new Random().nextInt(numVacant);
+                    if (vacancies.containsKey(rand)) {
+                        canMove = true;
+                        Cell move = vacancies.get(rand);
+                        int rand2 = new Random().nextInt(numDissatisfiedTotal);
+                        if (rand2 < num1) {
+                            move.setCurrState(StateENUM.AGENT1);
+                            move.setNextState(StateENUM.AGENT1);
+                        } else {
+                            move.setCurrState(StateENUM.AGENT2);
+                            move.setNextState(StateENUM.AGENT2);
+                        }
+                        move.setSatisfaction(true);
+                        move.updateCell();
+                        vacancies.remove(rand);
+                        if (move.getCurrState() == StateENUM.AGENT1) {
+                            num1--;
+                        } else {
+                            num2--;
+                        }
+                    }
+                }
+            }
+            numTotal = num1 + num2;
         }
     }
 }
