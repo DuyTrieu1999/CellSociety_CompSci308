@@ -47,8 +47,8 @@ public class XMLReader {
                 Element cellEl = (Element) cellNode;
                 String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
                 String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
-                System.out.println(cellState);
-                System.out.println(cellNumber);
+                //System.out.println(cellState);
+                //System.out.println(cellNumber);
                 state.add(cellState);
                 counts.add(Integer.parseInt(cellNumber));
             }

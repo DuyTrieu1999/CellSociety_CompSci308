@@ -44,7 +44,7 @@ public class Grid {
         val = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
         reader.determineGridSize(size);
-        reader.addVariable(var, val);
+        //reader.addVariable(var, val);
         reader.addCell(state, counts);
     }
     public void changeConfig (String configName) {
