@@ -9,9 +9,10 @@ import java.util.ResourceBundle;
  * @author duytrieu
  */
 public class Grid {
-
+    private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String DEFAULT_RESOURCE_PACKAGE = "resources/"; //May have to delete
     private static final String DEFAULT_XML_FILE = "Game_Of_life.xml";
+
     private XMLReader reader;
     private Cell[][] grid;
     private int size;
@@ -60,8 +61,7 @@ public class Grid {
         }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                Cell cell = grid[i][j];
-                cell.setCurrState(cell.getNextState());
+                grid[i][j].setCurrState(grid[i][j].getNextState());
             }
         }
     }
@@ -91,7 +91,7 @@ public class Grid {
     }
 
     public void storeNeighbors (Cell cell) {
-        ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
+        ArrayList<Cell> cellNeighbours = new ArrayList<>();
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
         for (int row: rowCoord) {
@@ -119,7 +119,7 @@ public class Grid {
     public Cell[][] getGrid() {
         return grid;
     }
-    public int getGridSize() {
-        return size;
+    protected double getMaxGridPaneSize() {
+        return MAX_GRID_PANE_SIZE;
     }
 }

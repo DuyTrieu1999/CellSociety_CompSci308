@@ -2,29 +2,16 @@ package view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
-import org.w3c.dom.Document;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -44,6 +31,7 @@ public class SimulationUI {
     private static final String WA_TOR_WORLD_XML = "WaTor.xml";
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
+    private static final double MAX_GRID_PANE_SIZE = 360;
 
     private Scene myScene;
     private Group myRoot;
@@ -175,11 +163,11 @@ public class SimulationUI {
     private void addGridPane () {
         myGridPane = new GridPane();
         for (int i=0; i< gridSize; i++) {
-            RowConstraints row = new RowConstraints(360/gridSize);
+            RowConstraints row = new RowConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getRowConstraints().add(row);
         }
         for (int i=0; i< gridSize; i++) {
-            ColumnConstraints col = new ColumnConstraints(360/gridSize);
+            ColumnConstraints col = new ColumnConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getColumnConstraints().add(col);
         }
         myGridPane.setPadding(new Insets(60,60,60,50));

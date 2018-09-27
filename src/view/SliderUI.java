@@ -16,12 +16,10 @@ import javafx.scene.layout.VBox;
 public class SliderUI extends VBox {
     private Slider slider = new Slider();
     protected TextField valueText;
-    protected String name;
     protected Label nameLabel;
     protected HBox layoutBox;
 
     public SliderUI (String name, double val, double min, double max) {
-        name = name;
         slider.setValue(val);
         slider.setMin(min);
         slider.setMax(max);
