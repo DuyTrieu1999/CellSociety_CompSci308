@@ -2,29 +2,16 @@ package view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
-import org.w3c.dom.Document;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.*;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -33,11 +20,12 @@ import java.util.Scanner;
  * @author duytrieu
  */
 public class SimulationUI {
-    public static final Paint BACKGROUND = Color.AZURE;
-    public double FRAMES_PER_SECOND = 1;
-    public double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final Paint BACKGROUND = Color.AZURE;
+    private double FRAMES_PER_SECOND = 1;
+    private double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+    private double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final double MAX_GRID_PANE_SIZE = 360;
 
     private Scene myScene;
     private Group myRoot;
@@ -172,11 +160,11 @@ public class SimulationUI {
     private void addGridPane () {
         myGridPane = new GridPane();
         for (int i=0; i< gridSize; i++) {
-            RowConstraints row = new RowConstraints(360/gridSize);
+            RowConstraints row = new RowConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getRowConstraints().add(row);
         }
         for (int i=0; i< gridSize; i++) {
-            ColumnConstraints col = new ColumnConstraints(360/gridSize);
+            ColumnConstraints col = new ColumnConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getColumnConstraints().add(col);
         }
         myGridPane.setPadding(new Insets(60,60,60,50));
@@ -197,32 +185,5 @@ public class SimulationUI {
                 myGridPane.add(cell, i,j);
             }
         }
-    }
-
-    private String readSizeFromFile(String xmlString) {
-        /*readFile
-        File fXmlFile = new File(filename);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(fXmlFile);
-        DocumentBuilder.parse(new InputStream(new StringReader(fXmlFile.toString())));
-        */
-        System.out.println("Reading XML");
-        Scanner scanner = new Scanner(xmlString);
-        String s = scanner.nextLine();
-        System.out.println(s);
-        while(!s.contains("grid_size") && scanner.hasNextLine()) {
-            s = scanner.nextLine();
-            System.out.println(s);
-        }
-        if(!scanner.hasNextLine()) {
-            return "";
-        }
-        String[] result1 = s.split("<grid_size>");
-        String[] result2 = s.split("<");
-        for(int i = 0; i < result2.length; i++) {
-            System.out.println(result2[i]);
-        }
-        return result2[0];
     }
 }

@@ -202,7 +202,7 @@ public class PredatorPreyGrid extends Grid{
     public void fillGrid() {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                this.getGrid()[i][j] = new PredatorPreyCell(i, j, (double)360 / this.getColNum());
+                this.getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum());
                 this.getGrid()[i][j].setStartState();
             }
         }
