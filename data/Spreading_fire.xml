@@ -3,21 +3,21 @@
     <parameters>
         <variable> name = "probOfCatchingFire" value = "0.15"</variable>
     </parameters>
-    <Grid>
-        <size>15</size>
-    </Grid>
-    <Cells>
+    <grid>
+        <size>20</size>
+    </grid>
+    <cell_types>
         <cell>
-            <cell_state>Deforested</cell_state>
+            <cell_state>DEFORESTED</cell_state>
             <cell_number>20</cell_number>
         </cell>
         <cell>
-            <cell_state>Tree</cell_state>
-            <cell_number>60</cell_number>
+            <cell_state>TREE</cell_state>
+            <cell_number>360</cell_number>
         </cell>
         <cell>
-            <cell_state>Burning</cell_state>
+            <cell_state>BURNING</cell_state>
             <cell_number>20</cell_number>
         </cell>
-    </Cells>
+    </cell_types>
 </simulation>

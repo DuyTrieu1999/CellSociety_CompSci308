@@ -3,21 +3,21 @@
     <parameters>
         <variable>name = "neighborSimilar" value = "0.3"</variable>
     </parameters>
-    <Grid>
+    <grid>
         <size>20</size>
-    </Grid>
-    <Cells>
+    </grid>
+    <cell_types>
         <cell>
-            <cell_state>Vacant</cell_state>
+            <cell_state>VACANT</cell_state>
             <cell_number>50</cell_number>
         </cell>
         <cell>
-            <cell_state>Agent 1</cell_state>
+            <cell_state>AGENT 1</cell_state>
             <cell_number>25</cell_number>
         </cell>
         <cell>
-            <cell_state>Agent 2</cell_state>
+            <cell_state>AGENT 2</cell_state>
             <cell_number>25</cell_number>
         </cell>
-    </Cells>
+    </cell_types>
 </simulation>

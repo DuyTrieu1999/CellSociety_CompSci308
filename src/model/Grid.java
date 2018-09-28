@@ -1,12 +1,10 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  *
- * @author duytrieu
+ * @author Duy Tieu, Samuel Appiah-Kubi, Austin Kao
  */
 public class Grid {
     private static final double MAX_GRID_PANE_SIZE = 360;
@@ -44,7 +42,7 @@ public class Grid {
         counts = new ArrayList<>();
         val = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
-        size = reader.determineGridSize(size);
+        //size = reader.determineGridSize(size);
         System.out.println(size);
         //reader.addParameters(var, val);
         reader.addCell(states, counts);
@@ -66,32 +64,43 @@ public class Grid {
         }
     }
 
-    public void fillGrid () {
-        /*
-        if(counts.size() > 0 && states.size() > 0) {
-            int total = 0;
-            for(int count : counts) {
-                total += count;
+    public void fillGrid() {
+        if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size()) {
+            TreeMap<Integer, Integer> cellTypeCount = new TreeMap<>();
+            for (int k = 0; k < counts.size(); k++) {
+                cellTypeCount.put(k, counts.get(k));
+                //System.out.println(states.get(k));
             }
-            for (int i = 0; i<this.getRowNum(); i++) {
-                for (int j = 0; j<this.getColNum(); j++) {
-                    grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
-                    StateENUM state = states
-                    grid[i][j].setStartState(state);
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    while(true) {
+                        int rn = new Random().nextInt(states.size());
+                        if(cellTypeCount.get(rn) > 0) {
+                            grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                            int newCount = cellTypeCount.get(rn) - 1;
+                            cellTypeCount.remove(rn);
+                            cellTypeCount.put(rn, newCount);
+                            StateENUM state = StateENUM.valueOf(states.get(rn));
+                            grid[i][j].setStartState(state);
+                            break;
+                        }
+                    }
                 }
-            } */
-         {
-            for (int i = 0; i<this.getRowNum(); i++) {
-                for (int j = 0; j<this.getColNum(); j++) {
-                    grid[i][j] = new GOLCell(i, j, (double)360 / this.getColNum());
+            }
+        } else {
+            System.out.println("Switching to random cell setup");
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
                     grid[i][j].setRandStartState();
                 }
             }
         }
     }
 
-    public void storeNeighbors (Cell cell) {
+    public void storeNeighbors(Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<>();
+        System.out.println(cell.getRowPos());
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
         for (int row: rowCoord) {
@@ -107,10 +116,10 @@ public class Grid {
     public boolean outOfBounds (int row, int col) {
         return (row < 0 || row >= getRowNum() || col < 0 || col >= getColNum());
     }
-    public int getRowNum () {
+    public int getRowNum() {
         return grid.length;
     }
-    public int getColNum () {
+    public int getColNum() {
         return grid[0].length;
     }
     public Cell getCell (int row, int col) {
@@ -121,5 +130,11 @@ public class Grid {
     }
     protected double getMaxGridPaneSize() {
         return MAX_GRID_PANE_SIZE;
+    }
+    public ArrayList<String> getCellStates(){
+        return states;
+    }
+    public ArrayList<Integer> getCellCounts() {
+        return counts;
     }
 }

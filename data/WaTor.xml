@@ -6,21 +6,21 @@
         <variable>name = "fishReproductionCycle" value="3"</variable>
         <variable>name = "fishEnergyGained" value="2"</variable>
     </parameters>
-    <Grid>
+    <grid>
         <size>20</size>
-    </Grid>
-    <Cells>
+    </grid>
+    <cell_types>
         <cell>
             <cell_state>Water</cell_state>
-            <cell_percent>60</cell_percent>
+            <cell_number>300</cell_number>
         </cell>
         <cell>
             <cell_state>Fish</cell_state>
-            <cell_percent>30</cell_percent>
+            <cell_number>80</cell_number>
         </cell>
         <cell>
             <cell_state>Shark</cell_state>
-            <cell_percent>10</cell_percent>
+            <cell_number>20</cell_number>
         </cell>
-    </Cells>
+    </cell_types>
 </simulation>
