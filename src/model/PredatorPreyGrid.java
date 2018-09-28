@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 /**
  * This class implements the grid for the Wa-Tor World of Predator Prey Relationships
+ * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
     private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
@@ -17,6 +18,8 @@ public class PredatorPreyGrid extends Grid{
 
     public PredatorPreyGrid(int size) {
         super(size);
+        poorInnocentLittleFishies = new HashMap<>();
+        sharks = new HashMap<Integer, Shark>();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 if(getGrid()[i][j].getCurrState() == StateENUM.FISH) {
@@ -30,6 +33,7 @@ public class PredatorPreyGrid extends Grid{
 
     /**
      * Make updateGrid() conform to the rules of the simulation
+     * Sharks move before fish so that the fish that are eaten by sharks don't move.
      */
     @Override
     public void updateGrid() {
@@ -39,18 +43,20 @@ public class PredatorPreyGrid extends Grid{
                     getGrid()[i][j].updateCell();
                     if(getGrid()[i][j].isMoving()) {
                         PredatorPreyCell nextLocation = getGrid()[i][j].getMove();
-                        Shark temp = sharks.get(hashCode(i,j));
+                        Shark currentShark = sharks.get(hashCode(i,j));
                         if(getGrid()[i][j].isEating()) {
                             poorInnocentLittleFishies.remove(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()));
                             nextLocation.setCurrState(StateENUM.WATER);
-                        }
-                        if(temp.getReproductionTime() <= 0) {
-                            temp.setReproductionTime(SHARK_REPRODUCTION_CYCLE_WAIT);
-                        } else {
-                            temp.setReproductionTime(temp.getReproductionTime()-1);
+                            currentShark.setSharkEnergy(currentShark.getSharkEnergy()+ENERGY_FROM_EATING_FISH);
                         }
                         sharks.remove(hashCode(i,j));
-                        sharks.put(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()), temp);
+                        if(currentShark.getReproductionTime() <= 0) {
+                            currentShark.setReproductionTime(SHARK_REPRODUCTION_CYCLE_WAIT);
+                            sharks.put(hashCode(i,j), new Shark());
+                        } else {
+                            currentShark.setReproductionTime(currentShark.getReproductionTime()-1);
+                        }
+                        sharks.put(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()), currentShark);
                     } else {
                         Shark currentShark = sharks.get(hashCode(i,j));
                         if(currentShark.getReproductionTime() != 0) {
@@ -63,11 +69,24 @@ public class PredatorPreyGrid extends Grid{
         }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                getGrid()[i][j].updateCell();
-                if(poorInnocentLittleFishies.containsKey(hashCode(i,j))) {
-                    Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
-                    if(currentFish.getReproductionTime() <= 0) {
+                if(getGrid()[i][j].getCurrState() == StateENUM.FISH) {
+                    getGrid()[i][j].updateCell();
+                    if(getGrid()[i][j].isMoving()) {
+                        PredatorPreyCell nextLocation = getGrid()[i][j].getMove();
+                        Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
                         poorInnocentLittleFishies.remove(hashCode(i,j));
+                        if(currentFish.getReproductionTime() <= 0) {
+                            currentFish.setReproductionTime(SHARK_REPRODUCTION_CYCLE_WAIT);
+                            poorInnocentLittleFishies.put(hashCode(i,j), new Fish());
+                        } else {
+                            currentFish.setReproductionTime(currentFish.getReproductionTime()-1);
+                        }
+                        poorInnocentLittleFishies.put(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()), currentFish);
+                    } else {
+                        Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
+                        if(currentFish.getReproductionTime() != 0) {
+                            currentFish.setReproductionTime(currentFish.getReproductionTime() - 1);
+                        }
                     }
                 }
             }
@@ -131,7 +150,11 @@ public class PredatorPreyGrid extends Grid{
             this.reproductionTime = reproductionTime;
         }
         public void setSharkEnergy(int energy) {
-            this.sharkEnergy = energy;
+            if(energy < MAX_SHARK_ENERGY) {
+                this.sharkEnergy = energy;
+            } else {
+                this.sharkEnergy = MAX_SHARK_ENERGY;
+            }
         }
         public boolean isDead() {
             if(getSharkEnergy() <= 0) {
@@ -179,7 +202,7 @@ public class PredatorPreyGrid extends Grid{
     public void fillGrid() {
         for (int i = 0; i<this.getRowNum(); i++) {
             for (int j = 0; j<this.getColNum(); j++) {
-                this.getGrid()[i][j] = new PredatorPreyCell(i, j, (double)360 / this.getColNum());
+                this.getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum());
                 this.getGrid()[i][j].setStartState();
             }
         }

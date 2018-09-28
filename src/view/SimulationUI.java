@@ -2,32 +2,30 @@ package view;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
-
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 /**
  *
  * @author duytrieu
  */
 public class SimulationUI {
-    public static final Paint BACKGROUND = Color.AZURE;
-    public double FRAMES_PER_SECOND = 1;
-    public double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final Paint BACKGROUND = Color.AZURE;
+    private double FRAMES_PER_SECOND = 1;
+    private double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+    private double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/";
+    private static final double MAX_GRID_PANE_SIZE = 360;
 
     private Scene myScene;
     private Group myRoot;
@@ -56,6 +54,10 @@ public class SimulationUI {
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
         makeAllButton();
         gridSize = (int)sizeSlider.getVal();
+        //XMLtoString xmlStringGetter = new XMLtoString();
+        //String gridSizeString = readSizeFromFile(xmlStringGetter.getXmlString());
+        //gridSize = Integer.parseInt(gridSizeString);
+        //System.out.print(gridSize);
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
@@ -75,7 +77,7 @@ public class SimulationUI {
     }
 
     private void makeSlider () {
-        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),15, 10, 20);
+        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),20, 10, 30);
         sizeSlider.setTextField();
         speedSlider = new SliderUI(myResources.getString("SetSpeed"), 10, 1, 20);
         speedSlider.setTextField();
@@ -100,7 +102,7 @@ public class SimulationUI {
         hbox3.getChildren().add(stopButton);
         hbox4.getChildren().add(stepButton);
         hbox5.getChildren().addAll(resetButton);
-        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider);
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider); //Omitted sizeSlider
         createButtonPane(buttonContainer);
     }
 
@@ -122,6 +124,7 @@ public class SimulationUI {
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
+
         addGridPane();
         addCellToGrid(simuName);
         myRoot.getChildren().add(myGridPane);
@@ -157,17 +160,17 @@ public class SimulationUI {
     private void addGridPane () {
         myGridPane = new GridPane();
         for (int i=0; i< gridSize; i++) {
-            RowConstraints row = new RowConstraints(360/gridSize);
+            RowConstraints row = new RowConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getRowConstraints().add(row);
         }
         for (int i=0; i< gridSize; i++) {
-            ColumnConstraints col = new ColumnConstraints(360/gridSize);
+            ColumnConstraints col = new ColumnConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getColumnConstraints().add(col);
         }
         myGridPane.setPadding(new Insets(60,60,60,50));
     }
     private void addCellToGrid (String simuName) {
-        System.out.println(simuName);
+        //System.out.println(simuName);
         if (simuName.equals(myResources.getString("GOL")))
             myGrid = new Grid(gridSize);
         if (simuName.equals(myResources.getString("WaTor")))
