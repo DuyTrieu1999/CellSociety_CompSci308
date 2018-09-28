@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * This class implements the grid for the Wa-Tor World of Predator Prey Relationships
@@ -41,20 +38,23 @@ public class PredatorPreyGrid extends Grid{
     @Override
     public void updateGrid() {
         Cell currentCell;
-        for(int hashCode : livingFish.keySet()) {
+        Set<Integer> currentLivingFish = new HashSet<>(livingFish.keySet());
+        for(int hashCode : currentLivingFish) {
+            //System.out.println(hashCode);
             int row = hashCode / getRowNum();
             int col = Math.floorMod(hashCode, getRowNum());
-            int currentHashCode = row * getRowNum() + col;
             Fish currentFish = livingFish.get(hashCode);
             currentCell = getGrid()[row][col];
             ArrayList<Cell> neighborList = currentCell.getNeighbors();
             boolean canMove = false;
             for(Cell neighbor : neighborList) {
                 int neighborHashCode = hashCode(neighbor.getRowPos(), neighbor.getColPos());
+                //System.out.println(neighborHashCode);
                 if(!livingSharks.containsKey(neighborHashCode) && !livingFish.containsKey(neighborHashCode)) {
                     canMove = true;
                 }
             }
+            //System.out.println(canMove);
             if (canMove) {
                 boolean determinedMove = false;
                 while (!determinedMove) {
@@ -62,8 +62,9 @@ public class PredatorPreyGrid extends Grid{
                     int newHashCode = hashCode(neighborList.get(rn).getRowPos(), neighborList.get(rn).getColPos());
                     if(!livingSharks.containsKey(newHashCode) && !livingFish.containsKey(newHashCode)) {
                         determinedMove = true;
-                        currentFish.updateMovingFish(currentHashCode, newHashCode, livingFish);
+                        currentFish.updateMovingFish(hashCode, newHashCode, livingFish);
                         neighborList.get(rn).setHasFish(true);
+                        //System.out.println(newHashCode);
                     }
                 }
             } else {
@@ -71,8 +72,8 @@ public class PredatorPreyGrid extends Grid{
                 currentCell.setHasFish(true);
             }
         }
-        for(int hashCode : livingSharks.keySet()) {
-            int currentHashCode = hashCode;
+        Set<Integer> currentLivingSharks = new HashSet<>(livingSharks.keySet());
+        for(int hashCode : currentLivingSharks) {
             int row = hashCode / getRowNum();
             int col = Math.floorMod(hashCode, getRowNum());
             Shark currentShark = livingSharks.get(hashCode);
@@ -97,19 +98,19 @@ public class PredatorPreyGrid extends Grid{
                     if(canEat) {
                         if(livingFish.containsKey(newHashCode)) {
                             determinedMove = true;
-                            currentShark.updateMovingShark(currentHashCode, newHashCode, livingSharks, livingFish);
+                            currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
                             neighborList.get(rn).setHasShark(true);
                             neighborList.get(rn).setHasFish(false);
                         }
                     } else if(!livingSharks.containsKey(newHashCode)) {
                         determinedMove = true;
-                        currentShark.updateMovingShark(currentHashCode, newHashCode, livingSharks, livingFish);
+                        currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
                         neighborList.get(rn).setHasShark(true);
                     }
                 }
             } else {
-                currentShark.updateUnmovingShark(currentHashCode, livingSharks);
-                if(livingSharks.containsKey(currentHashCode)) {
+                currentShark.updateUnmovingShark(hashCode, livingSharks);
+                if(livingSharks.containsKey(hashCode)) {
                     currentCell.setHasShark(true);
                 }
             }
