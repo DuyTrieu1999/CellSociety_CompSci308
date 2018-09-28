@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class XMLReader {
     /**
@@ -53,19 +54,16 @@ public class XMLReader {
             }
         }
     }
-    protected void addParameters (ArrayList<String> var, ArrayList<Double> val) {
-        NodeList parameterList = xmlDocument.getElementsByTagName("variable");
+    protected void addParameters (TreeMap<String, Double> paramMap) {
+        NodeList parameterList = xmlDocument.getElementsByTagName("parameter");
         for(int i = 0; i < parameterList.getLength(); i++) {
             Node xmlNode = parameterList.item(i);
-            Element variable = (Element) xmlNode;
-            String varName = variable.getAttribute("name");
-            String varVal = variable.getAttribute("value");
-            System.out.println(varVal);
-            if(varName != null) {
-                var.add(varName);
-            }
-            if(varVal != null) {
-                val.add(Double.parseDouble(varVal));
+            Element parameter = (Element) xmlNode;
+            String paramName = parameter.getElementsByTagName("variable_name").item(0).getTextContent();
+            String paramValString = parameter.getElementsByTagName("variable_value").item(0).getTextContent();
+            double paramVal = Double.parseDouble(paramValString);
+            if(paramName != null && !(paramVal < 0)) {
+                paramMap.put(paramName, paramVal);
             }
         }
     }
@@ -75,7 +73,6 @@ public class XMLReader {
             Node xmlNode = gridSize.item(i);
             Element xmlElement = (Element) xmlNode;
             if (xmlElement.getTagName().equals("size")) {
-                System.out.println("Current node is size");
                 String sizeString = xmlElement.getTextContent();
                 size = Integer.parseInt(sizeString);
                 return size;

@@ -17,9 +17,8 @@ public class Grid {
     protected String configFileName;
     protected String defaultFileName;
     private ArrayList<String> states;
-    private ArrayList<String> var;
     private ArrayList<Integer> counts;
-    private ArrayList<Double> val;
+    private TreeMap<String, Double> parameterValues;
 
     public Grid (String filename, int size) {
         reader = new XMLReader();
@@ -37,13 +36,12 @@ public class Grid {
     }
     public void loadConfig(String fileName, String defaultFile) {
         states = new ArrayList<>();
-        var = new ArrayList<>();
         counts = new ArrayList<>();
-        val = new ArrayList<>();
+        parameterValues = new TreeMap<>();
         reader.loadDoc(fileName, defaultFile);
         size = reader.determineGridSize(size);
         //System.out.println(size);
-        //reader.addParameters(var, val);
+        reader.addParameters(parameterValues);
         reader.addCell(states, counts);
     }
     public void changeConfig (String configName) {
@@ -144,5 +142,8 @@ public class Grid {
     }
     public ArrayList<Integer> getCellCounts() {
         return counts;
+    }
+    public TreeMap<String, Double> getParameterValues() {
+        return parameterValues;
     }
 }

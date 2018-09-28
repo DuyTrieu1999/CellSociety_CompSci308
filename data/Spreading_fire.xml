@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Spreading_fire" author="team8">
-    <parameters>
-        <variable> name = "probOfCatchingFire" value = "0.15"</variable>
-    </parameters>
+    <parameter>
+        <variable_name>probabilityOfCatchingFire</variable_name>
+        <variable_value>0.45</variable_value>
+    </parameter>
     <grid>
         <size>20</size>
     </grid>

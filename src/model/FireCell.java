@@ -1,7 +1,6 @@
 package model;
 
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,7 +21,6 @@ public class FireCell extends Cell {
     public FireCell(int row, int col, double width) {
         super(row, col, width);
         hasNeighborFire = false;
-        probCatch = 1;
     }
 
     @Override
@@ -49,6 +47,7 @@ public class FireCell extends Cell {
         this.setFill(getStateColor(this.getNextState()));
     }
 
+    @Override
     public void setProbCatch(double probability) {
         probCatch = probability;
     }

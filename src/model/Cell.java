@@ -66,5 +66,6 @@ public abstract class Cell extends Rectangle {
         return false;
     }
     public void setSatisfaction(boolean value) {}
+    public void setProbCatch(double probability) {}
 }
 

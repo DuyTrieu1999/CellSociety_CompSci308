@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Segregation" author="team8">
-    <parameters>
-        <variable>name = "neighborSimilar" value = "0.3"</variable>
-    </parameters>
+    <parameter>
+        <variable_name>threshold</variable_name>
+        <variable_value>0.3</variable_value>
+    </parameter>
     <grid>
         <size>20</size>
     </grid>
