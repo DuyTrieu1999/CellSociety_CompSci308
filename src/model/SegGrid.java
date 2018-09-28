@@ -62,11 +62,46 @@ public class SegGrid extends Grid {
     }
 
     @Override
-    public void fillGrid () {
-        for (int i = 0; i<this.getRowNum(); i++) {
-            for (int j = 0; j<this.getColNum(); j++) {
-                this.getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum());
-                this.getGrid()[i][j].setRandStartState();
+    public void fillGrid() {
+        if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
+            int total = 0;
+            TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
+            for (int k = 0; k < getCellCounts().size(); k++) {
+                cellTypeCount.put(getCellStates().get(k), getCellCounts().get(k));
+                total += getCellCounts().get(k);
+            }
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    boolean createdCell = false;
+                    while(!createdCell) {
+                        int rn = new Random().nextInt(total);
+                        for (String s : cellTypeCount.keySet()) {
+                            if(rn > cellTypeCount.get(s)) {
+                                int value = cellTypeCount.get(s);
+                                rn = rn - value;
+                            } else {
+                                if(cellTypeCount.get(s) > 0) {
+                                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                                    int newCount = cellTypeCount.get(s) - 1;
+                                    StateENUM state = StateENUM.valueOf(s);
+                                    getGrid()[i][j].setStartState(state);
+                                    cellTypeCount.replace(s, newCount);
+                                    createdCell = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    total--;
+                }
+            }
+        } else {
+            System.out.println("Switching to random cell setup");
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                    getGrid()[i][j].setRandStartState();
+                }
             }
         }
     }
@@ -80,7 +115,7 @@ public class SegGrid extends Grid {
                     if (vacancies.containsKey(rand)) {
                         canMove = true;
                         Cell move = vacancies.get(rand);
-                        int rand2 = new Random().nextInt(numDissatisfiedTotal);
+                        int rand2 = new Random().nextInt(numTotal);
                         if (rand2 < num1) {
                             move.setCurrState(StateENUM.AGENT1);
                             move.setNextState(StateENUM.AGENT1);

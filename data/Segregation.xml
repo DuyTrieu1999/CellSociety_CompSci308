@@ -9,15 +9,15 @@
     <cell_types>
         <cell>
             <cell_state>VACANT</cell_state>
-            <cell_number>50</cell_number>
+            <cell_number>150</cell_number>
         </cell>
         <cell>
-            <cell_state>AGENT 1</cell_state>
-            <cell_number>25</cell_number>
+            <cell_state>AGENT1</cell_state>
+            <cell_number>125</cell_number>
         </cell>
         <cell>
-            <cell_state>AGENT 2</cell_state>
-            <cell_number>25</cell_number>
+            <cell_state>AGENT2</cell_state>
+            <cell_number>125</cell_number>
         </cell>
     </cell_types>
 </simulation>

@@ -79,11 +79,6 @@ public class SegCell extends Cell{
     }
 
     @Override
-    public void setStartState(StateENUM state) {
-        this.setCurrState(state);
-        this.setFill(getStateColor(this.getCurrState()));
-    }
-    @Override
     public void setRandStartState() {
         int rand = new Random().nextInt(states.length);
         this.setCurrState(states[rand]);

@@ -36,14 +36,13 @@ public class Grid {
         }
     }
     public void loadConfig(String fileName, String defaultFile) {
-        System.out.println("Started loading");
         states = new ArrayList<>();
         var = new ArrayList<>();
         counts = new ArrayList<>();
         val = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
-        //size = reader.determineGridSize(size);
-        System.out.println(size);
+        size = reader.determineGridSize(size);
+        //System.out.println(size);
         //reader.addParameters(var, val);
         reader.addCell(states, counts);
     }
@@ -66,25 +65,35 @@ public class Grid {
 
     public void fillGrid() {
         if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size()) {
-            TreeMap<Integer, Integer> cellTypeCount = new TreeMap<>();
+            int total = 0;
+            TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
             for (int k = 0; k < counts.size(); k++) {
-                cellTypeCount.put(k, counts.get(k));
-                //System.out.println(states.get(k));
+                cellTypeCount.put(states.get(k), counts.get(k));
+                total += counts.get(k);
             }
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    while(true) {
-                        int rn = new Random().nextInt(states.size());
-                        if(cellTypeCount.get(rn) > 0) {
-                            grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
-                            int newCount = cellTypeCount.get(rn) - 1;
-                            cellTypeCount.remove(rn);
-                            cellTypeCount.put(rn, newCount);
-                            StateENUM state = StateENUM.valueOf(states.get(rn));
-                            grid[i][j].setStartState(state);
-                            break;
+                    boolean createdCell = false;
+                    while(!createdCell) {
+                        int rn = new Random().nextInt(total);
+                        for (String s : cellTypeCount.keySet()) {
+                            if(rn > cellTypeCount.get(s)) {
+                                int value = cellTypeCount.get(s);
+                                rn = rn - value;
+                            } else {
+                                if(cellTypeCount.get(s) > 0) {
+                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                                    int newCount = cellTypeCount.get(s) - 1;
+                                    StateENUM state = StateENUM.valueOf(s);
+                                    grid[i][j].setStartState(state);
+                                    cellTypeCount.replace(s, newCount);
+                                    createdCell = true;
+                                    break;
+                                }
+                            }
                         }
                     }
+                    total--;
                 }
             }
         } else {
@@ -100,7 +109,6 @@ public class Grid {
 
     public void storeNeighbors(Cell cell) {
         ArrayList<Cell> cellNeighbours = new ArrayList<>();
-        System.out.println(cell.getRowPos());
         int[] rowCoord = {cell.getRowPos(), cell.getRowPos()+1, cell.getRowPos()-1};
         int[] colCoord = {cell.getColPos(), cell.getColPos()+1, cell.getColPos()-1};
         for (int row: rowCoord) {

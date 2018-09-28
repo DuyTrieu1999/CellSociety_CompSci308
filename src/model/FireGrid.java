@@ -29,25 +29,35 @@ public class FireGrid extends Grid {
     @Override
     public void fillGrid() {
         if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
-            TreeMap<Integer, Integer> cellTypeCount = new TreeMap<>();
+            int total = 0;
+            TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
             for (int k = 0; k < getCellCounts().size(); k++) {
-                cellTypeCount.put(k, getCellCounts().get(k));
-                //System.out.println(states.get(k));
+                cellTypeCount.put(getCellStates().get(k), getCellCounts().get(k));
+                total += getCellCounts().get(k);
             }
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    while(true) {
-                        int rn = new Random().nextInt(getCellStates().size());
-                        if(cellTypeCount.get(rn) > 0) {
-                            getGrid()[i][j] = new FireCell(i, j, getMaxGridPaneSize() / this.getColNum());
-                            int newCount = cellTypeCount.get(rn) - 1;
-                            cellTypeCount.remove(rn);
-                            cellTypeCount.put(rn, newCount);
-                            StateENUM state = StateENUM.valueOf(getCellStates().get(rn));
-                            getGrid()[i][j].setStartState(state);
-                            break;
+                    boolean createdCell = false;
+                    while(!createdCell) {
+                        int rn = new Random().nextInt(total);
+                        for (String s : cellTypeCount.keySet()) {
+                            if(rn > cellTypeCount.get(s)) {
+                                int value = cellTypeCount.get(s);
+                                rn = rn - value;
+                            } else {
+                                if(cellTypeCount.get(s) > 0) {
+                                    getGrid()[i][j] = new FireCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                                    int newCount = cellTypeCount.get(s) - 1;
+                                    StateENUM state = StateENUM.valueOf(s);
+                                    getGrid()[i][j].setStartState(state);
+                                    cellTypeCount.replace(s, newCount);
+                                    createdCell = true;
+                                    break;
+                                }
+                            }
                         }
                     }
+                    total--;
                 }
             }
         } else {
