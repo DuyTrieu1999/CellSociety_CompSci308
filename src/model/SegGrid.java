@@ -13,9 +13,12 @@ import java.util.TreeMap;
  * @author Austin Kao
  */
 public class SegGrid extends Grid {
+    private static final double DEFAULT_THRESHOLD = 0.25;
+
     private int numDissatisfied1;
     private int numDissatisfied2;
     private int numDissatisfiedTotal;
+    private double threshold;
     private int numVacant;
     private TreeMap<Integer, Cell> vacancies;
 
@@ -51,7 +54,6 @@ public class SegGrid extends Grid {
                 }
             }
         }
-        //Need to change this; agents should move as one (oops)
         numDissatisfiedTotal = numDissatisfied1 + numDissatisfied2;
         relocateCells(numDissatisfiedTotal, numDissatisfied1, numDissatisfied2);
         for (int i=0; i<this.getRowNum(); i++) {
@@ -63,6 +65,7 @@ public class SegGrid extends Grid {
 
     @Override
     public void fillGrid() {
+        double segregationThreshold = determineThreshold();
         if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
             int total = 0;
             TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
@@ -81,7 +84,7 @@ public class SegGrid extends Grid {
                                 rn = rn - value;
                             } else {
                                 if(cellTypeCount.get(s) > 0) {
-                                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum(), segregationThreshold);
                                     int newCount = cellTypeCount.get(s) - 1;
                                     StateENUM state = StateENUM.valueOf(s);
                                     getGrid()[i][j].setStartState(state);
@@ -99,7 +102,7 @@ public class SegGrid extends Grid {
             System.out.println("Switching to random cell setup");
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum(), segregationThreshold);
                     getGrid()[i][j].setRandStartState();
                 }
             }
@@ -136,6 +139,19 @@ public class SegGrid extends Grid {
             }
             numTotal = num1 + num2;
         }
+    }
+
+    private double determineThreshold() {
+        if(getParameterValues().size() > 0) {
+            for(String s : getParameterValues().keySet()) {
+                if(s.equals("thresholdToCauseSegregation")) {
+                    threshold = getParameterValues().get(s);
+                }
+            }
+        } else {
+            threshold = DEFAULT_THRESHOLD;
+        }
+        return threshold;
     }
 }
 

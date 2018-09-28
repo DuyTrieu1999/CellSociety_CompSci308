@@ -17,14 +17,15 @@ import javafx.scene.shape.Rectangle;
 
 public class SegCell extends Cell{
     private boolean satisfied;
-    private double myThreshold = 0.3;
+    private double myThreshold;
     private double numAlike;
     private double agentNeighbors;
     private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
-    public SegCell(int row, int col, double width) {
+    public SegCell(int row, int col, double width, double threshold) {
         super(row, col, width);
         satisfied = true;
+        myThreshold = threshold;
     }
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
