@@ -17,8 +17,9 @@ import javafx.scene.shape.Rectangle;
 
 public class PredatorPreyCell extends Cell {
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
-    private boolean willMove;
-    private boolean fishNeighbor;
+    private boolean hasFish = false;
+    private boolean hasShark = false;
+
     private double cellWidth;
 
     public PredatorPreyCell(int row, int col, double width) {
@@ -27,31 +28,16 @@ public class PredatorPreyCell extends Cell {
     }
     @Override
     public void updateCell () {
-        willMove = false;
-        fishNeighbor = false;
-        if(this.getCurrState() == StateENUM.WATER) {
-            this.setNextState(StateENUM.WATER);
-            return;
-        }
-        ArrayList<Cell> currNeighbors = this.getNeighbors();
-        if (this.getCurrState() == StateENUM.SHARK) {
-            for(Cell neighbor : currNeighbors) {
-                if(neighbor.getCurrState() == StateENUM.FISH) {
-                    willMove = true;
-                    fishNeighbor = true;
-                } else if(neighbor.getCurrState() == StateENUM.WATER) {
-                    willMove = true;
-                }
-            }
-            this.setNextState(StateENUM.SHARK);
-        } else {
-            for(Cell neighbor : currNeighbors) {
-                if(neighbor.getCurrState() == StateENUM.WATER) {
-                    willMove = true;
-                }
-            }
+        if(this.hasFish) {
             this.setNextState(StateENUM.FISH);
+            hasFish = false;
+        } else if (this.hasShark) {
+            this.setNextState(StateENUM.SHARK);
+            hasShark = false;
+        } else {
+            this.setNextState(StateENUM.WATER);
         }
+        this.setFill(this.getStateColor(this.getNextState()));
     }
 
     @Override
@@ -75,11 +61,11 @@ public class PredatorPreyCell extends Cell {
         this.setFill(getStateColor(this.getCurrState()));
     }
     @Override
-    public boolean isEating() {
-        return fishNeighbor;
+    public void setHasFish(boolean value) {
+        hasFish = value;
     }
     @Override
-    public boolean isMoving() {
-        return willMove;
+    public void setHasShark(boolean value) {
+        hasShark = value;
     }
 }

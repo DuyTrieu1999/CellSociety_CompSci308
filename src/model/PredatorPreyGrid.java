@@ -41,106 +41,83 @@ public class PredatorPreyGrid extends Grid{
     @Override
     public void updateGrid() {
         Cell currentCell;
-        for (int i = 0; i < this.getRowNum(); i++) {
-            for (int j = 0; j < this.getColNum(); j++) {
-                getGrid()[i][j].updateCell();
+        for(int hashCode : livingFish.keySet()) {
+            int row = hashCode / getRowNum();
+            int col = Math.floorMod(hashCode, getRowNum());
+            int currentHashCode = row * getRowNum() + col;
+            Fish currentFish = livingFish.get(hashCode);
+            currentCell = getGrid()[row][col];
+            ArrayList<Cell> neighborList = currentCell.getNeighbors();
+            boolean canMove = false;
+            for(Cell neighbor : neighborList) {
+                int neighborHashCode = hashCode(neighbor.getRowPos(), neighbor.getColPos());
+                if(!livingSharks.containsKey(neighborHashCode) && !livingFish.containsKey(neighborHashCode)) {
+                    canMove = true;
+                }
+            }
+            if (canMove) {
+                boolean determinedMove = false;
+                while (!determinedMove) {
+                    int rn = new Random().nextInt(neighborList.size());
+                    int newHashCode = hashCode(neighborList.get(rn).getRowPos(), neighborList.get(rn).getColPos());
+                    if(!livingSharks.containsKey(newHashCode) && !livingFish.containsKey(newHashCode)) {
+                        determinedMove = true;
+                        currentFish.updateMovingFish(currentHashCode, newHashCode, livingFish);
+                        neighborList.get(rn).setHasFish(true);
+                    }
+                }
+            } else {
+                currentFish.updateUnmovingFish();
+                currentCell.setHasFish(true);
             }
         }
-        movedInto = new HashMap<>();
-        for (int i = 0; i < this.getRowNum(); i++) {
-            for (int j = 0; j < this.getColNum(); j++) {
-                currentCell = getGrid()[i][j]; //Technically not needed, but easier to work with
-                if (currentCell.getCurrState() == StateENUM.SHARK && currentCell.isMoving()) {
-                    ArrayList<Cell> currNeighbors = currentCell.getNeighbors();
-                    boolean determinedMove = true;
-                    int newHashCode = -1;
-                    for(Cell neighbor : currNeighbors) {
-                        if(!movedInto.containsKey(hashCode(neighbor.getRowPos(), neighbor.getColPos()))) {
-                            determinedMove = false;
+        for(int hashCode : livingSharks.keySet()) {
+            int currentHashCode = hashCode;
+            int row = hashCode / getRowNum();
+            int col = Math.floorMod(hashCode, getRowNum());
+            Shark currentShark = livingSharks.get(hashCode);
+            currentCell = getGrid()[row][col];
+            ArrayList<Cell> neighborList = currentCell.getNeighbors();
+            boolean canMove = false;
+            boolean canEat = false;
+            for(Cell neighbor : neighborList) {
+                int neighborHashCode = hashCode(neighbor.getRowPos(), neighbor.getColPos());
+                if(livingFish.containsKey(neighborHashCode)) {
+                    canMove = true;
+                    canEat = true;
+                } else if (!livingSharks.containsKey(neighborHashCode)) {
+                    canMove = true;
+                }
+            }
+            if (canMove) {
+                boolean determinedMove = false;
+                while (!determinedMove) {
+                    int rn = new Random().nextInt(neighborList.size());
+                    int newHashCode = hashCode(neighborList.get(rn).getRowPos(), neighborList.get(rn).getColPos());
+                    if(canEat) {
+                        if(livingFish.containsKey(newHashCode)) {
+                            determinedMove = true;
+                            currentShark.updateMovingShark(currentHashCode, newHashCode, livingSharks, livingFish);
+                            neighborList.get(rn).setHasShark(true);
+                            neighborList.get(rn).setHasFish(false);
                         }
+                    } else if(!livingSharks.containsKey(newHashCode)) {
+                        determinedMove = true;
+                        currentShark.updateMovingShark(currentHashCode, newHashCode, livingSharks, livingFish);
+                        neighborList.get(rn).setHasShark(true);
                     }
-                    if (!determinedMove) {
-                        while (!determinedMove) {
-                            int rn = new Random().nextInt(currNeighbors.size());
-                            newHashCode = hashCode(currNeighbors.get(rn).getRowPos(), currNeighbors.get(rn).getColPos());
-                            if (currentCell.isEating()) {
-                                if (currNeighbors.get(rn).getCurrState() == StateENUM.FISH && !movedInto.containsKey(newHashCode)) {
-                                    determinedMove = true;
-                                    movedInto.put(newHashCode, currNeighbors.get(rn));
-                                    livingSharks.get(hashCode(i,j)).updateMovingShark(hashCode(i,j), newHashCode, livingSharks, livingFish);
-                                    if(livingSharks.get(newHashCode).hasReproduced()) {
-                                        currentCell.setNextState(StateENUM.SHARK);
-                                    }
-                                    currNeighbors.get(rn).setNextState(StateENUM.SHARK);
-                                }
-                            } else {
-                                if (currNeighbors.get(rn).getCurrState() == StateENUM.WATER && !movedInto.containsKey(newHashCode)) {
-                                    determinedMove = true;
-                                    movedInto.put(newHashCode, currNeighbors.get(rn));
-                                    livingSharks.get(hashCode(i,j)).updateMovingShark(hashCode(i,j), newHashCode, livingSharks, livingFish);
-                                    if(livingSharks.get(newHashCode).hasReproduced()) {
-                                        currentCell.setNextState(StateENUM.SHARK);
-                                    }
-                                    currNeighbors.get(rn).setNextState(StateENUM.SHARK);
-                                }
-                            }
-                        }
-                    } else {
-                        livingSharks.get(hashCode(i,j)).updateUnmovingShark(hashCode(i,j),livingSharks);
-                        if(livingSharks.containsKey(hashCode(i,j))) {
-                            currentCell.setNextState(StateENUM.SHARK);
-                        }
-                    }
-                } else if (currentCell.getCurrState() == StateENUM.SHARK) {
-                    livingSharks.get(hashCode(i, j)).updateUnmovingShark(hashCode(i, j), livingSharks);
-                    if(!livingSharks.containsKey(hashCode(i,j))) {
-                        currentCell.setNextState(StateENUM.WATER);
-                    }
+                }
+            } else {
+                currentShark.updateUnmovingShark(currentHashCode, livingSharks);
+                if(livingSharks.containsKey(currentHashCode)) {
+                    currentCell.setHasShark(true);
                 }
             }
         }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 currentCell = getGrid()[i][j];
-                if(livingFish.containsKey(hashCode(i,j))) {
-                    if (currentCell.getCurrState() == StateENUM.FISH && currentCell.isMoving()) {
-                        ArrayList<Cell> currNeighbors = currentCell.getNeighbors();
-                        boolean determinedMove = true;
-                        for(Cell neighbor : currNeighbors) {
-                            if(!movedInto.containsKey(hashCode(neighbor.getRowPos(),neighbor.getColPos()))) {
-                                determinedMove = false;
-                            }
-                        }
-                        if (!determinedMove) {
-                            while (!determinedMove) {
-                                int rn = new Random().nextInt(currNeighbors.size());
-                                int newHashCode = hashCode(currNeighbors.get(rn).getRowPos(), currNeighbors.get(rn).getColPos());
-                                if (currNeighbors.get(rn).getCurrState() == StateENUM.WATER && !movedInto.containsKey(newHashCode)) {
-                                    determinedMove = true;
-                                    livingFish.get(hashCode(i, j)).updateMovingFish(hashCode(i,j), newHashCode, livingFish);
-                                    currNeighbors.get(rn).setNextState(StateENUM.FISH);
-                                    if(livingFish.get(newHashCode).reproduced) {
-                                        currentCell.setNextState(StateENUM.FISH);
-                                    }
-                                }
-                            }
-                        } else {
-                            livingFish.get(hashCode(i,j)).updateUnmovingFish();
-                            currentCell.setNextState(StateENUM.FISH);
-                        }
-                    } else {
-                        livingFish.get(hashCode(i,j)).updateUnmovingFish();
-                    }
-                } else {
-                    currentCell.setNextState(StateENUM.WATER);
-                }
-            }
-        }
-        for (int i=0; i<this.getRowNum(); i++) {
-            for (int j=0; j<this.getColNum(); j++) {
-                currentCell = getGrid()[i][j];
-                currentCell.setCurrState(currentCell.getNextState());
-                currentCell.setFill(currentCell.getStateColor(currentCell.getCurrState()));
+                currentCell.updateCell();
             }
         }
         System.out.println(livingFish.size());
