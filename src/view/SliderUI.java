@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- *
+ * This class layouts the slider to control properties in the simulations
  * @author duytrieu
  */
 public class SliderUI extends VBox {
@@ -23,6 +23,8 @@ public class SliderUI extends VBox {
         slider.setValue(val);
         slider.setMin(min);
         slider.setMax(max);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(0);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
         slider.setSnapToTicks(true);
@@ -46,16 +48,6 @@ public class SliderUI extends VBox {
                 valueText.textProperty().bind(slider.valueProperty().asString("%.0f"));
             }
         });
-    }
-
-    public void setVal (int val) {
-        this.slider.setValue(val);
-    }
-    public double getMax () {
-        return this.slider.getMax();
-    }
-    public double getMin () {
-        return this.slider.getMin();
     }
     public double getVal () {
         return this.slider.getValue();

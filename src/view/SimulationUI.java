@@ -12,6 +12,8 @@ import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
+
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -43,6 +45,7 @@ public class SimulationUI {
     private KeyFrame frame;
     private int gridSize;
     private String simulationName;
+    private GraphSimu simulationGraph;
 
     private ResourceBundle myResources;
 
@@ -65,13 +68,16 @@ public class SimulationUI {
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
         changeSpeed();
+        addGraph();
+        myRoot.getChildren().add(simulationGraph);
         myRoot.getChildren().add(myGridPane);
-        //System.out.println(simulationName);
         return myScene;
     }
     public void step (double elapsedTime) {
         myGrid.updateGrid();
         gridSize = (int)sizeSlider.getVal();
+        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        simulationGraph.updateGraph(simuMap);
     }
     private void changeSpeed () {
         speedSlider.setOnMouseDragged(event -> {
@@ -81,9 +87,11 @@ public class SimulationUI {
     }
 
     private void makeSlider () {
-        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),20, 10, 30);
+        sizeSlider = new SliderUI(myResources.getString("SizeLabel"),SceneENUM.SIZE_SLIDER_VAL.getVal(),
+                SceneENUM.SIZE_SLIDER_MIN.getVal(), SceneENUM.SIZE_SLIDER_MAX.getVal());
         sizeSlider.setTextField();
-        speedSlider = new SliderUI(myResources.getString("SetSpeed"), 1, 1, 2);
+        speedSlider = new SliderUI(myResources.getString("SetSpeed"), SceneENUM.SPEED_SLIDER_VAL.getVal(),
+                SceneENUM.SPEED_SLIDER_MIN.getVal(), SceneENUM.SPEED_SLIDER_MAX.getVal());
         speedSlider.setTextField();
     }
 
@@ -106,7 +114,7 @@ public class SimulationUI {
         hbox3.getChildren().add(stopButton);
         hbox4.getChildren().add(stepButton);
         hbox5.getChildren().addAll(resetButton);
-        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider); //Omitted sizeSlider
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider);
         createButtonPane(buttonContainer);
     }
 
@@ -170,7 +178,7 @@ public class SimulationUI {
             ColumnConstraints col = new ColumnConstraints(MAX_GRID_PANE_SIZE/gridSize);
             myGridPane.getColumnConstraints().add(col);
         }
-        myGridPane.setPadding(new Insets(60,60,60,50));
+        myGridPane.setPadding(new Insets(SceneENUM.GRID_PANE_PADDING.getVal()));
     }
     private void addCellToGrid (String simuName) {
         if (simuName.equals(myResources.getString("GOL")))
@@ -187,5 +195,10 @@ public class SimulationUI {
                 myGridPane.add(cell, i,j);
             }
         }
+    }
+
+    private void addGraph () {
+        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        simulationGraph = new GraphSimu(simuMap);
     }
 }
