@@ -95,11 +95,8 @@ public class Grid {
     public boolean outOfBounds (int row, int col) {
         return (row < 0 || row > getRowNum() || col < 0 || col > getColNum());
     }
-<<<<<<< HEAD
-
-=======
     protected double getMaxGridPaneSize() {
         return MAX_GRID_PANE_SIZE;
     }
->>>>>>> 4c376b3e7f4a4f70f531de72b878843fbdd6d265
+
 }
