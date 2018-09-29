@@ -81,16 +81,10 @@ public abstract class Cell extends Polygon {
     public boolean isSatisfied() {
         return false;
     }
-    public PredatorPreyCell getMove() {
-        return null;
-    }
-    public boolean isMoving() {
-        return false;
-    }
-    public boolean isEating() {
-        return false;
-    }
+    public void setHasFish(boolean value) {}
+    public void setHasShark(boolean value) {}
     public void setSatisfaction(boolean value) {}
     public void setProbCatch(double probability) {}
+
 }
 

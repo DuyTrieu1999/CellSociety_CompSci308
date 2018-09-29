@@ -21,7 +21,8 @@ import java.util.Scanner;
  *
  * @author duytrieu
  * IDEA: When main launches, choose the configuration file to use right away. This will automatically specify the grid sie and type of shape.
- * EXTRA IDEA: When main launches, bring the user to a start screen where the XML File can be selected and have a launch button to then bring the user to the main UI screen.
+ * EXTRA IDEA: When main launches, bring the user to a start screen where the XML File can be selected and have a launch button to then bring
+ * the user to the main UI screen.
  */
 public class SimulationUI {
     private static final Paint BACKGROUND = Color.AZURE;
@@ -68,7 +69,8 @@ public class SimulationUI {
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
         changeSpeed();
-        addGraph();
+        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(simulationGraph);
         myRoot.getChildren().add(myGridPane);
         return myScene;
@@ -82,7 +84,6 @@ public class SimulationUI {
     private void changeSpeed () {
         speedSlider.setOnMouseDragged(event -> {
             animation.setRate(speedSlider.getVal());
-            System.out.println(speedSlider.getVal());
         });
     }
 
@@ -136,9 +137,13 @@ public class SimulationUI {
 
     private void setSimulation (String simuName) {
         myRoot.getChildren().remove(myGridPane);
+        myRoot.getChildren().remove(simulationGraph);
         addGridPane();
         addCellToGrid(simuName);
+        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(myGridPane);
+        myRoot.getChildren().add(simulationGraph);
         pauseSim();
     }
     private void startButtonHandler () {
@@ -165,7 +170,7 @@ public class SimulationUI {
         buttonContainer.setPadding(buttonPane);
         buttonContainer.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
         buttonContainer.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
-        buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - SceneENUM.BUTTON_GRID.getVal());
+        buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 3*SceneENUM.BUTTON_GRID.getVal());
         myRoot.getChildren().add(buttonContainer);
     }
     private void addGridPane () {
@@ -195,10 +200,5 @@ public class SimulationUI {
                 myGridPane.add(cell, i,j);
             }
         }
-    }
-
-    private void addGraph () {
-        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
-        simulationGraph = new GraphSimu(simuMap);
     }
 }

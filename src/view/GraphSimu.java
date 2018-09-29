@@ -10,7 +10,6 @@ import model.StateENUM;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * This class will generate a graph to represent the population in each simulation
@@ -24,7 +23,7 @@ public class GraphSimu extends VBox {
     private ArrayList<XYChart.Series<Number, Number>> dataArray = new ArrayList<>();
     private double sequence = 0;
     private double y = 10;
-    private final int MAX_DATA_POINTS = 25;
+    private final int MAX_DATA_POINTS = 10;
     protected HBox layoutBox;
 
     public GraphSimu (HashMap<StateENUM, Integer> populationMap) {
@@ -36,7 +35,6 @@ public class GraphSimu extends VBox {
         simuChart.getData().addAll(dataArray);
         addLayout();
         updateGraph(populationMap);
-
     }
     public XYChart.Series<Number, Number> getSeries () {
         simuChart = new LineChart<>(xAxis, yAxis);
@@ -55,12 +53,13 @@ public class GraphSimu extends VBox {
         layoutBox.getChildren().add(simuChart);
         layoutBox.setPadding(new Insets(SceneENUM.PADDING.getVal()));
         this.getChildren().add(layoutBox);
-        this.setPadding(new Insets(SceneENUM.HBOX_GRID.getVal()));
+        this.setPadding(new Insets(5, 10, 5, 0));
+        this.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 2.3*SceneENUM.BUTTON_GRID.getVal());
     }
 
     public void updateGraph (HashMap<StateENUM, Integer> populationMap) {
         for (int i=0; i<populationMap.size(); i++) {
-            dataArray.get(i).getData().add(new XYChart.Data<>(0, populationMap.get(cellStates.get(i))));
+            dataArray.get(i).getData().add(new XYChart.Data<>(++sequence, populationMap.get(cellStates.get(i))));
             if (sequence > MAX_DATA_POINTS) {
                 dataArray.get(i).getData().remove(0);
             }

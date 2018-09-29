@@ -11,15 +11,15 @@
     </grid>
     <cell_types>
         <cell>
-            <cell_state>Water</cell_state>
+            <cell_state>WATER</cell_state>
             <cell_number>300</cell_number>
         </cell>
         <cell>
-            <cell_state>Fish</cell_state>
+            <cell_state>FISH</cell_state>
             <cell_number>80</cell_number>
         </cell>
         <cell>
-            <cell_state>Shark</cell_state>
+            <cell_state>SHARK</cell_state>
             <cell_number>20</cell_number>
         </cell>
     </cell_types>
