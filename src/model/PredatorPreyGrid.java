@@ -16,8 +16,8 @@ public class PredatorPreyGrid extends Grid{
     private HashMap<Integer, Shark> livingSharks;
     private HashMap<Integer, Cell> movedInto;
 
-    public PredatorPreyGrid(String filename, int size) {
-        super(filename, size);
+    public PredatorPreyGrid(String filename, int size, String cellType) {
+        super(filename, size, cellType);
         livingFish = new HashMap<>();
         livingSharks = new HashMap<>();
         for (int i = 0; i < this.getRowNum(); i++) {
@@ -272,7 +272,7 @@ public class PredatorPreyGrid extends Grid{
                                 rn = rn - value;
                             } else {
                                 if(cellTypeCount.get(s) > 0) {
-                                    getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                                    getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum(), this.getCellType());
                                     int newCount = cellTypeCount.get(s) - 1;
                                     StateENUM state = StateENUM.valueOf(s);
                                     getGrid()[i][j].setStartState(state);
@@ -290,7 +290,7 @@ public class PredatorPreyGrid extends Grid{
             System.out.println("Switching to random cell setup");
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                    getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum(), this.getCellType());
                     getGrid()[i][j].setRandStartState();
                 }
             }

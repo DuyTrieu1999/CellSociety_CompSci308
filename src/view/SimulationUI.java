@@ -36,6 +36,12 @@ public class SimulationUI {
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
 
+    protected RadioButton rectangleCellButton;
+    protected RadioButton triangleCellButton;
+    protected RadioButton hexagonCellButton;
+    protected HBox radioBox;
+    protected ToggleGroup radioGroup;
+
     private Scene myScene;
     private Group myRoot;
     private GridPane myGridPane;
@@ -47,6 +53,7 @@ public class SimulationUI {
     private int gridSize;
     private String simulationName;
     private GraphSimu simulationGraph;
+    private String cellType;
 
     private ResourceBundle myResources;
 
@@ -63,7 +70,9 @@ public class SimulationUI {
         animation.getKeyFrames().add(frame);
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
+        makeCellTypeButton();
         makeAllButton();
+        getCellType();
         gridSize = (int) sizeSlider.getVal();
         addGridPane();
         simulationName = myResources.getString("GOL");
@@ -115,8 +124,35 @@ public class SimulationUI {
         hbox3.getChildren().add(stopButton);
         hbox4.getChildren().add(stepButton);
         hbox5.getChildren().addAll(resetButton);
-        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider);
+        buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider, radioBox);
         createButtonPane(buttonContainer);
+    }
+
+    private void makeCellTypeButton () {
+        rectangleCellButton = new RadioButton(myResources.getString("Rectangle"));
+        rectangleCellButton.setSelected(true);
+        triangleCellButton = new RadioButton(myResources.getString("Triangle"));
+        hexagonCellButton = new RadioButton(myResources.getString("Hexagon"));
+
+        radioGroup = new ToggleGroup();
+        radioBox = new HBox(SceneENUM.HBOX_GRID.getVal());
+        radioBox.getChildren().add(rectangleCellButton);
+        rectangleCellButton.setToggleGroup(radioGroup);
+        radioBox.getChildren().add(triangleCellButton);
+        triangleCellButton.setToggleGroup(radioGroup);
+        radioBox.getChildren().add(hexagonCellButton);
+        hexagonCellButton.setToggleGroup(radioGroup);
+    }
+    private void getCellType () {
+        if (rectangleCellButton.isSelected()) {
+            cellType = "Rectangle";
+        }
+        if (triangleCellButton.isSelected()) {
+            cellType = "Triangle";
+        }
+        if (hexagonCellButton.isSelected()) {
+            cellType = "Hexagon";
+        }
     }
 
     private ChoiceBox makeChoiceBox () {
@@ -187,14 +223,15 @@ public class SimulationUI {
         myGridPane.setPadding(new Insets(SceneENUM.GRID_PANE_PADDING.getVal()));
     }
     private void addCellToGrid (String simuName) {
+        getCellType();
         if (simuName.equals(myResources.getString("GOL")))
-            myGrid = new Grid(GAME_OF_LIFE_XML, gridSize);
+            myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
         if (simuName.equals(myResources.getString("WaTor")))
-            myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize);
+            myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize, cellType);
         if (simuName.equals(myResources.getString("Fire")))
-            myGrid = new FireGrid(SPREADING_FIRE_XML, gridSize);
+            myGrid = new FireGrid(SPREADING_FIRE_XML, gridSize, cellType);
         if (simuName.equals(myResources.getString("Segg")))
-            myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize);
+            myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize, cellType);
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);

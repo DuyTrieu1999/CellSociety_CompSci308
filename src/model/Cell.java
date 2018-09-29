@@ -15,9 +15,10 @@ public abstract class Cell extends Polygon {
     private StateENUM nextState;
     private ArrayList<Cell> neighbors;
     private static final double ROOT_THREE_OVER_2 = Math.sqrt(3) / 2;
-    private static final double ang30 = Math.toRadians(30);
+    private String cellType;
 
-    public Cell(int row, int col, double width) {
+    public Cell(int row, int col, double width, String cellType) {
+        this.cellType = cellType;
         this.rowPos = row;
         this.colPos = col;
         drawShape(row, col, width);
@@ -53,7 +54,15 @@ public abstract class Cell extends Polygon {
         this.setFill(getStateColor(this.getCurrState()));
     }
     public void drawShape (int row, int col, double width) {
-        drawHexagon(row, col, width);
+        if (cellType.equals("Rectangle")) {
+            drawRectangle(row, col, width);
+        }
+        if (cellType.equals("Triangle")) {
+            drawTriangle(row, col, width);
+        }
+        if (cellType.equals("Hexagon")) {
+            drawHexagon(row, col, width);
+        }
     }
     private void drawRectangle (int row, int col, double width) {
         Double[] recPoints = {0.0,0.0,0.0, width,width,width,width,0.0};

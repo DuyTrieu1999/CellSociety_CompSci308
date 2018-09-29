@@ -19,8 +19,10 @@ public class Grid {
     private ArrayList<Integer> counts;
     private TreeMap<String, Double> parameterValues;
     private HashMap<StateENUM, Integer> populationMap = new HashMap<>();
+    private String cellType;
 
-    public Grid (String filename, int size) {
+    public Grid (String filename, int size, String cellType) {
+        this.cellType = cellType;
         reader = new XMLReader();
         this.size = size;
         grid = new Cell[size][size];
@@ -40,7 +42,6 @@ public class Grid {
         parameterValues = new TreeMap<>();
         reader.loadDoc(fileName, defaultFile);
         size = reader.determineGridSize(size);
-        //System.out.println(size);
         reader.addParameters(parameterValues);
         reader.addCell(states, counts);
     }
@@ -97,7 +98,7 @@ public class Grid {
                                 rn = rn - value;
                             } else {
                                 if(cellTypeCount.get(s) > 0) {
-                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), cellType);
                                     int newCount = cellTypeCount.get(s) - 1;
                                     StateENUM state = StateENUM.valueOf(s);
                                     grid[i][j].setStartState(state);
@@ -115,7 +116,7 @@ public class Grid {
             System.out.println("Switching to random cell setup");
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), cellType);
                     grid[i][j].setRandStartState();
                 }
             }
@@ -163,4 +164,5 @@ public class Grid {
     public TreeMap<String, Double> getParameterValues() {
         return parameterValues;
     }
+    public String getCellType () { return cellType; }
 }

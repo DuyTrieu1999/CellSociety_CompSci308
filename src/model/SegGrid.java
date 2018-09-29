@@ -21,9 +21,10 @@ public class SegGrid extends Grid {
     private double threshold;
     private int numVacant;
     private TreeMap<Integer, Cell> vacancies;
+    //private String cellType;
 
-    public SegGrid (String filename, int size) {
-        super(filename, size);
+    public SegGrid (String filename, int size, String cellType) {
+        super(filename, size, cellType);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class SegGrid extends Grid {
                                 rn = rn - value;
                             } else {
                                 if(cellTypeCount.get(s) > 0) {
-                                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum(), segregationThreshold);
+                                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum(), segregationThreshold, this.getCellType());
                                     int newCount = cellTypeCount.get(s) - 1;
                                     StateENUM state = StateENUM.valueOf(s);
                                     getGrid()[i][j].setStartState(state);
@@ -102,7 +103,7 @@ public class SegGrid extends Grid {
             System.out.println("Switching to random cell setup");
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum(), segregationThreshold);
+                    getGrid()[i][j] = new SegCell(i, j, getMaxGridPaneSize() / this.getColNum(), segregationThreshold, this.getCellType());
                     getGrid()[i][j].setRandStartState();
                 }
             }

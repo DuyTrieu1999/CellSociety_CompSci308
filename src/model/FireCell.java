@@ -18,8 +18,8 @@ public class FireCell extends Cell {
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
     private double probCatch; //Probability of catching a fire
 
-    public FireCell(int row, int col, double width) {
-        super(row, col, width);
+    public FireCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
         hasNeighborFire = false;
     }
 
