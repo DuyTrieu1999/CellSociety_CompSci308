@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="WaTor" author="team8">
     <parameters>
-        <variable_name>sharkReproductionCycle</variable_name>
+        <variable_name>SharkReproductionCycle</variable_name>
         <variable_value>6</variable_value>
-        <variable_name>sharkEnergy</variable_name>
+        <variable_name>SharkEnergy</variable_name>
         <variable_value>3</variable_value>
-        <variable>name = "fishReproductionCycle" value="3"</variable>
-        <variable>name = "fishEnergyGained" value="2"</variable>
+        <variable_name>FishReproductionCycle</variable_name>
+        <variable_value>2</variable_value>
+        <variable_name>EnergyFromEatingFish</variable_name>
+        <variable_value>2</variable_value>
     </parameters>
     <grid>
         <size>20</size>

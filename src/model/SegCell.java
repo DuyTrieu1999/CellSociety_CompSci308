@@ -22,10 +22,9 @@ public class SegCell extends Cell{
     private double agentNeighbors;
     private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
-    public SegCell(int row, int col, double width, double threshold) {
+    public SegCell(int row, int col, double width) {
         super(row, col, width);
         satisfied = true;
-        myThreshold = threshold;
     }
 
     //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
@@ -61,6 +60,7 @@ public class SegCell extends Cell{
         this.setFill(getStateColor(this.getNextState()));
     }
 
+    @Override
     public void setThreshold(double threshold) {
         myThreshold = threshold;
     }

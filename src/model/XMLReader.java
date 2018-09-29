@@ -81,4 +81,22 @@ public class XMLReader {
         System.out.println("Could not determine grid size from file. Will keep original value.");
         return size;
     }
+    protected void loadSave(ArrayList<String> save) {
+        NodeList xmlSave = xmlDocument.getElementsByTagName("save");
+        for (int i = 0; i < xmlSave.getLength(); i++) {
+            Node xmlNode = xmlSave.item(i);
+            NodeList cellStatesInSave = xmlNode.getChildNodes();
+            for(int j = 0; j < cellStatesInSave.getLength(); j++) {
+                Node cellNode = cellStatesInSave.item(j);
+                if(cellNode instanceof Element) {
+                    Element cell = (Element) cellNode;
+                    if(cell.getTagName().equals("cell_state")) {
+                        String cellState = cell.getTextContent();
+                        save.add(cellState);
+                    }
+                }
+            }
+        }
+
+    }
 }

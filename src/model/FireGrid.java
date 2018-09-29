@@ -45,7 +45,15 @@ public class FireGrid extends Grid {
 
     @Override
     public void fillGrid() {
-        if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
+        if(getSaveState().size() > 0) {
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    int index = getRowNum()*i+j;
+                    getGrid()[i][j] = new FireCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                    getGrid()[i][j].setStartState(StateENUM.valueOf(getSaveState().get(index)));
+                }
+            }
+        } else if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
             int total = 0;
             TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
             for (int k = 0; k < getCellCounts().size(); k++) {

@@ -7,19 +7,19 @@ import java.util.*;
  * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
-    private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
-    private final int MAX_SHARK_ENERGY = 3;
-    private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
-    private final int ENERGY_FROM_EATING_FISH = 2;
+    private final int DEFAULT_SHARK_REPRODUCTION_TIME = 5;
+    private final int DEFAULT_MAX_SHARK_ENERGY = 3;
+    private final int DEFAULT_ENERGY_FROM_EATING_FISH = 2;
+    private final int DEFAULT_FISH_REPRODUCTION_TIME = 2;
 
     private HashMap<Integer, Fish> livingFish;
     private HashMap<Integer, Shark> livingSharks;
-    private HashMap<Integer, Cell> movedInto;
 
     public PredatorPreyGrid(String filename, int size) {
         super(filename, size);
         livingFish = new HashMap<>();
         livingSharks = new HashMap<>();
+
         for (int i = 0; i < this.getRowNum(); i++) {
             for (int j = 0; j < this.getColNum(); j++) {
                 if (getGrid()[i][j].getCurrState() == StateENUM.FISH) {
@@ -126,8 +126,6 @@ public class PredatorPreyGrid extends Grid{
                 }
             }
         }
-        System.out.println(livingFish.size());
-        System.out.println(livingSharks.size());
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 currentCell = getGrid()[i][j];
@@ -150,13 +148,15 @@ public class PredatorPreyGrid extends Grid{
     class Fish {
         private int reproductionTime;
         private boolean reproduced;
-        public Fish() {
-            this(2);
-        }
+
         public Fish(int reproduction) {
             reproductionTime = reproduction;
             reproduced = false;
         }
+        public Fish() {
+            this(DEFAULT_FISH_REPRODUCTION_TIME);
+        }
+
         public void updateUnmovingFish() {
             if(reproductionTime > 0) {
                 reproductionTime--;
@@ -191,7 +191,7 @@ public class PredatorPreyGrid extends Grid{
         private int maxSharkEnergy;
         private boolean reproduced;
         public Shark() {
-            this(5, 6);
+            this(DEFAULT_MAX_SHARK_ENERGY, DEFAULT_SHARK_REPRODUCTION_TIME);
         }
         public Shark(int energy, int reproduction) {
             sharkEnergy = energy;
@@ -215,7 +215,7 @@ public class PredatorPreyGrid extends Grid{
             sharkMap.remove(currentHashCode);
             if(fishMap.containsKey(newHashCode)) {
                 fishMap.remove(newHashCode);
-                sharkEnergy += 2;
+                sharkEnergy += DEFAULT_ENERGY_FROM_EATING_FISH;
                 if(sharkEnergy > maxSharkEnergy) {
                     sharkEnergy = maxSharkEnergy;
                 }
@@ -236,7 +236,7 @@ public class PredatorPreyGrid extends Grid{
 
         private void reproduceIfPossible(int currentHashCode, HashMap<Integer, Shark> sharkMap) {
             if(reproductionTime <= 0) {
-                reproductionTime = 6;
+                reproductionTime = DEFAULT_SHARK_REPRODUCTION_TIME;
                 sharkMap.put(currentHashCode, new Shark());
                 reproduced = true;
             } else {
@@ -282,7 +282,15 @@ public class PredatorPreyGrid extends Grid{
 
     @Override
     public void fillGrid() {
-        if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
+        if(getSaveState().size() > 0) {
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    int index = getRowNum()*i+j;
+                    getGrid()[i][j] = new GOLCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                    getGrid()[i][j].setStartState(StateENUM.valueOf(getSaveState().get(index)));
+                }
+            }
+        } else if (getCellCounts().size() > 0 && getCellStates().size() > 0 && getCellCounts().size() == getCellStates().size()) {
             int total = 0;
             TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
             for (int k = 0; k < getCellCounts().size(); k++) {

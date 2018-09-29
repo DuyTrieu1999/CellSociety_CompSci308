@@ -19,6 +19,7 @@ public class Grid {
     private ArrayList<Integer> counts;
     private TreeMap<String, Double> parameterValues;
     private HashMap<StateENUM, Integer> populationMap = new HashMap<>();
+    private ArrayList<String> saveState; //Consider turning into a hashMap
 
     public Grid (String filename, int size) {
         reader = new XMLReader();
@@ -38,11 +39,13 @@ public class Grid {
         states = new ArrayList<>();
         counts = new ArrayList<>();
         parameterValues = new TreeMap<>();
+        saveState = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
         size = reader.determineGridSize(size);
         //System.out.println(size);
         reader.addParameters(parameterValues);
         reader.addCell(states, counts);
+        reader.loadSave(saveState);
     }
     public void changeConfig (String configName) {
         configFileName = configName;
@@ -79,7 +82,15 @@ public class Grid {
     }
 
     public void fillGrid() {
-        if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size()) {
+        if(saveState.size() > 0) {
+            for (int i = 0; i < this.getRowNum(); i++) {
+                for (int j = 0; j < this.getColNum(); j++) {
+                    int index = getRowNum()*i+j;
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                    grid[i][j].setStartState(StateENUM.valueOf(saveState.get(index)));
+                }
+            }
+        } else if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size()) {
             int total = 0;
             TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
             for (int k = 0; k < counts.size(); k++) {
@@ -162,5 +173,8 @@ public class Grid {
     }
     public TreeMap<String, Double> getParameterValues() {
         return parameterValues;
+    }
+    public ArrayList<String> getSaveState() {
+        return saveState;
     }
 }
