@@ -16,6 +16,7 @@ import model.Cell;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  *
@@ -78,7 +79,7 @@ public class SimulationUI {
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
         changeSpeed();
-        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(simulationGraph);
         myRoot.getChildren().add(myGridPane);
@@ -87,7 +88,7 @@ public class SimulationUI {
     public void step (double elapsedTime) {
         myGrid.updateGrid();
         gridSize = (int)sizeSlider.getVal();
-        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph.updateGraph(simuMap);
     }
     private void changeSpeed () {
@@ -176,7 +177,7 @@ public class SimulationUI {
         myRoot.getChildren().remove(simulationGraph);
         addGridPane();
         addCellToGrid(simuName);
-        HashMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(myGridPane);
         myRoot.getChildren().add(simulationGraph);
