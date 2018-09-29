@@ -21,8 +21,7 @@ public abstract class Cell extends Polygon {
         this.rowPos = row;
         this.colPos = col;
         drawShape(row, col, width);
-//        this.setWidth(width);
-//        this.setHeight(width);
+        this.setStroke(Color.BLACK);
     }
     public int getRowPos() {
         return rowPos;
@@ -54,7 +53,7 @@ public abstract class Cell extends Polygon {
         this.setFill(getStateColor(this.getCurrState()));
     }
     public void drawShape (int row, int col, double width) {
-        drawTriangle(row, col, width);
+        drawHexagon(row, col, width);
     }
     private void drawRectangle (int row, int col, double width) {
         Double[] recPoints = {0.0,0.0,0.0, width,width,width,width,0.0};
@@ -80,10 +79,11 @@ public abstract class Cell extends Polygon {
     }
     private void drawHexagon (int row, int col, double width) {
         Double[] hexagonPoints = hexagonPoints(width / (2*ROOT_THREE_OVER_2));
+        int border = 1;
         this.getPoints().addAll(hexagonPoints);
         this.setRotate(90);
         if (col % 2 == 1) {
-            this.setTranslateX(width*ROOT_THREE_OVER_2/2+1);
+            this.setTranslateX(width*ROOT_THREE_OVER_2/2+border);
         }
     }
     private Double[] hexagonPoints (double radius) {

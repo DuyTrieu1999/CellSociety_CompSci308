@@ -158,6 +158,7 @@ public class SimulationUI {
     private void stepButtonHandler () {
         pauseSim();
         myGrid.updateGrid();
+        simulationGraph.updateGraph(myGrid.getPopulationMap());
     }
     private void startSim () {
         animation.setCycleCount(Timeline.INDEFINITE);
