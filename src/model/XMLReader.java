@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 public class XMLReader {
     /**
-     * This class imports XML-related packages, creates a SAXBuilder, document from files stream.
+     * This class imports XML-related packages and creates a document from an input stream.
      * Source code copied from https://www.tutorialspoint.com/java_xml/java_dom_parse_document.htm
      * @author Austin Kao, Duy Trieu
      */
@@ -82,21 +82,29 @@ public class XMLReader {
         return size;
     }
     protected void loadSave(ArrayList<String> save) {
-        NodeList xmlSave = xmlDocument.getElementsByTagName("save");
-        for (int i = 0; i < xmlSave.getLength(); i++) {
-            Node xmlNode = xmlSave.item(i);
-            NodeList cellStatesInSave = xmlNode.getChildNodes();
-            for(int j = 0; j < cellStatesInSave.getLength(); j++) {
-                Node cellNode = cellStatesInSave.item(j);
-                if(cellNode instanceof Element) {
-                    Element cell = (Element) cellNode;
-                    if(cell.getTagName().equals("cell_state")) {
-                        String cellState = cell.getTextContent();
-                        save.add(cellState);
+        try {
+            int size = determineGridSize(0);
+            NodeList xmlSave = xmlDocument.getElementsByTagName("save");
+            for (int i = 0; i < xmlSave.getLength(); i++) {
+                Node xmlNode = xmlSave.item(i);
+                NodeList cellStatesInSave = xmlNode.getChildNodes();
+                for(int j = 0; j < cellStatesInSave.getLength(); j++) {
+                    Node cellNode = cellStatesInSave.item(j);
+                    if(cellNode instanceof Element) {
+                        Element cell = (Element) cellNode;
+                        if(cell.getTagName().equals("cell_state")) {
+                            String cellState = cell.getTextContent();
+                            save.add(cellState);
+                        }
                     }
                 }
+                if(Math.pow(size, 2) > save.size()) {
+                    throw new Exception("Invalid save state. Cannot load file.");
+                }
             }
+        } catch (Exception e) {
+            save.clear();
+            e.printStackTrace();
         }
-
     }
 }

@@ -50,7 +50,7 @@ public class FireGrid extends Grid {
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
                     int index = getRowNum()*i+j;
-                    getGrid()[i][j] = new FireCell(i, j, getMaxGridPaneSize() / this.getColNum());
+                    getGrid()[i][j] = new FireCell(i, j, getMaxGridPaneSize() / this.getColNum(), getCellType());
                     getGrid()[i][j].setStartState(StateENUM.valueOf(getSaveState().get(index)));
                 }
             }

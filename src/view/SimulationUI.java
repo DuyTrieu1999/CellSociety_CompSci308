@@ -30,7 +30,7 @@ public class SimulationUI {
     private double FRAMES_PER_SECOND = 1;
     private double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
-    private static final String GAME_OF_LIFE_XML = "Game_Of_Life.xml";
+    private static final String GAME_OF_LIFE_XML = "TestSave.xml";
     private static final String WA_TOR_WORLD_XML = "WaTor.xml";
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
