@@ -113,6 +113,6 @@ public abstract class Cell extends Polygon {
     public void setHasShark(boolean value) {}
     public void setSatisfaction(boolean value) {}
     public void setProbCatch(double probability) {}
-
+    public void setThreshold(double threshold) {}
 }
 

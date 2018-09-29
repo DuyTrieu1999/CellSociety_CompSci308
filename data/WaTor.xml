@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="WaTor" author="team8">
     <parameters>
-        <variable>name = "sharkReproductionCycle" value="5"</variable>
-        <variable>name = "sharkEnergy" value="3"</variable>
-        <variable>name = "fishReproductionCycle" value="3"</variable>
-        <variable>name = "fishEnergyGained" value="2"</variable>
+        <variable_name>SharkReproductionCycle</variable_name>
+        <variable_value>6</variable_value>
+        <variable_name>SharkEnergy</variable_name>
+        <variable_value>3</variable_value>
+        <variable_name>FishReproductionCycle</variable_name>
+        <variable_value>2</variable_value>
+        <variable_name>EnergyFromEatingFish</variable_name>
+        <variable_value>2</variable_value>
     </parameters>
     <grid>
         <size>20</size>
     </grid>
-    <cell_types>
-        <cell>
-            <cell_state>WATER</cell_state>
-            <cell_number>300</cell_number>
-        </cell>
-        <cell>
-            <cell_state>FISH</cell_state>
-            <cell_number>80</cell_number>
-        </cell>
-        <cell>
-            <cell_state>SHARK</cell_state>
-            <cell_number>20</cell_number>
-        </cell>
-    </cell_types>
+    <cell>
+        <cell_state>WATER</cell_state>
+        <cell_number>150</cell_number>
+    </cell>
+    <cell>
+        <cell_state>FISH</cell_state>
+        <cell_number>150</cell_number>
+    </cell>
+    <cell>
+        <cell_state>SHARK</cell_state>
+        <cell_number>100</cell_number>
+    </cell>
 </simulation>
