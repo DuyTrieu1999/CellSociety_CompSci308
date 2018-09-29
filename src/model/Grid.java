@@ -8,7 +8,6 @@ import java.util.*;
  */
 public class Grid {
     private static final double MAX_GRID_PANE_SIZE = 360;
-    private static final String DEFAULT_RESOURCE_PACKAGE = "resources/"; //May have to delete
     private static final String DEFAULT_XML_FILE = "Game_Of_life.xml";
 
     private XMLReader reader;
@@ -19,6 +18,7 @@ public class Grid {
     private ArrayList<String> states;
     private ArrayList<Integer> counts;
     private TreeMap<String, Double> parameterValues;
+    public HashMap<StateENUM, Integer> populationMap = new HashMap<>();
 
     public Grid (String filename, int size) {
         reader = new XMLReader();
@@ -59,6 +59,24 @@ public class Grid {
                 grid[i][j].setCurrState(grid[i][j].getNextState());
             }
         }
+    }
+    public HashMap<StateENUM, Integer> getPopulationMap () {
+        int aliveCount = 0;
+        int deadCount = 0;
+        populationMap.put(StateENUM.ALIVE, aliveCount);
+        populationMap.put(StateENUM.DEAD, deadCount);
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                Cell cell = grid[i][j];
+                if (populationMap.containsKey(cell.getCurrState())) {
+                    populationMap.put(cell.getCurrState(), populationMap.get(cell.getCurrState()) + 1);
+                }
+                else {
+                    populationMap.put(cell.getCurrState(), 1);
+                }
+            }
+        }
+        return this.populationMap;
     }
 
     public void fillGrid() {

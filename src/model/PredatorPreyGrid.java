@@ -113,6 +113,10 @@ public class PredatorPreyGrid extends Grid{
                                 currentCell.setHasShark(true);
                             }
                         }
+                    } else if(!livingSharks.containsKey(newHashCode)) {
+                        determinedMove = true;
+                        currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
+                        neighborList.get(rn).setHasShark(true);
                     }
                 }
             } else {
@@ -171,6 +175,7 @@ public class PredatorPreyGrid extends Grid{
             }
             fishMap.put(newHashCode, this);
         }
+
         public boolean hasReproduced() {
             return reproduced;
         }
@@ -214,32 +219,30 @@ public class PredatorPreyGrid extends Grid{
                 if(sharkEnergy > maxSharkEnergy) {
                     sharkEnergy = maxSharkEnergy;
                 }
-                if(reproductionTime <= 0) {
-                    reproductionTime = 6;
-                    sharkMap.put(currentHashCode, new Shark());
-                    reproduced = true;
-                } else {
-                    reproductionTime--;
-                    reproduced = false;
-                }
+                reproduceIfPossible(currentHashCode, sharkMap);
                 sharkMap.put(newHashCode, this);
             } else if(sharkEnergy > 0) {
                 sharkEnergy--;
-                if(reproductionTime <= 0) {
-                    reproductionTime = 6;
-                    sharkMap.put(currentHashCode, new Shark());
-                    reproduced = true;
-                } else {
-                    reproductionTime--;
-                    reproduced = false;
-                }
+                reproduceIfPossible(currentHashCode, sharkMap);
                 sharkMap.put(newHashCode, this);
             } else {
                 sharkMap.remove(currentHashCode);
             }
+            sharkMap.put(newHashCode, this);
         }
         public boolean hasReproduced() {
             return reproduced;
+        }
+
+        private void reproduceIfPossible(int currentHashCode, HashMap<Integer, Shark> sharkMap) {
+            if(reproductionTime <= 0) {
+                reproductionTime = 6;
+                sharkMap.put(currentHashCode, new Shark());
+                reproduced = true;
+            } else {
+                reproductionTime--;
+                reproduced = false;
+            }
         }
     }
 

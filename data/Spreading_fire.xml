@@ -2,7 +2,7 @@
 <simulation name="Spreading_fire" author="team8">
     <parameter>
         <variable_name>probabilityOfCatchingFire</variable_name>
-        <variable_value>0.45</variable_value>
+        <variable_value>0.25</variable_value>
     </parameter>
     <grid>
         <size>20</size>
