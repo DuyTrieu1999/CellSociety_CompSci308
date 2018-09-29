@@ -40,7 +40,6 @@ public class PredatorPreyGrid extends Grid{
         Cell currentCell;
         Set<Integer> currentLivingFish = new HashSet<>(livingFish.keySet());
         for(int hashCode : currentLivingFish) {
-            //System.out.println(hashCode);
             int row = hashCode / getRowNum();
             int col = Math.floorMod(hashCode, getRowNum());
             Fish currentFish = livingFish.get(hashCode);
@@ -49,12 +48,10 @@ public class PredatorPreyGrid extends Grid{
             boolean canMove = false;
             for(Cell neighbor : neighborList) {
                 int neighborHashCode = hashCode(neighbor.getRowPos(), neighbor.getColPos());
-                //System.out.println(neighborHashCode);
                 if(!livingSharks.containsKey(neighborHashCode) && !livingFish.containsKey(neighborHashCode)) {
                     canMove = true;
                 }
             }
-            //System.out.println(canMove);
             if (canMove) {
                 boolean determinedMove = false;
                 while (!determinedMove) {
@@ -64,7 +61,9 @@ public class PredatorPreyGrid extends Grid{
                         determinedMove = true;
                         currentFish.updateMovingFish(hashCode, newHashCode, livingFish);
                         neighborList.get(rn).setHasFish(true);
-                        //System.out.println(newHashCode);
+                        if(livingFish.get(newHashCode).hasReproduced()) {
+                            currentCell.setHasFish(true);
+                        }
                     }
                 }
             } else {
@@ -101,11 +100,19 @@ public class PredatorPreyGrid extends Grid{
                             currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
                             neighborList.get(rn).setHasShark(true);
                             neighborList.get(rn).setHasFish(false);
+                            if(livingSharks.get(newHashCode).hasReproduced()) {
+                                currentCell.setHasShark(true);
+                            }
                         }
                     } else if(!livingSharks.containsKey(newHashCode)) {
                         determinedMove = true;
                         currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
-                        neighborList.get(rn).setHasShark(true);
+                        if(livingSharks.containsKey(newHashCode)) {
+                            neighborList.get(rn).setHasShark(true);
+                            if(livingSharks.get(newHashCode).hasReproduced()) {
+                                currentCell.setHasShark(true);
+                            }
+                        }
                     }
                 }
             } else {
@@ -115,14 +122,15 @@ public class PredatorPreyGrid extends Grid{
                 }
             }
         }
+        System.out.println(livingFish.size());
+        System.out.println(livingSharks.size());
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 currentCell = getGrid()[i][j];
                 currentCell.updateCell();
+                currentCell.setCurrState(currentCell.getNextState());
             }
         }
-        System.out.println(livingFish.size());
-        System.out.println(livingSharks.size());
     }
 
     public int hashCode(int i, int j) {
@@ -139,7 +147,7 @@ public class PredatorPreyGrid extends Grid{
         private int reproductionTime;
         private boolean reproduced;
         public Fish() {
-            this(5);
+            this(2);
         }
         public Fish(int reproduction) {
             reproductionTime = reproduction;
@@ -154,7 +162,7 @@ public class PredatorPreyGrid extends Grid{
         public void updateMovingFish(int currentHashCode, int newHashCode, HashMap<Integer, Fish> fishMap) {
             fishMap.remove(currentHashCode);
             if(reproductionTime <= 0) {
-                reproductionTime = 5;
+                reproductionTime = 2;
                 fishMap.put(currentHashCode, new Fish());
                 reproduced = true;
             } else {
@@ -178,7 +186,7 @@ public class PredatorPreyGrid extends Grid{
         private int maxSharkEnergy;
         private boolean reproduced;
         public Shark() {
-            this(6, 6);
+            this(5, 6);
         }
         public Shark(int energy, int reproduction) {
             sharkEnergy = energy;
@@ -206,18 +214,29 @@ public class PredatorPreyGrid extends Grid{
                 if(sharkEnergy > maxSharkEnergy) {
                     sharkEnergy = maxSharkEnergy;
                 }
+                if(reproductionTime <= 0) {
+                    reproductionTime = 6;
+                    sharkMap.put(currentHashCode, new Shark());
+                    reproduced = true;
+                } else {
+                    reproductionTime--;
+                    reproduced = false;
+                }
+                sharkMap.put(newHashCode, this);
             } else if(sharkEnergy > 0) {
                 sharkEnergy--;
-            }
-            if(reproductionTime <= 0) {
-                reproductionTime = 6;
-                sharkMap.put(currentHashCode, new Shark());
-                reproduced = true;
+                if(reproductionTime <= 0) {
+                    reproductionTime = 6;
+                    sharkMap.put(currentHashCode, new Shark());
+                    reproduced = true;
+                } else {
+                    reproductionTime--;
+                    reproduced = false;
+                }
+                sharkMap.put(newHashCode, this);
             } else {
-                reproductionTime--;
-                reproduced = false;
+                sharkMap.remove(currentHashCode);
             }
-            sharkMap.put(newHashCode, this);
         }
         public boolean hasReproduced() {
             return reproduced;
