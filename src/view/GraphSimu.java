@@ -31,7 +31,7 @@ public class GraphSimu extends VBox {
         for (int i=0; i<size; i++) {
             dataArray.add(getSeries());
         }
-        cellStates = new ArrayList<>(populationMap.keySet());
+        cellStates = new ArrayList<StateENUM>(populationMap.keySet());
         simuChart.getData().addAll(dataArray);
         addLayout();
         updateGraph(populationMap);
