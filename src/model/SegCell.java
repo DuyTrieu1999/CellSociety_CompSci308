@@ -22,8 +22,8 @@ public class SegCell extends Cell{
     private double agentNeighbors;
     private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
-    public SegCell(int row, int col, double width) {
-        super(row, col, width);
+    public SegCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
         satisfied = true;
     }
 

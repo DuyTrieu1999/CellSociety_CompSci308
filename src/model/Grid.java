@@ -20,8 +20,10 @@ public class Grid {
     private TreeMap<String, Double> parameterValues;
     private HashMap<StateENUM, Integer> populationMap = new HashMap<>();
     private ArrayList<String> saveState; //Consider turning into a hashMap
+    private String cellType;
 
-    public Grid (String filename, int size) {
+    public Grid (String filename, int size, String cellType) {
+        this.cellType = cellType;
         reader = new XMLReader();
         this.size = size;
         grid = new Cell[size][size];
@@ -42,7 +44,6 @@ public class Grid {
         saveState = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
         size = reader.determineGridSize(size);
-        //System.out.println(size);
         reader.addParameters(parameterValues);
         reader.addCell(states, counts);
         reader.loadSave(saveState);
@@ -86,7 +87,7 @@ public class Grid {
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
                     int index = getRowNum()*i+j;
-                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
                     grid[i][j].setStartState(StateENUM.valueOf(saveState.get(index)));
                 }
             }
@@ -108,7 +109,7 @@ public class Grid {
                                 rn = rn - value;
                             } else {
                                 if(cellTypeCount.get(s) > 0) {
-                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), cellType);
                                     int newCount = cellTypeCount.get(s) - 1;
                                     StateENUM state = StateENUM.valueOf(s);
                                     grid[i][j].setStartState(state);
@@ -126,7 +127,7 @@ public class Grid {
             System.out.println("Switching to random cell setup");
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
-                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum());
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), cellType);
                     grid[i][j].setRandStartState();
                 }
             }
@@ -177,4 +178,5 @@ public class Grid {
     public ArrayList<String> getSaveState() {
         return saveState;
     }
+    public String getCellType () { return cellType; }
 }

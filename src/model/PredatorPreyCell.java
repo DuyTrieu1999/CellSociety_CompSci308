@@ -19,11 +19,11 @@ public class PredatorPreyCell extends Cell {
     private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
     private boolean hasFish = false;
     private boolean hasShark = false;
-
+    private String cellType;
     private double cellWidth;
 
-    public PredatorPreyCell(int row, int col, double width) {
-        super(row, col, width);
+    public PredatorPreyCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
         cellWidth = width;
     }
     @Override

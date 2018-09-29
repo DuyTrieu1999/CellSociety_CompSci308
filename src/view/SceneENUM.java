@@ -6,11 +6,11 @@ package view;
 public enum SceneENUM {
     HBOX_GRID(10),
     BUTTON_GRID(240),
-    SCENE_WIDTH(1200),
+    SCENE_WIDTH(1300),
     SCENE_HEIGHT(500),
     GRID_WIDTH(400),
     GRID_HEIGHT(400),
-    PADDING(40),
+    PADDING(50),
     SIZE_SLIDER_MAX(20),
     SIZE_SLIDER_MIN(10),
     SIZE_SLIDER_VAL(15),

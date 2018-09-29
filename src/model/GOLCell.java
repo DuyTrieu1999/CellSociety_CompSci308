@@ -22,8 +22,8 @@ import java.util.Random;
 public class GOLCell extends Cell {
     private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
 
-    public GOLCell(int row, int col, double width) {
-        super(row, col, width);
+    public GOLCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
     }
 
     @Override

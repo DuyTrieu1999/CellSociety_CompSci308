@@ -27,24 +27,23 @@ public class GraphSimu extends VBox {
     protected HBox layoutBox;
 
     public GraphSimu (HashMap<StateENUM, Integer> populationMap) {
-        int size = populationMap.size();
-        for (int i=0; i<size; i++) {
-            dataArray.add(getSeries());
+        cellStates = new ArrayList<>(populationMap.keySet());
+        for (int i=0; i<cellStates.size(); i++) {
+            dataArray.add(getSeries(cellStates.get(i).toString()));
         }
-        cellStates = new ArrayList<StateENUM>(populationMap.keySet());
         simuChart.getData().addAll(dataArray);
         addLayout();
         updateGraph(populationMap);
     }
-    public XYChart.Series<Number, Number> getSeries () {
+    public XYChart.Series<Number, Number> getSeries (String name) {
         simuChart = new LineChart<>(xAxis, yAxis);
-        xAxis.setLabel("Population");
+        yAxis.setLabel("Population");
         xAxis.setForceZeroInRange(false);
-        yAxis.setLabel("Simulation timeline");
+        xAxis.setLabel("Simulation timeline");
         yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis, "$", null));
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Data");
+        series.setName(name);
         series.getData().add(new XYChart.Data<>(++sequence, y));
         return series;
     }
@@ -53,7 +52,7 @@ public class GraphSimu extends VBox {
         layoutBox.getChildren().add(simuChart);
         layoutBox.setPadding(new Insets(SceneENUM.PADDING.getVal()));
         this.getChildren().add(layoutBox);
-        this.setPadding(new Insets(5, 10, 5, 0));
+        this.setPadding(new Insets(SceneENUM.HBOX_GRID.getVal()));
         this.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 2.3*SceneENUM.BUTTON_GRID.getVal());
     }
 
