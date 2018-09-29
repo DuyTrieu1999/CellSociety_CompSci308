@@ -14,6 +14,8 @@ public abstract class Cell extends Polygon {
     private StateENUM currState;
     private StateENUM nextState;
     private ArrayList<Cell> neighbors;
+    private static final double ROOT_THREE_OVER_2 = Math.sqrt(3) / 2;
+    private static final double ang30 = Math.toRadians(30);
 
     public Cell(int row, int col, double width) {
         this.rowPos = row;
@@ -52,28 +54,45 @@ public abstract class Cell extends Polygon {
         this.setFill(getStateColor(this.getCurrState()));
     }
     public void drawShape (int row, int col, double width) {
+        drawTriangle(row, col, width);
+    }
+    private void drawRectangle (int row, int col, double width) {
         Double[] recPoints = {0.0,0.0,0.0, width,width,width,width,0.0};
+        // Set Rectangle Cell
+        this.getPoints().addAll(recPoints);
+    }
+    private void drawTriangle (int row, int col, double width) {
         Double[] trianglePointsUp = {width/2, 0.0, width*3/2, width, -width/2, width};
         Double[] trianglePointsDown = {-width/2, 0.0, width*3/2, 0.0, width/2, width};
-        Double[] hexagonPointsUp = {width/2-width/(2*Math.sqrt(3)),0.0,
-                width/2+width/(2*Math.sqrt(3)),0.0,
-                width/2+width/Math.sqrt(3),width/2,
-                width/2+width/(2*Math.sqrt(3)),width,
-                width/2-width/(2*Math.sqrt(3)),width,
-                width/2-width/(Math.sqrt(3)),width/2};
-        Double[] hexagonPointsDown = {width/2-width/(2*Math.sqrt(3)),width/2,
-                width/2+width/(2*Math.sqrt(3)), width/2,
-                width/2+width/Math.sqrt(3), width,
-                width/2-width/(2*Math.sqrt(3)), width*3/2,
-                width/2-width/(2*Math.sqrt(3)), width*3/2,
-                width/2-width/(Math.sqrt(3)), width};
-//        if ((col+row) % 2 == 1) {
-//            this.getPoints().addAll(trianglePointsDown);
-//        }
-//        if (col % 2 == 0) {
-//            this.getPoints().addAll(trianglePointsUp);
-//        }
-        this.getPoints().addAll(recPoints);
+        // Set Triangle Cell
+        if (col%2 == 1 && row%2 == 1) {
+            this.getPoints().addAll(trianglePointsUp);
+        }
+        if (col%2==1 && row%2 == 0) {
+            this.getPoints().addAll(trianglePointsDown);
+        }
+        if (col % 2 == 0 && row%2 == 1) {
+            this.getPoints().addAll(trianglePointsUp);
+        }
+        if (col % 2 == 0 && row%2 == 0) {
+            this.getPoints().addAll(trianglePointsDown);
+        }
+    }
+    private void drawHexagon (int row, int col, double width) {
+        Double[] hexagonPoints = hexagonPoints(width / (2*ROOT_THREE_OVER_2));
+        this.getPoints().addAll(hexagonPoints);
+        this.setRotate(90);
+        if (col % 2 == 1) {
+            this.setTranslateX(width*ROOT_THREE_OVER_2/2+1);
+        }
+    }
+    private Double[] hexagonPoints (double radius) {
+        return new Double[]{radius, 0.0,
+                radius / 2, ROOT_THREE_OVER_2 * radius,
+                -radius / 2, ROOT_THREE_OVER_2 * radius,
+                -radius, 0.0,
+                -radius / 2, -ROOT_THREE_OVER_2 * radius,
+                radius / 2, -ROOT_THREE_OVER_2 * radius};
     }
     public abstract void setRandStartState();
     public abstract void updateCell ();

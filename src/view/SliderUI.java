@@ -35,8 +35,7 @@ public class SliderUI extends VBox {
 
         layoutBox = new HBox();
         layoutBox.getChildren().addAll(slider, valueText);
-        layoutBox.setPadding(new Insets(10, 0, 10, 0));
-        this.setPadding(new Insets(10, 10, 10, 10));
+        layoutBox.setPadding(new Insets(SceneENUM.HBOX_GRID.getVal(), 0, SceneENUM.HBOX_GRID.getVal(), 0));
         this.getChildren().add(nameLabel);
         this.getChildren().add(layoutBox);
     }
