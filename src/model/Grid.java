@@ -18,7 +18,7 @@ public class Grid {
     private ArrayList<String> states;
     private ArrayList<Integer> counts;
     private TreeMap<String, Double> parameterValues;
-    public HashMap<StateENUM, Integer> populationMap = new HashMap<>();
+    private HashMap<StateENUM, Integer> populationMap = new HashMap<>();
 
     public Grid (String filename, int size) {
         reader = new XMLReader();
@@ -61,10 +61,9 @@ public class Grid {
         }
     }
     public HashMap<StateENUM, Integer> getPopulationMap () {
-        int aliveCount = 0;
-        int deadCount = 0;
-        populationMap.put(StateENUM.ALIVE, aliveCount);
-        populationMap.put(StateENUM.DEAD, deadCount);
+        for (int i=0; i<states.size(); i++) {
+            populationMap.put(StateENUM.valueOf(states.get(i)), 0);
+        }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 Cell cell = grid[i][j];

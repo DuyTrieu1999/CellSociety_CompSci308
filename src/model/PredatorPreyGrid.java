@@ -217,7 +217,6 @@ public class PredatorPreyGrid extends Grid{
             return reproduced;
         }
     }
-
     /**
      * The world of Wa-Tor is a torus, and wraps left to right, top to bottom.
      * This means that any fish or shark that moves right at the rightmost square ends up on the leftmost square in the same row.
