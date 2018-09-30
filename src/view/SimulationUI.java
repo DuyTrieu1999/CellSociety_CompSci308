@@ -35,6 +35,7 @@ public class SimulationUI {
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
     private static final String ERROR_TESTING = "XMLErrorTesting.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
+    private static final String RESOURCE_PATH = "../resources/";
 
     protected RadioButton rectangleCellButton;
     protected RadioButton triangleCellButton;
@@ -46,6 +47,7 @@ public class SimulationUI {
     private Group myRoot;
     private GridPane myGridPane;
     private Grid myGrid;
+    private VBox buttonContainer = new VBox(SceneENUM.HBOX_GRID.getVal());
     private SliderUI sizeSlider;
     private SliderUI speedSlider;
     private Timeline animation = new Timeline();
@@ -54,7 +56,7 @@ public class SimulationUI {
     private String simulationName;
     private GraphSimu simulationGraph;
     private String cellType;
-    private GridParaSlider paraSlider;
+    private XMLSaveBuilder xmlSave;
 
     private ResourceBundle myResources;
 
@@ -71,6 +73,7 @@ public class SimulationUI {
         animation.getKeyFrames().add(frame);
         myRoot = new Group();
         myScene = new Scene(myRoot, SceneENUM.SCENE_WIDTH.getVal(), SceneENUM.SCENE_HEIGHT.getVal(), BACKGROUND);
+        xmlSave = new XMLSaveBuilder();
         makeCellTypeButton();
         makeAllButton();
         getCellType();
@@ -78,11 +81,11 @@ public class SimulationUI {
         addGridPane();
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
+        makeSaveButton();
+        myRoot.getChildren().add(buttonContainer);
         changeSpeed();
         TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph = new GraphSimu(simuMap);
-        paraSlider = new GridParaSlider(myGrid);
-        simulationGraph.getChildren().add(paraSlider);
         myRoot.getChildren().add(simulationGraph);
         myRoot.getChildren().add(myGridPane);
         return myScene;
@@ -109,7 +112,6 @@ public class SimulationUI {
     }
 
     private void makeAllButton () {
-        VBox buttonContainer = new VBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox1 = new HBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox2 = new HBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox3 = new HBox(SceneENUM.HBOX_GRID.getVal());
@@ -126,9 +128,19 @@ public class SimulationUI {
         hbox2.getChildren().add(startButton);
         hbox3.getChildren().add(stopButton);
         hbox4.getChildren().add(stepButton);
-        hbox5.getChildren().addAll(resetButton);
+        hbox5.getChildren().add(resetButton);
         buttonContainer.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5, sizeSlider, speedSlider, radioBox);
         createButtonPane(buttonContainer);
+    }
+    private void makeSaveButton () {
+        HBox hbox6 = new HBox(SceneENUM.HBOX_GRID.getVal());
+        SimuButton saveButton = new SimuButton(myResources.getString("Save"), event ->
+                xmlSave.createSave(RESOURCE_PATH, gridSize, myGrid.getParameterValues(), myGrid.createSaveState()));
+        System.out.println(gridSize);
+        System.out.println(myGrid.getParameterValues());
+        System.out.println(myGrid.getSaveState());
+        hbox6.getChildren().add(saveButton);
+        buttonContainer.getChildren().add(hbox6);
     }
 
     private void makeCellTypeButton () {
@@ -183,8 +195,6 @@ public class SimulationUI {
         simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(myGridPane);
         myRoot.getChildren().add(simulationGraph);
-        System.out.println(paraSlider.getSliders().size());
-        System.out.println(myGrid.getParameterValues().size());
         pauseSim();
     }
     private void startButtonHandler () {
@@ -213,7 +223,6 @@ public class SimulationUI {
         buttonContainer.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
         buttonContainer.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
         buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 3*SceneENUM.BUTTON_GRID.getVal());
-        myRoot.getChildren().add(buttonContainer);
     }
     private void addGridPane () {
         myGridPane = new GridPane();
