@@ -7,8 +7,8 @@ import java.util.*;
  * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
-    private final int DEFAULT_SHARK_REPRODUCTION_TIME = 5;
-    private final int DEFAULT_MAX_SHARK_ENERGY = 3;
+    private final int DEFAULT_SHARK_REPRODUCTION_TIME = 6;
+    private final int DEFAULT_MAX_SHARK_ENERGY = 2;
     private final int DEFAULT_ENERGY_FROM_EATING_FISH = 2;
     private final int DEFAULT_FISH_REPRODUCTION_TIME = 2;
 
@@ -113,10 +113,6 @@ public class PredatorPreyGrid extends Grid{
                                 currentCell.setHasShark(true);
                             }
                         }
-                    } else if(!livingSharks.containsKey(newHashCode)) {
-                        determinedMove = true;
-                        currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
-                        neighborList.get(rn).setHasShark(true);
                     }
                 }
             } else {
@@ -166,7 +162,7 @@ public class PredatorPreyGrid extends Grid{
         public void updateMovingFish(int currentHashCode, int newHashCode, HashMap<Integer, Fish> fishMap) {
             fishMap.remove(currentHashCode);
             if(reproductionTime <= 0) {
-                reproductionTime = 2;
+                reproductionTime = DEFAULT_FISH_REPRODUCTION_TIME;
                 fishMap.put(currentHashCode, new Fish());
                 reproduced = true;
             } else {
@@ -228,7 +224,6 @@ public class PredatorPreyGrid extends Grid{
             } else {
                 sharkMap.remove(currentHashCode);
             }
-            sharkMap.put(newHashCode, this);
         }
         public boolean hasReproduced() {
             return reproduced;

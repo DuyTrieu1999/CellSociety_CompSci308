@@ -30,13 +30,21 @@ public class XMLReader {
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
+            if(!xmlDocument.getDocumentElement().getTagName().equals("simulation") && !fileName.equals(defaultFile)) {
+                throw new IOException("Wrong type of configuration file.");
+            }
         }
-        catch (ParserConfigurationException | SAXException | IOException e) {
+        catch (ParserConfigurationException | SAXException e) {
             System.out.println("Configuration file not found. Using default file instead.");
             if (!fileName.equals(defaultFile)) {
                 loadDoc(defaultFile, defaultFile);
             }
             e.printStackTrace();
+        } catch (IOException f) {
+            if (!fileName.equals(defaultFile)) {
+                loadDoc(defaultFile, defaultFile);
+            }
+            f.printStackTrace();
         }
     }
     protected void addCell (ArrayList<String> state, ArrayList<Integer> counts) {
@@ -47,8 +55,6 @@ public class XMLReader {
                 Element cellEl = (Element) cellNode;
                 String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
                 String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
-                //System.out.println(cellState);
-                //System.out.println(cellNumber);
                 state.add(cellState);
                 counts.add(Integer.parseInt(cellNumber));
             }
