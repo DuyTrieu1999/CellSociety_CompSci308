@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import model.StateENUM;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * This class will generate a graph to represent the population in each simulation
@@ -26,7 +26,7 @@ public class GraphSimu extends VBox {
     private final int MAX_DATA_POINTS = 10;
     protected HBox layoutBox;
 
-    public GraphSimu (HashMap<StateENUM, Integer> populationMap) {
+    public GraphSimu (TreeMap<StateENUM, Integer> populationMap) {
         cellStates = new ArrayList<>(populationMap.keySet());
         for (int i=0; i<cellStates.size(); i++) {
             dataArray.add(getSeries(cellStates.get(i).toString()));
@@ -40,7 +40,7 @@ public class GraphSimu extends VBox {
         yAxis.setLabel("Population");
         xAxis.setForceZeroInRange(false);
         xAxis.setLabel("Simulation timeline");
-        yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis, "$", null));
+        yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis, null, "Cells"));
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(name);
@@ -56,7 +56,7 @@ public class GraphSimu extends VBox {
         this.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 2.3*SceneENUM.BUTTON_GRID.getVal());
     }
 
-    public void updateGraph (HashMap<StateENUM, Integer> populationMap) {
+    public void updateGraph (TreeMap<StateENUM, Integer> populationMap) {
         for (int i=0; i<populationMap.size(); i++) {
             dataArray.get(i).getData().add(new XYChart.Data<>(++sequence, populationMap.get(cellStates.get(i))));
             if (sequence > MAX_DATA_POINTS) {

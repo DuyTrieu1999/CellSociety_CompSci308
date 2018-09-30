@@ -18,7 +18,7 @@ public class Grid {
     private ArrayList<String> states;
     private ArrayList<Integer> counts;
     private TreeMap<String, Double> parameterValues;
-    private HashMap<StateENUM, Integer> populationMap = new HashMap<>();
+    private TreeMap<StateENUM, Integer> populationMap = new TreeMap<>();
     private ArrayList<String> saveState; //Consider turning into a hashMap
     private String cellType;
 
@@ -64,7 +64,7 @@ public class Grid {
             }
         }
     }
-    public HashMap<StateENUM, Integer> getPopulationMap () {
+    public TreeMap<StateENUM, Integer> getPopulationMap () {
         for (int i=0; i<states.size(); i++) {
             populationMap.put(StateENUM.valueOf(states.get(i)), 0);
         }
