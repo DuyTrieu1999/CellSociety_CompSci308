@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 public class XMLReader {
     /**
-     * This class imports XML-related packages, creates a SAXBuilder, document from files stream.
+     * This class imports XML-related packages and creates a document from an input stream.
      * Source code copied from https://www.tutorialspoint.com/java_xml/java_dom_parse_document.htm
      * @author Austin Kao, Duy Trieu
      */
@@ -30,26 +30,46 @@ public class XMLReader {
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
+            if(!xmlDocument.getDocumentElement().getTagName().equals("simulation") && !fileName.equals(defaultFile)) {
+                throw new IOException("Wrong type of configuration file.");
+            }
         }
-        catch (ParserConfigurationException | SAXException | IOException e) {
+        catch (ParserConfigurationException | SAXException e) {
             System.out.println("Configuration file not found. Using default file instead.");
             if (!fileName.equals(defaultFile)) {
                 loadDoc(defaultFile, defaultFile);
             }
             e.printStackTrace();
+        } catch (IOException f) {
+            if (!fileName.equals(defaultFile)) {
+                loadDoc(defaultFile, defaultFile);
+            }
+            f.printStackTrace();
         }
     }
     protected void addCell (ArrayList<String> state, ArrayList<Integer> counts) {
-        NodeList cells = xmlDocument.getElementsByTagName("cell");
-        for (int i=0; i<cells.getLength(); i++) {
-            Node cellNode = cells.item(i);
-            if (cellNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element cellEl = (Element) cellNode;
-                String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
-                String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
-                state.add(cellState);
-                counts.add(Integer.parseInt(cellNumber));
+        try {
+            NodeList cells = xmlDocument.getElementsByTagName("cell");
+            int totalCells = 0;
+            for (int i=0; i<cells.getLength(); i++) {
+                Node cellNode = cells.item(i);
+                if (cellNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element cellEl = (Element) cellNode;
+                    String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
+                    String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
+                    state.add(cellState);
+                    counts.add(Integer.parseInt(cellNumber));
+                    totalCells += Integer.parseInt(cellNumber);
+                }
             }
+            int size = determineGridSize(0);
+            if(Math.pow(size, 2) > totalCells) {
+                throw new Exception("Wrong number of cells");
+            }
+        } catch (Exception e) {
+            System.out.println("XML file contains incorrect cell counts.");
+            counts.clear();
+            state.clear();
         }
     }
     protected void addParameters (TreeMap<String, Double> paramMap) {
@@ -80,21 +100,29 @@ public class XMLReader {
         return size;
     }
     protected void loadSave(ArrayList<String> save) {
-        NodeList xmlSave = xmlDocument.getElementsByTagName("save");
-        for (int i = 0; i < xmlSave.getLength(); i++) {
-            Node xmlNode = xmlSave.item(i);
-            NodeList cellStatesInSave = xmlNode.getChildNodes();
-            for(int j = 0; j < cellStatesInSave.getLength(); j++) {
-                Node cellNode = cellStatesInSave.item(j);
-                if(cellNode instanceof Element) {
-                    Element cell = (Element) cellNode;
-                    if(cell.getTagName().equals("cell_state")) {
-                        String cellState = cell.getTextContent();
-                        save.add(cellState);
+        try {
+            int size = determineGridSize(0);
+            NodeList xmlSave = xmlDocument.getElementsByTagName("save");
+            for (int i = 0; i < xmlSave.getLength(); i++) {
+                Node xmlNode = xmlSave.item(i);
+                NodeList cellStatesInSave = xmlNode.getChildNodes();
+                for(int j = 0; j < cellStatesInSave.getLength(); j++) {
+                    Node cellNode = cellStatesInSave.item(j);
+                    if(cellNode instanceof Element) {
+                        Element cell = (Element) cellNode;
+                        if(cell.getTagName().equals("cell_state")) {
+                            String cellState = cell.getTextContent();
+                            save.add(cellState);
+                        }
                     }
                 }
+                if(Math.pow(size, 2) > save.size()) {
+                    throw new Exception("Invalid save state. Cannot load file.");
+                }
             }
+        } catch (Exception e) {
+            save.clear();
+            e.printStackTrace();
         }
-
     }
 }

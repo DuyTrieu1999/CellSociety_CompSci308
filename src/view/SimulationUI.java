@@ -33,6 +33,7 @@ public class SimulationUI {
     private static final String WA_TOR_WORLD_XML = "WaTor.xml";
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
+    private static final String ERROR_TESTING = "XMLErrorTesting.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
 
     protected RadioButton rectangleCellButton;
