@@ -63,7 +63,7 @@ public class XMLReader {
                 }
             }
             int size = determineGridSize(0);
-            if(Math.pow(size, 2) > totalCells) {
+            if((int) Math.pow(size, 2) > totalCells && counts.size() > 0) {
                 throw new Exception("Wrong number of cells");
             }
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class XMLReader {
                         }
                     }
                 }
-                if(Math.pow(size, 2) > save.size()) {
+                if((int) Math.pow(size, 2) > save.size()) {
                     throw new Exception("Invalid save state. Cannot load file.");
                 }
             }

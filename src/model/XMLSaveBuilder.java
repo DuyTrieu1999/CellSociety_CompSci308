@@ -41,7 +41,6 @@ public class XMLSaveBuilder {
             DOMSource domSource = new DOMSource(saveDocument);
             StreamResult streamResult = new StreamResult(new File(filePath));
             transformer.transform(domSource, streamResult);
-
         } catch (ParserConfigurationException | TransformerConfigurationException e) {
             System.out.println("Cannot create save file");
         } catch (TransformerException f) {

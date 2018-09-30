@@ -9,10 +9,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
@@ -35,7 +39,7 @@ public class SimulationUI {
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
     private static final String ERROR_TESTING = "XMLErrorTesting.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
-    private static final String RESOURCE_PATH = "../resources/";
+    private static final String RESOURCE_PATH = "data";
 
     protected RadioButton rectangleCellButton;
     protected RadioButton triangleCellButton;
@@ -82,6 +86,7 @@ public class SimulationUI {
         simulationName = myResources.getString("GOL");
         addCellToGrid(simulationName);
         makeSaveButton();
+        makeLoadButton();
         myRoot.getChildren().add(buttonContainer);
         changeSpeed();
         TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
@@ -134,15 +139,16 @@ public class SimulationUI {
     }
     private void makeSaveButton () {
         HBox hbox6 = new HBox(SceneENUM.HBOX_GRID.getVal());
-        SimuButton saveButton = new SimuButton(myResources.getString("Save"), event ->
-                xmlSave.createSave(RESOURCE_PATH, gridSize, myGrid.getParameterValues(), myGrid.createSaveState()));
-        System.out.println(gridSize);
-        System.out.println(myGrid.getParameterValues());
-        System.out.println(myGrid.getSaveState());
+        SimuButton saveButton = new SimuButton(myResources.getString("Save"), event -> saveFileChooser());
         hbox6.getChildren().add(saveButton);
         buttonContainer.getChildren().add(hbox6);
     }
-
+    private void makeLoadButton () {
+        HBox hbox7 = new HBox(SceneENUM.HBOX_GRID.getVal());
+        SimuButton loadButton = new SimuButton(myResources.getString("Load"), event -> openFileChooser());
+        hbox7.getChildren().add(loadButton);
+        buttonContainer.getChildren().add(hbox7);
+    }
     private void makeCellTypeButton () {
         rectangleCellButton = new RadioButton(myResources.getString("Rectangle"));
         rectangleCellButton.setSelected(true);
@@ -256,5 +262,48 @@ public class SimulationUI {
                 myGridPane.add(cell, i,j);
             }
         }
+    }
+    private void saveFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save File As");
+        File defaultFile = new File(RESOURCE_PATH);
+        fileChooser.setInitialDirectory(defaultFile);
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            try {
+                xmlSave.createSave(file.getPath(), gridSize, myGrid.getParameterValues(), myGrid.createSaveState());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+    private void openFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open File");
+        File defaultFile = new File(RESOURCE_PATH);
+        fileChooser.setInitialDirectory(defaultFile);
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null) {
+            try {
+                myGrid.changeConfig(file.getName());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        myRoot.getChildren().remove(myGridPane);
+        myRoot.getChildren().remove(simulationGraph);
+        gridSize = myGrid.getSize();
+        addGridPane();
+        for (int i=0; i<myGrid.getRowNum();i++) {
+            for(int j=0;j<myGrid.getColNum();j++) {
+                Cell cell = myGrid.getCell(i,j);
+                myGridPane.add(cell, i,j);
+            }
+        }
+        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
+        simulationGraph = new GraphSimu(simuMap);
+        myRoot.getChildren().add(myGridPane);
+        myRoot.getChildren().add(simulationGraph);
+        pauseSim();
     }
 }

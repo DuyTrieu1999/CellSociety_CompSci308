@@ -43,7 +43,6 @@ public class Grid {
         parameterValues = new TreeMap<>();
         saveState = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
-        size = reader.determineGridSize(size);
         reader.addParameters(parameterValues);
         reader.addCell(states, counts);
         reader.loadSave(saveState);
@@ -51,6 +50,7 @@ public class Grid {
     public void changeConfig (String configName) {
         configFileName = configName;
         loadConfig(configName, defaultFileName);
+        fillGrid();
     }
     public void updateGrid () {
         for (int i=0; i<this.getRowNum(); i++) {
@@ -184,9 +184,11 @@ public class Grid {
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 saveState.add(getCell(i, j).getCurrState().toString());
-                System.out.println(getCell(i,j).getCurrState().toString());
             }
         }
         return saveState;
+    }
+    public int getSize() {
+        return size;
     }
 }
