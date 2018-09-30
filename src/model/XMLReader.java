@@ -1,9 +1,6 @@
 package model;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -63,7 +60,7 @@ public class XMLReader {
                 }
             }
             int size = determineGridSize(0);
-            if((int) Math.pow(size, 2) > totalCells && counts.size() > 0) {
+            if( Math.pow(size, 2) > totalCells && counts.size() > 0) {
                 throw new Exception("Wrong number of cells");
             }
         } catch (Exception e) {
@@ -116,7 +113,7 @@ public class XMLReader {
                         }
                     }
                 }
-                if((int) Math.pow(size, 2) > save.size()) {
+                if( Math.pow(size, 2) > save.size()) {
                     throw new Exception("Invalid save state. Cannot load file.");
                 }
             }
@@ -124,5 +121,10 @@ public class XMLReader {
             save.clear();
             e.printStackTrace();
         }
+    }
+    protected String readSimType() {
+        Element simulation = xmlDocument.getDocumentElement();
+        Attr nameOfSim = simulation.getAttributeNode("name");
+        return nameOfSim.getValue();
     }
 }

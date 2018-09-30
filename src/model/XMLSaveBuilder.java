@@ -1,5 +1,6 @@
 package model;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
@@ -23,7 +24,7 @@ import java.util.TreeMap;
 public class XMLSaveBuilder {
     private Document saveDocument;
 
-    public void createSave(String filePath, int gridSize, TreeMap<String, Double> parameterValues, ArrayList<String> saveState) {
+    public void createSave(String filePath, String sim, int gridSize, TreeMap<String, Double> parameterValues, ArrayList<String> saveState) {
         try {
             if(Math.pow(gridSize, 2) > saveState.size()) {
                 throw new IllegalArgumentException("There are too few cells being saved for a save file to be created.");
@@ -33,9 +34,15 @@ public class XMLSaveBuilder {
             saveDocument = dBuilder.newDocument();
             Element root = saveDocument.createElement("simulation");
             saveDocument.appendChild(root);
+            Attr authorAttribute = saveDocument.createAttribute("author");
+            authorAttribute.setValue("team8");
+            root.setAttributeNode(authorAttribute);
+            Attr nameAttribute = saveDocument.createAttribute("name");
+            nameAttribute.setValue(sim);
+            root.setAttributeNode(nameAttribute);
             appendGrid(gridSize, root, saveDocument);
             appendParameters(parameterValues, root, saveDocument);
-            appeandSave(saveState, root, saveDocument);
+            appendSave(saveState, root, saveDocument);
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(saveDocument);
@@ -77,7 +84,7 @@ public class XMLSaveBuilder {
             Element parameter = save.createElement("parameter");
             root.appendChild(parameter);
             Element variableName = save.createElement("variable_name");
-            parameter.appendChild(save.createElement("variable_name"));
+            parameter.appendChild(variableName);
             variableName.appendChild(save.createTextNode(s));
             Element variableValue = save.createElement("variable_value");
             parameter.appendChild(variableValue);
@@ -86,7 +93,7 @@ public class XMLSaveBuilder {
         }
     }
 
-    private void appeandSave(ArrayList<String> saveState, Element root, Document save) {
+    private void appendSave(ArrayList<String> saveState, Element root, Document save) {
         Element saveElement = save.createElement("save");
         root.appendChild(saveElement);
         for (int i = 0; i < saveState.size(); i++) {

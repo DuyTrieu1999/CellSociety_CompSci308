@@ -280,7 +280,7 @@ public class PredatorPreyGrid extends Grid{
             for (int i = 0; i < this.getRowNum(); i++) {
                 for (int j = 0; j < this.getColNum(); j++) {
                     int index = getRowNum()*i+j;
-                    getGrid()[i][j] = new GOLCell(i, j, getMaxGridPaneSize() / this.getColNum(), getCellType());
+                    getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum(), getCellType());
                     getGrid()[i][j].setStartState(StateENUM.valueOf(getSaveState().get(index)));
                 }
             }

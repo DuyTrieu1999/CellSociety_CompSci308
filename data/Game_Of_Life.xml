@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding ="utf-8"?>
-<simulation name="Game_Of_Life" author="team8">
+<simulation name="Game of Life" author="team8">
     <!--This XML file sets up the initial configuration for John Horton Conway's Game of Life. Example format is shown below.-->
     <grid>
         <size>20</size>

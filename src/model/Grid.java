@@ -21,6 +21,7 @@ public class Grid {
     private TreeMap<StateENUM, Integer> populationMap = new TreeMap<>();
     private ArrayList<String> saveState; //Consider turning into a hashMap
     private String cellType;
+    private String simType;
 
     public Grid (String filename, int size, String cellType) {
         this.cellType = cellType;
@@ -43,6 +44,7 @@ public class Grid {
         parameterValues = new TreeMap<>();
         saveState = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
+        simType = reader.readSimType();
         reader.addParameters(parameterValues);
         reader.addCell(states, counts);
         reader.loadSave(saveState);
@@ -51,6 +53,11 @@ public class Grid {
         configFileName = configName;
         loadConfig(configName, defaultFileName);
         fillGrid();
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                storeNeighbors(grid[i][j]);
+            }
+        }
     }
     public void updateGrid () {
         for (int i=0; i<this.getRowNum(); i++) {
@@ -190,5 +197,8 @@ public class Grid {
     }
     public int getSize() {
         return size;
+    }
+    public String getSimType() {
+        return simType;
     }
 }

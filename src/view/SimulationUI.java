@@ -40,6 +40,7 @@ public class SimulationUI {
     private static final String ERROR_TESTING = "XMLErrorTesting.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String RESOURCE_PATH = "data";
+    private static final String DEFAULT_FILE_NAME = "";
 
     protected RadioButton rectangleCellButton;
     protected RadioButton triangleCellButton;
@@ -84,7 +85,7 @@ public class SimulationUI {
         gridSize = (int) sizeSlider.getVal();
         addGridPane();
         simulationName = myResources.getString("GOL");
-        addCellToGrid(simulationName);
+        addCellToGrid(simulationName, DEFAULT_FILE_NAME);
         makeSaveButton();
         makeLoadButton();
         myRoot.getChildren().add(buttonContainer);
@@ -189,14 +190,14 @@ public class SimulationUI {
     private void getChoice(ChoiceBox<String> cb) {
         String name = cb.getValue();
         simulationName = name;
-        setSimulation(simulationName);
+        setSimulation(simulationName, DEFAULT_FILE_NAME);
     }
 
-    private void setSimulation (String simuName) {
+    private void setSimulation (String simuName, String filename) {
         myRoot.getChildren().remove(myGridPane);
         myRoot.getChildren().remove(simulationGraph);
         addGridPane();
-        addCellToGrid(simuName);
+        addCellToGrid(simuName, filename);
         TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(myGridPane);
@@ -210,7 +211,7 @@ public class SimulationUI {
         pauseSim();
     }
     private void resetButtonHandler () {
-        setSimulation(simulationName);
+        setSimulation(simulationName, DEFAULT_FILE_NAME);
     }
     private void stepButtonHandler () {
         pauseSim();
@@ -242,19 +243,35 @@ public class SimulationUI {
         }
         myGridPane.setPadding(new Insets(SceneENUM.GRID_PANE_PADDING.getVal()));
     }
-    private void addCellToGrid (String simuName) {
+    private void addCellToGrid (String simuName, String filename) {
         getCellType();
         if (simuName.equals(myResources.getString("GOL"))) {
-            myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
+            if(filename.equals(DEFAULT_FILE_NAME)) {
+                myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
+            } else {
+                myGrid = new Grid(filename, gridSize, cellType);
+            }
         }
         if (simuName.equals(myResources.getString("WaTor"))) {
-            myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize, cellType);
+            if(filename.equals(DEFAULT_FILE_NAME)) {
+                myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize, cellType);
+            } else {
+                myGrid = new PredatorPreyGrid(filename, gridSize, cellType);
+            }
         }
         if (simuName.equals(myResources.getString("Fire"))) {
-            myGrid = new FireGrid(SPREADING_FIRE_XML, gridSize, cellType);
+            if(filename.equals(DEFAULT_FILE_NAME)) {
+                myGrid = new FireGrid(SPREADING_FIRE_XML, gridSize, cellType);
+            } else {
+                myGrid = new FireGrid(filename, gridSize, cellType);
+            }
         }
         if (simuName.equals(myResources.getString("Segg"))) {
-            myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize, cellType);
+            if(filename.equals(DEFAULT_FILE_NAME)) {
+                myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize, cellType);
+            } else {
+                myGrid = new SegGrid(filename, gridSize, cellType);
+            }
         }
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
@@ -269,9 +286,10 @@ public class SimulationUI {
         File defaultFile = new File(RESOURCE_PATH);
         fileChooser.setInitialDirectory(defaultFile);
         File file = fileChooser.showSaveDialog(new Stage());
+        System.out.println(myGrid.getSimType());
         if (file != null) {
             try {
-                xmlSave.createSave(file.getPath(), gridSize, myGrid.getParameterValues(), myGrid.createSaveState());
+                xmlSave.createSave(file.getPath(), myGrid.getSimType(), gridSize, myGrid.getParameterValues(), myGrid.createSaveState());
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
@@ -290,20 +308,8 @@ public class SimulationUI {
                 System.out.println(ex.getMessage());
             }
         }
-        myRoot.getChildren().remove(myGridPane);
-        myRoot.getChildren().remove(simulationGraph);
         gridSize = myGrid.getSize();
-        addGridPane();
-        for (int i=0; i<myGrid.getRowNum();i++) {
-            for(int j=0;j<myGrid.getColNum();j++) {
-                Cell cell = myGrid.getCell(i,j);
-                myGridPane.add(cell, i,j);
-            }
-        }
-        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
-        simulationGraph = new GraphSimu(simuMap);
-        myRoot.getChildren().add(myGridPane);
-        myRoot.getChildren().add(simulationGraph);
-        pauseSim();
+        simulationName = myGrid.getSimType();
+        setSimulation(simulationName, file.getName());
     }
 }

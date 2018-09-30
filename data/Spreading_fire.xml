@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding ="UTF-8"?>
-<simulation name="Spreading_fire" author="team8">
+<simulation name="Spreading of Fire" author="team8">
     <parameter>
         <variable_name>probabilityOfCatchingFire</variable_name>
         <variable_value>0.75</variable_value>
