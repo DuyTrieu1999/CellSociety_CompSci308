@@ -13,9 +13,7 @@ import javafx.util.Duration;
 import model.*;
 import model.Cell;
 
-import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
@@ -55,6 +53,7 @@ public class SimulationUI {
     private String simulationName;
     private GraphSimu simulationGraph;
     private String cellType;
+    private GridParaSlider paraSlider;
 
     private ResourceBundle myResources;
 
@@ -81,6 +80,8 @@ public class SimulationUI {
         changeSpeed();
         TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph = new GraphSimu(simuMap);
+        paraSlider = new GridParaSlider(myGrid);
+        simulationGraph.getChildren().add(paraSlider);
         myRoot.getChildren().add(simulationGraph);
         myRoot.getChildren().add(myGridPane);
         return myScene;
@@ -181,6 +182,8 @@ public class SimulationUI {
         simulationGraph = new GraphSimu(simuMap);
         myRoot.getChildren().add(myGridPane);
         myRoot.getChildren().add(simulationGraph);
+        System.out.println(paraSlider.getSliders().size());
+        System.out.println(myGrid.getParameterValues().size());
         pauseSim();
     }
     private void startButtonHandler () {
@@ -225,14 +228,18 @@ public class SimulationUI {
     }
     private void addCellToGrid (String simuName) {
         getCellType();
-        if (simuName.equals(myResources.getString("GOL")))
+        if (simuName.equals(myResources.getString("GOL"))) {
             myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
-        if (simuName.equals(myResources.getString("WaTor")))
+        }
+        if (simuName.equals(myResources.getString("WaTor"))) {
             myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize, cellType);
-        if (simuName.equals(myResources.getString("Fire")))
+        }
+        if (simuName.equals(myResources.getString("Fire"))) {
             myGrid = new FireGrid(SPREADING_FIRE_XML, gridSize, cellType);
-        if (simuName.equals(myResources.getString("Segg")))
+        }
+        if (simuName.equals(myResources.getString("Segg"))) {
             myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize, cellType);
+        }
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);

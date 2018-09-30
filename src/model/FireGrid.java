@@ -6,7 +6,6 @@ import java.util.*;
 public class FireGrid extends Grid {
     private final static double DEFAULT_PROBABILITY = 0.1;
     private double probability;
-    //private String cellType;
 
     public FireGrid(String filename, int size, String cellType) {
         super(filename, size, cellType);
@@ -87,5 +86,11 @@ public class FireGrid extends Grid {
                 }
             }
         }
+    }
+    public double getProbability () {
+        return this.probability;
+    }
+    public void setProbability (double probability) {
+        this.probability = probability;
     }
 }

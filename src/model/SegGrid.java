@@ -21,7 +21,6 @@ public class SegGrid extends Grid {
     private double threshold;
     private int numVacant;
     private TreeMap<Integer, Cell> vacancies;
-    //private String cellType;
 
     public SegGrid (String filename, int size, String cellType) {
         super(filename, size, cellType);
@@ -166,6 +165,12 @@ public class SegGrid extends Grid {
             threshold = DEFAULT_THRESHOLD;
         }
         return threshold;
+    }
+    public double getThreshold () {
+        return this.threshold;
+    }
+    public void setThreshold (int threshold) {
+        this.threshold = threshold;
     }
 }
 
