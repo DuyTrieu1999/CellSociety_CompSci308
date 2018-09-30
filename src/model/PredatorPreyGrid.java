@@ -36,8 +36,12 @@ public class PredatorPreyGrid extends Grid{
     }
 
     /**
-     * Make updateGrid() conform to the rules of the simulation
-     * Sharks move before fish so that the fish that are eaten by sharks don't move.
+     * updateGrid() has three phases.
+     * These phases are based on the simulation described by A.K. Dewdney,
+     * in his article for Scientific American "Sharks and Fish Wage an Ecological War on the Toroidal Planet Wa-Tor".
+     * In the first phase, fish move and breed
+     * In the second phase, sharks move and eat fish.
+     * In the third phase, the fish and shark movements are displayed on the grid.
      */
     @Override
     public void updateGrid() {
@@ -179,7 +183,7 @@ public class PredatorPreyGrid extends Grid{
     }
     /**
      * The Shark class is intended to represent a shark in the simulation
-     * Shark have a sharkEnergy parameter which represents the number of chronons they can continue living for without eating fish before dying
+     * Shark have a sharkEnergy parameter which represents the number of chronons they can continue living for without eating fish before dying.
      * They also have a reproductionTime parameter which represents the number of chronons they take to reproduce.
      */
     class Shark {

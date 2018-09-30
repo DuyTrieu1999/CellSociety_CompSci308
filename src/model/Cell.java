@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 /**
  *
- * @author duytrieu
+ * @author duytrieu, Austin Kao
  */
 public abstract class Cell extends Polygon {
     private int rowPos;
@@ -113,14 +113,13 @@ public abstract class Cell extends Polygon {
     }
     public abstract void updateCell ();
     public abstract Color getStateColor(StateENUM state);
-    public boolean isSatisfied() {
-        return false;
-    }
     public void setHasFish(boolean value) {}
     public void setHasShark(boolean value) {}
-    public void setSatisfaction(boolean value) {}
     public void setProbCatch(double probability) {}
     public void setThreshold(double threshold) {}
+    public void setHasMoved(boolean value) {}
+    public void setMoveByAgent1(boolean value) {}
+    public void setMoveByAgent2(boolean value) {}
     public ArrayList<StateENUM> getCellStateEnums() {
         return cellStateEnums;
     }

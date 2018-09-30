@@ -3,7 +3,7 @@ package model;
 import java.util.*;
 
 /**
- *
+ * The Grid class is the super class for all other simulation grids. The Grid class acts as the grid for the Game of Life simulation by default.
  * @author Duy Tieu, Samuel Appiah-Kubi, Austin Kao
  */
 public class Grid {

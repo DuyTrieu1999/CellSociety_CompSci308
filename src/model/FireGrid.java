@@ -3,6 +3,11 @@ package model;
 import javafx.scene.paint.Color;
 import java.util.*;
 
+/**
+ * The FireGrid class implements the Spreading by Fire simulation
+ * @author Austin Kao
+ * @author Samuel Appiah-Kubi
+ */
 public class FireGrid extends Grid {
     private final static double DEFAULT_PROBABILITY = 0.1;
     private double probability;

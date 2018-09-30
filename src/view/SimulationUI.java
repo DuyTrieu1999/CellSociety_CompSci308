@@ -23,9 +23,6 @@ import java.util.TreeMap;
 /**
  *
  * @author duytrieu
- * IDEA: When main launches, choose the configuration file to use right away. This will automatically specify the grid sie and type of shape.
- * EXTRA IDEA: When main launches, bring the user to a start screen where the XML File can be selected and have a launch button to then bring
- * the user to the main UI screen.
  */
 public class SimulationUI {
     private static final Paint BACKGROUND = Color.AZURE;

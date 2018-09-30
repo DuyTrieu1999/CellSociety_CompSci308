@@ -2,7 +2,7 @@
 <simulation name="Schelling's Model of Segregation" author="team8">
     <parameter>
         <variable_name>thresholdToCauseSegregation</variable_name>
-        <variable_value>0.3</variable_value>
+        <variable_value>0.8</variable_value>
     </parameter>
     <grid>
         <size>20</size>

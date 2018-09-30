@@ -8,7 +8,7 @@ import java.util.TreeMap;
  * This class represents the grid for the Segregation model.
  * There are two types of agents, 1 and 2, in this simulation.
  * Based on whether or not a certain percentage of their neighbors are the same type of agent, each cell will choose to move or not to move its location.
- * Each agent that decides to move will relocate somewhere in the Grid where they are satisfied with the location.
+ * Each agent that decides to move will relocate to a vacant cell somewhere in the Grid.
  * All dissatisfied agents move at the same time.
  * @author Austin Kao
  */
@@ -21,14 +21,15 @@ public class SegGrid extends Grid {
     private double threshold;
     private int numVacant;
     private TreeMap<Integer, Cell> vacancies;
+    private ArrayList<Integer> disatisfiedAgent1Index;
+    private ArrayList<Integer> disatisfiedAgent2Index;
 
     public SegGrid (String filename, int size, String cellType) {
         super(filename, size, cellType);
-        double segregationThreshold = determineThreshold();
-        for (int i=0; i<this.getRowNum(); i++) {
-            for (int j = 0; j < this.getColNum(); j++) {
-                getGrid()[i][j].setThreshold(segregationThreshold);
-            }
+        threshold = determineThreshold();
+        System.out.println(threshold);
+        if(threshold <= 0) {
+            threshold = DEFAULT_THRESHOLD;
         }
     }
 
@@ -45,18 +46,31 @@ public class SegGrid extends Grid {
         numVacant = 0;
         boolean currentlySatisfied;
         vacancies = new TreeMap<>();
+        disatisfiedAgent1Index = new ArrayList<>();
+        disatisfiedAgent2Index = new ArrayList<>();
+        int agent1 = 0;
+        int agent2 = 0;
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                currentlySatisfied = getGrid()[i][j].isSatisfied();
+                currentlySatisfied = determineSatisfaction(getGrid()[i][j]);
                 if(!currentlySatisfied && (getGrid()[i][j].getCurrState() == StateENUM.AGENT1)) {
                     numDissatisfied1++;
+                    getGrid()[i][j].setHasMoved(true);
+                    disatisfiedAgent1Index.add(getRowNum()*i+j);
                 } else if(!currentlySatisfied && (getGrid()[i][j].getCurrState() == StateENUM.AGENT2)) {
                     numDissatisfied2++;
+                    getGrid()[i][j].setHasMoved(true);
+                    disatisfiedAgent2Index.add(getRowNum()*i+j);
                 }
-                getGrid()[i][j].updateCell();
                 if(getGrid()[i][j].getCurrState() == StateENUM.VACANT) {
                     vacancies.put(numVacant, getGrid()[i][j]);
                     numVacant++;
+                }
+                if(getGrid()[i][j].getCurrState() == StateENUM.AGENT1) {
+                    agent1++;
+                }
+                if(getGrid()[i][j].getCurrState() == StateENUM.AGENT2) {
+                    agent2++;
                 }
             }
         }
@@ -64,40 +78,48 @@ public class SegGrid extends Grid {
         relocateCells(numDissatisfiedTotal, numDissatisfied1, numDissatisfied2);
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
+                getGrid()[i][j].updateCell();
                 getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
             }
         }
     }
 
     private void relocateCells(int numTotal, int num1, int num2) {
-        while(numTotal > 0) {
-            if (vacancies.size() > 0) {
-                boolean canMove = false;
-                while(!canMove) {
-                    int rand = new Random().nextInt(numVacant);
-                    if (vacancies.containsKey(rand)) {
-                        canMove = true;
-                        Cell move = vacancies.get(rand);
-                        int rand2 = new Random().nextInt(numTotal);
-                        if (rand2 < num1) {
-                            move.setCurrState(StateENUM.AGENT1);
-                            move.setNextState(StateENUM.AGENT1);
-                        } else {
-                            move.setCurrState(StateENUM.AGENT2);
-                            move.setNextState(StateENUM.AGENT2);
-                        }
-                        move.setSatisfaction(true);
-                        move.updateCell();
-                        vacancies.remove(rand);
-                        if (move.getCurrState() == StateENUM.AGENT1) {
-                            num1--;
-                        } else {
-                            num2--;
-                        }
+        while (vacancies.size() > 0 && numTotal > 0) {
+            boolean canMove = false;
+            while (!canMove) {
+                int rand = new Random().nextInt(numVacant);
+                if (vacancies.containsKey(rand)) {
+                    canMove = true;
+                    Cell move = vacancies.get(rand);
+                    int rand2 = new Random().nextInt(numTotal);
+                    if (rand2 < num1) {
+                        move.setMoveByAgent1(true);
+                        num1--;
+                    } else {
+                        move.setMoveByAgent2(true);
+                        num2--;
                     }
+                    vacancies.remove(rand);
                 }
             }
             numTotal = num1 + num2;
+        }
+        while(num1 > 0) {
+            int rn = new Random().nextInt(disatisfiedAgent1Index.size());
+            int row = disatisfiedAgent1Index.get(rn) / getRowNum();
+            int col = Math.floorMod(disatisfiedAgent1Index.get(rn), getRowNum());
+            getGrid()[row][col].setHasMoved(false);
+            disatisfiedAgent1Index.remove(rn);
+            num1--;
+        }
+        while(num2 > 0) {
+            int rn = new Random().nextInt(disatisfiedAgent2Index.size());
+            int row = disatisfiedAgent2Index.get(rn) / getRowNum();
+            int col = Math.floorMod(disatisfiedAgent2Index.get(rn), getRowNum());
+            getGrid()[row][col].setHasMoved(false);
+            disatisfiedAgent2Index.remove(rn);
+            num2--;
         }
     }
 
@@ -113,6 +135,26 @@ public class SegGrid extends Grid {
         }
         return threshold;
     }
+
+    private boolean determineSatisfaction(Cell cell) {
+        ArrayList<Cell> neighborList = cell.getNeighbors();
+        double numAlike = 0;
+        double agentNeighbors = 0;
+        for(Cell neighbor : neighborList) {
+            if(neighbor.getCurrState() == StateENUM.AGENT1 || neighbor.getCurrState() == StateENUM.AGENT2) {
+                agentNeighbors++;
+            }
+            if(cell.getCurrState() == neighbor.getCurrState()) {
+                numAlike++;
+            }
+        }
+        if(agentNeighbors == 0 || threshold <= numAlike/agentNeighbors) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public double getThreshold () {
         return this.threshold;
     }
