@@ -30,10 +30,11 @@ public class SimulationUI {
     private double FRAMES_PER_SECOND = 1;
     private double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
-    private static final String GAME_OF_LIFE_XML = "TestSave.xml";
+    private static final String GAME_OF_LIFE_XML = "Game_Of_Life.xml";
     private static final String WA_TOR_WORLD_XML = "WaTor.xml";
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
+    private static final String ERROR_TESTING = "XMLErrorTesting.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
 
     protected RadioButton rectangleCellButton;
@@ -225,7 +226,7 @@ public class SimulationUI {
     private void addCellToGrid (String simuName) {
         getCellType();
         if (simuName.equals(myResources.getString("GOL")))
-            myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
+            myGrid = new Grid(ERROR_TESTING, gridSize, cellType);
         if (simuName.equals(myResources.getString("WaTor")))
             myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize, cellType);
         if (simuName.equals(myResources.getString("Fire")))
