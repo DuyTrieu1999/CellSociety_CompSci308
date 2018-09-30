@@ -179,4 +179,14 @@ public class Grid {
         return saveState;
     }
     public String getCellType () { return cellType; }
+    public ArrayList<String> createSaveState() {
+        saveState.clear();
+        for (int i=0; i<this.getRowNum(); i++) {
+            for (int j=0; j<this.getColNum(); j++) {
+                saveState.add(getCell(i, j).getCurrState().toString());
+                System.out.println(getCell(i,j).getCurrState().toString());
+            }
+        }
+        return saveState;
+    }
 }
