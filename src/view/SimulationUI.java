@@ -226,7 +226,7 @@ public class SimulationUI {
     private void addCellToGrid (String simuName) {
         getCellType();
         if (simuName.equals(myResources.getString("GOL")))
-            myGrid = new Grid(ERROR_TESTING, gridSize, cellType);
+            myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
         if (simuName.equals(myResources.getString("WaTor")))
             myGrid = new PredatorPreyGrid(WA_TOR_WORLD_XML, gridSize, cellType);
         if (simuName.equals(myResources.getString("Fire")))

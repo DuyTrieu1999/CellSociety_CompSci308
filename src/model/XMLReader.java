@@ -48,16 +48,28 @@ public class XMLReader {
         }
     }
     protected void addCell (ArrayList<String> state, ArrayList<Integer> counts) {
-        NodeList cells = xmlDocument.getElementsByTagName("cell");
-        for (int i=0; i<cells.getLength(); i++) {
-            Node cellNode = cells.item(i);
-            if (cellNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element cellEl = (Element) cellNode;
-                String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
-                String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
-                state.add(cellState);
-                counts.add(Integer.parseInt(cellNumber));
+        try {
+            NodeList cells = xmlDocument.getElementsByTagName("cell");
+            int totalCells = 0;
+            for (int i=0; i<cells.getLength(); i++) {
+                Node cellNode = cells.item(i);
+                if (cellNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element cellEl = (Element) cellNode;
+                    String cellState = cellEl.getElementsByTagName("cell_state").item(0).getTextContent();
+                    String cellNumber = cellEl.getElementsByTagName("cell_number").item(0).getTextContent();
+                    state.add(cellState);
+                    counts.add(Integer.parseInt(cellNumber));
+                    totalCells += Integer.parseInt(cellNumber);
+                }
             }
+            int size = determineGridSize(0);
+            if(Math.pow(size, 2) > totalCells) {
+                throw new Exception("Wrong number of cells");
+            }
+        } catch (Exception e) {
+            System.out.println("XML file contains incorrect cell counts.");
+            counts.clear();
+            state.clear();
         }
     }
     protected void addParameters (TreeMap<String, Double> paramMap) {

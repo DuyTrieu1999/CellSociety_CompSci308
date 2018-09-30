@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<simulationSSSSSS>
-
-</simulationSSSSSS>
+<simulation>
+    <grid>
+        <size>20</size>
+    </grid>
+    <cell>
+        <cell_state>ALIVE</cell_state>
+        <cell_number>190</cell_number>
+    </cell>
+    <cell>
+        <cell_state>DEAD</cell_state>
+        <cell_number>200</cell_number>
+    </cell>
+</simulation>
