@@ -13,5 +13,9 @@ public enum StateENUM {
     BURNING,
     FISH,
     SHARK,
-    WATER;
+    WATER,
+    WHITESPACE,
+    RED,
+    BLUE,
+    GREEN;
 }

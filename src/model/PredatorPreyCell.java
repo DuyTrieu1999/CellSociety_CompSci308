@@ -16,7 +16,7 @@ import javafx.scene.shape.Rectangle;
  */
 
 public class PredatorPreyCell extends Cell {
-    private StateENUM[] states = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
+    private StateENUM[] waTorWorldCellStates = {StateENUM.FISH, StateENUM.WATER, StateENUM.SHARK};
     private boolean hasFish = false;
     private boolean hasShark = false;
     private String cellType;
@@ -25,6 +25,9 @@ public class PredatorPreyCell extends Cell {
     public PredatorPreyCell(int row, int col, double width, String cellType) {
         super(row, col, width, cellType);
         cellWidth = width;
+        for(int i = 0; i < waTorWorldCellStates.length; i++) {
+            getCellStateEnums().add(waTorWorldCellStates[i]);
+        }
     }
     @Override
     public void updateCell () {
@@ -52,13 +55,6 @@ public class PredatorPreyCell extends Cell {
             default:
                 return Color.BLACK;
         }
-    }
-
-    @Override
-    public void setRandStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
     }
     @Override
     public void setHasFish(boolean value) {

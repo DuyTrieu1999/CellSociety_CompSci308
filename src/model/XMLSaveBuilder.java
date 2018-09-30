@@ -18,6 +18,7 @@ import java.util.TreeMap;
 /**
  * Class to generate a new XML document from the current state of a CA simulation
  * Source code taken from: https://examples.javacodegeeks.com/core-java/xml/parsers/documentbuilderfactory/create-xml-file-in-java-using-dom-parser-example/
+ * @author Austin Kao
  */
 public class XMLSaveBuilder {
     private Document saveDocument;

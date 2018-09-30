@@ -14,13 +14,16 @@ import java.util.Random;
  * @author Austin Kao
  */
 public class FireCell extends Cell {
-    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
+    private StateENUM[] fireCellStates = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
     private double probCatch; //Probability of catching a fire
 
     public FireCell(int row, int col, double width, String cellType) {
         super(row, col, width, cellType);
         hasNeighborFire = false;
+        for(int i = 0; i < fireCellStates.length; i++) {
+            getCellStateEnums().add(fireCellStates[i]);
+        }
     }
 
     @Override
@@ -64,12 +67,5 @@ public class FireCell extends Cell {
             default:
                 return Color.BLACK;
         }
-    }
-
-    @Override
-    public void setRandStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
     }
 }

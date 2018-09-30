@@ -20,14 +20,16 @@ public class SegCell extends Cell{
     private double myThreshold;
     private double numAlike;
     private double agentNeighbors;
-    private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
+    private StateENUM[] segregationCellStates = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
     public SegCell(int row, int col, double width, String cellType) {
         super(row, col, width, cellType);
         satisfied = true;
+        for(int i = 0; i < segregationCellStates.length; i++) {
+            getCellStateEnums().add(segregationCellStates[i]);
+        }
     }
 
-    //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
     @Override
     public boolean isSatisfied() {
         ArrayList<Cell> currNeighbors = this.getNeighbors();
@@ -48,7 +50,7 @@ public class SegCell extends Cell{
         }
         return satisfied;
     }
-    // updateCell() assumes that there are only two types of agents
+
     @Override
     public void updateCell() {
         if(!satisfied) {
@@ -77,13 +79,6 @@ public class SegCell extends Cell{
             default:
                 return null;
         }
-    }
-
-    @Override
-    public void setRandStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
     }
 
     @Override

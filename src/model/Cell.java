@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -16,6 +17,7 @@ public abstract class Cell extends Polygon {
     private ArrayList<Cell> neighbors;
     private static final double ROOT_THREE_OVER_2 = Math.sqrt(3) / 2;
     private String cellType;
+    private ArrayList<StateENUM> cellStateEnums;
 
     public Cell(int row, int col, double width, String cellType) {
         this.cellType = cellType;
@@ -23,6 +25,7 @@ public abstract class Cell extends Polygon {
         this.colPos = col;
         drawShape(row, col, width);
         this.setStroke(Color.BLACK);
+        cellStateEnums = new ArrayList<>();
     }
     public int getRowPos() {
         return rowPos;
@@ -103,7 +106,11 @@ public abstract class Cell extends Polygon {
                 -radius / 2, -ROOT_THREE_OVER_2 * radius,
                 radius / 2, -ROOT_THREE_OVER_2 * radius};
     }
-    public abstract void setRandStartState();
+    public void setRandStartState(){
+        int rand = new Random().nextInt(cellStateEnums.size());
+        this.setCurrState(cellStateEnums.get(rand));
+        this.setFill(getStateColor(this.getCurrState()));
+    }
     public abstract void updateCell ();
     public abstract Color getStateColor(StateENUM state);
     public boolean isSatisfied() {
@@ -114,5 +121,8 @@ public abstract class Cell extends Polygon {
     public void setSatisfaction(boolean value) {}
     public void setProbCatch(double probability) {}
     public void setThreshold(double threshold) {}
+    public ArrayList<StateENUM> getCellStateEnums() {
+        return cellStateEnums;
+    }
 }
 

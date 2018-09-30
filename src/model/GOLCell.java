@@ -20,10 +20,13 @@ import java.util.Random;
  */
 
 public class GOLCell extends Cell {
-    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
+    private StateENUM[] gameOfLifeCellStates = {StateENUM.ALIVE, StateENUM.DEAD};
 
     public GOLCell(int row, int col, double width, String cellType) {
         super(row, col, width, cellType);
+        for(int i = 0; i < gameOfLifeCellStates.length; i++) {
+            getCellStateEnums().add(gameOfLifeCellStates[i]);
+        }
     }
 
     @Override
@@ -55,12 +58,5 @@ public class GOLCell extends Cell {
             default:
                 return null;
         }
-    }
-
-    @Override
-    public void setRandStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
     }
 }
