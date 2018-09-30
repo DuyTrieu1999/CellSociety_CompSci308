@@ -9,6 +9,10 @@ import java.util.*;
 public class Grid {
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String DEFAULT_XML_FILE = "Game_Of_life.xml";
+    private static final String GOL_SIM_STRING = "Game of Life";
+    private static final String FIRE_SIM_STRING = "Spreading of Fire";
+    private static final String WATOR_SIM_STRING = "Wa-Tor World model";
+    private static final String SEGREGATION_SIM_STRING = "Schelling's Model of Segregation";
 
     private XMLReader reader;
     private Cell[][] grid;
@@ -91,52 +95,97 @@ public class Grid {
 
     public void fillGrid() {
         if(saveState.size() > 0) {
-            for (int i = 0; i < this.getRowNum(); i++) {
-                for (int j = 0; j < this.getColNum(); j++) {
-                    int index = getRowNum()*i+j;
-                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
-                    grid[i][j].setStartState(StateENUM.valueOf(saveState.get(index)));
-                }
-            }
+            setUpSavedGrid(simType);
         } else if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size()) {
-            int total = 0;
-            TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
-            for (int k = 0; k < counts.size(); k++) {
-                cellTypeCount.put(states.get(k), counts.get(k));
-                total += counts.get(k);
+            setUpGridFromXMLConfig(simType);
+        } else {
+            System.out.println("Switching to random cell setup");
+            setUpRandomGrid(simType);
+        }
+    }
+
+    public void setUpSavedGrid(String gridType) {
+        for (int i = 0; i < this.getRowNum(); i++) {
+            for (int j = 0; j < this.getColNum(); j++) {
+                int index = getRowNum()*i+j;
+                if (gridType.equals(GOL_SIM_STRING)) {
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                if (gridType.equals(WATOR_SIM_STRING)) {
+                    grid[i][j] = new PredatorPreyCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                if (gridType.equals(FIRE_SIM_STRING)) {
+                    grid[i][j] = new FireCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                if (gridType.equals(SEGREGATION_SIM_STRING)) {
+                    grid[i][j] = new SegCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                grid[i][j].setStartState(StateENUM.valueOf(saveState.get(index)));
             }
-            for (int i = 0; i < this.getRowNum(); i++) {
-                for (int j = 0; j < this.getColNum(); j++) {
-                    boolean createdCell = false;
-                    while(!createdCell) {
-                        int rn = new Random().nextInt(total);
-                        for (String s : cellTypeCount.keySet()) {
-                            if(rn > cellTypeCount.get(s)) {
-                                int value = cellTypeCount.get(s);
-                                rn = rn - value;
-                            } else {
-                                if(cellTypeCount.get(s) > 0) {
-                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), cellType);
-                                    int newCount = cellTypeCount.get(s) - 1;
-                                    StateENUM state = StateENUM.valueOf(s);
-                                    grid[i][j].setStartState(state);
-                                    cellTypeCount.replace(s, newCount);
-                                    createdCell = true;
-                                    break;
+        }
+    }
+
+    public void setUpGridFromXMLConfig(String gridType) {
+        int total = 0;
+        TreeMap<String, Integer> cellTypeCount = new TreeMap<>();
+        for (int k = 0; k < counts.size(); k++) {
+            cellTypeCount.put(states.get(k), counts.get(k));
+            total += counts.get(k);
+        }
+        for (int i = 0; i < this.getRowNum(); i++) {
+            for (int j = 0; j < this.getColNum(); j++) {
+                boolean createdCell = false;
+                while(!createdCell) {
+                    int rn = new Random().nextInt(total);
+                    for (String s : cellTypeCount.keySet()) {
+                        if(rn > cellTypeCount.get(s)) {
+                            int value = cellTypeCount.get(s);
+                            rn = rn - value;
+                        } else {
+                            if(cellTypeCount.get(s) > 0) {
+                                if (gridType.equals(GOL_SIM_STRING)) {
+                                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
                                 }
+                                if (gridType.equals(WATOR_SIM_STRING)) {
+                                    grid[i][j] = new PredatorPreyCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                                }
+                                if (gridType.equals(FIRE_SIM_STRING)) {
+                                    grid[i][j] = new FireCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                                }
+                                if (gridType.equals(SEGREGATION_SIM_STRING)) {
+                                    grid[i][j] = new SegCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                                }
+                                int newCount = cellTypeCount.get(s) - 1;
+                                StateENUM state = StateENUM.valueOf(s);
+                                grid[i][j].setStartState(state);
+                                cellTypeCount.replace(s, newCount);
+                                createdCell = true;
+                                break;
                             }
                         }
                     }
-                    total--;
                 }
+                total--;
             }
-        } else {
-            System.out.println("Switching to random cell setup");
-            for (int i = 0; i < this.getRowNum(); i++) {
-                for (int j = 0; j < this.getColNum(); j++) {
-                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), cellType);
-                    grid[i][j].setRandStartState();
+        }
+    }
+
+    public void setUpRandomGrid(String gridType) {
+        for (int i = 0; i < this.getRowNum(); i++) {
+            for (int j = 0; j < this.getColNum(); j++) {
+                if (gridType.equals(GOL_SIM_STRING)) {
+                    grid[i][j] = new GOLCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
                 }
+                if (gridType.equals(WATOR_SIM_STRING)) {
+                    grid[i][j] = new PredatorPreyCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                if (gridType.equals(FIRE_SIM_STRING)) {
+                    grid[i][j] = new FireCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                if (gridType.equals(SEGREGATION_SIM_STRING)) {
+                    grid[i][j] = new SegCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
+                grid[i][j].setRandStartState();
             }
         }
     }
@@ -200,5 +249,8 @@ public class Grid {
     }
     public String getSimType() {
         return simType;
+    }
+    public void setSize(int newSize) {
+        size = newSize;
     }
 }

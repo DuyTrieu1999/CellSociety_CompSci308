@@ -304,12 +304,12 @@ public class SimulationUI {
         if (file != null) {
             try {
                 myGrid.changeConfig(file.getName());
+                gridSize = myGrid.getSize();
+                simulationName = myGrid.getSimType();
+                setSimulation(simulationName, file.getName());
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
         }
-        gridSize = myGrid.getSize();
-        simulationName = myGrid.getSimType();
-        setSimulation(simulationName, file.getName());
     }
 }
