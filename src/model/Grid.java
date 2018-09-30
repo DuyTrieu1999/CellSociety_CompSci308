@@ -26,6 +26,7 @@ public class Grid {
     private ArrayList<String> saveState; //Consider turning into a hashMap
     private String cellType;
     private String simType;
+    private String simDescription;
 
     public Grid (String filename, int size, String cellType) {
         this.cellType = cellType;
@@ -49,6 +50,7 @@ public class Grid {
         saveState = new ArrayList<>();
         reader.loadDoc(fileName, defaultFile);
         simType = reader.readSimType();
+        simDescription = reader.readDescription();
         reader.addParameters(parameterValues);
         reader.addCell(states, counts);
         reader.loadSave(saveState);
@@ -96,11 +98,17 @@ public class Grid {
     public void fillGrid() {
         if(saveState.size() > 0) {
             setUpSavedGrid(simType);
-        } else if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size()) {
-            setUpGridFromXMLConfig(simType);
         } else {
-            System.out.println("Switching to random cell setup");
-            setUpRandomGrid(simType);
+            int cellCount = 0;
+            for(int i = 0; i < counts.size(); i++) {
+                cellCount += counts.get(i);
+            }
+            if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size() && Math.pow(size, 2) <= cellCount) {
+                setUpGridFromXMLConfig(simType);
+            } else {
+                System.out.println("Switching to random cell setup");
+                setUpRandomGrid(simType);
+            }
         }
     }
 

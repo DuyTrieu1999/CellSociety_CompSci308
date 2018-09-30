@@ -83,18 +83,22 @@ public class XMLReader {
         }
     }
     protected int determineGridSize (int size) {
-        NodeList gridSize = xmlDocument.getElementsByTagName("size");
-        for (int i = 0; i < gridSize.getLength(); i++) {
-            Node xmlNode = gridSize.item(i);
-            Element xmlElement = (Element) xmlNode;
-            if (xmlElement.getTagName().equals("size")) {
-                String sizeString = xmlElement.getTextContent();
-                size = Integer.parseInt(sizeString);
-                return size;
+        try {
+            NodeList gridSize = xmlDocument.getElementsByTagName("size");
+            for (int i = 0; i < gridSize.getLength(); i++) {
+                Node xmlNode = gridSize.item(i);
+                Element xmlElement = (Element) xmlNode;
+                if (xmlElement.getTagName().equals("size")) {
+                    String sizeString = xmlElement.getTextContent();
+                    size = Integer.parseInt(sizeString);
+                    return size;
+                }
             }
+            return size;
+        } catch (Exception e) {
+            System.out.println("Could not determine grid size from file. Will keep original value.");
+            return size;
         }
-        System.out.println("Could not determine grid size from file. Will keep original value.");
-        return size;
     }
     protected void loadSave(ArrayList<String> save) {
         try {
@@ -119,12 +123,32 @@ public class XMLReader {
             }
         } catch (Exception e) {
             save.clear();
-            e.printStackTrace();
+            System.out.println("Invalid save state. Cannot load file.");
         }
     }
     protected String readSimType() {
         Element simulation = xmlDocument.getDocumentElement();
         Attr nameOfSim = simulation.getAttributeNode("name");
         return nameOfSim.getValue();
+    }
+    protected String readDescription() {
+        try {
+            Element simulation = xmlDocument.getDocumentElement();
+            NodeList descriptionNodeList = simulation.getElementsByTagName("description");
+            if(descriptionNodeList == null) {
+                throw new Exception("No Description exists.");
+            }
+            for(int i = 0; i < descriptionNodeList.getLength(); i++) {
+                Node descriptionNode = descriptionNodeList.item(i);
+                if(descriptionNode instanceof Element) {
+                    Element descriptionElement = (Element) descriptionNode;
+                    String description = descriptionElement.getTextContent();
+                    return description;
+                }
+            }
+            return "This is the default description. Hello World!";
+        } catch (Exception e) {
+            return "This is the default description. Hello World!";
+        }
     }
 }

@@ -27,7 +27,6 @@ public class SegGrid extends Grid {
     public SegGrid (String filename, int size, String cellType) {
         super(filename, size, cellType);
         threshold = determineThreshold();
-        System.out.println(threshold);
         if(threshold <= 0) {
             threshold = DEFAULT_THRESHOLD;
         }

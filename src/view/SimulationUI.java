@@ -96,6 +96,7 @@ public class SimulationUI {
     public void step (double elapsedTime) {
         myGrid.updateGrid();
         gridSize = (int)sizeSlider.getVal();
+        myGrid.setSize(gridSize);
         TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
         simulationGraph.updateGraph(simuMap);
     }
@@ -193,6 +194,8 @@ public class SimulationUI {
     private void setSimulation (String simuName, String filename) {
         myRoot.getChildren().remove(myGridPane);
         myRoot.getChildren().remove(simulationGraph);
+        gridSize = (int) sizeSlider.getVal();
+        myGrid.setSize(gridSize);
         addGridPane();
         addCellToGrid(simuName, filename);
         TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();

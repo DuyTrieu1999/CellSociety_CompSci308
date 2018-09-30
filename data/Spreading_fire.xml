@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Spreading of Fire" author="team8">
+    <description>This simulation tries to capture how a wildfire spreads in a particular ecosystem.</description>
     <parameter>
         <variable_name>probabilityOfCatchingFire</variable_name>
         <variable_value>0.75</variable_value>
