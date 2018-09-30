@@ -7,10 +7,14 @@ import java.util.*;
  * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
-    private final int DEFAULT_SHARK_REPRODUCTION_TIME = 6;
-    private final int DEFAULT_MAX_SHARK_ENERGY = 2;
-    private final int DEFAULT_ENERGY_FROM_EATING_FISH = 2;
-    private final int DEFAULT_FISH_REPRODUCTION_TIME = 2;
+    private final double DEFAULT_SHARK_REPRODUCTION_TIME = 6;
+    private final double DEFAULT_MAX_SHARK_ENERGY = 2;
+    private final double DEFAULT_ENERGY_FROM_EATING_FISH = 2;
+    private final double DEFAULT_FISH_REPRODUCTION_TIME = 2;
+    private double fishReproductionTime;
+    private double sharkReproductionTime;
+    private double maxSharkEnergy;
+    private double energyGainedFromFish;
 
     private HashMap<Integer, Fish> livingFish;
     private HashMap<Integer, Shark> livingSharks;
@@ -19,13 +23,13 @@ public class PredatorPreyGrid extends Grid{
         super(filename, size, cellType);
         livingFish = new HashMap<>();
         livingSharks = new HashMap<>();
-
+        determineParameters();
         for (int i = 0; i < this.getRowNum(); i++) {
             for (int j = 0; j < this.getColNum(); j++) {
                 if (getGrid()[i][j].getCurrState() == StateENUM.FISH) {
-                    livingFish.put(hashCode(i, j), new Fish());
+                    livingFish.put(hashCode(i, j), new Fish(fishReproductionTime));
                 } else if (getGrid()[i][j].getCurrState() == StateENUM.SHARK) {
-                    livingSharks.put(hashCode(i, j), new Shark());
+                    livingSharks.put(hashCode(i, j), new Shark(maxSharkEnergy, sharkReproductionTime));
                 }
             }
         }
@@ -142,15 +146,12 @@ public class PredatorPreyGrid extends Grid{
      * At each chronon, if a fish survives long enough, it will reproduce by leaving a new fish in the cell it leaves behind.
      */
     class Fish {
-        private int reproductionTime;
+        private double reproductionTime;
         private boolean reproduced;
 
-        public Fish(int reproduction) {
+        public Fish(double reproduction) {
             reproductionTime = reproduction;
             reproduced = false;
-        }
-        public Fish() {
-            this(DEFAULT_FISH_REPRODUCTION_TIME);
         }
 
         public void updateUnmovingFish() {
@@ -162,8 +163,8 @@ public class PredatorPreyGrid extends Grid{
         public void updateMovingFish(int currentHashCode, int newHashCode, HashMap<Integer, Fish> fishMap) {
             fishMap.remove(currentHashCode);
             if(reproductionTime <= 0) {
-                reproductionTime = DEFAULT_FISH_REPRODUCTION_TIME;
-                fishMap.put(currentHashCode, new Fish());
+                reproductionTime = fishReproductionTime;
+                fishMap.put(currentHashCode, new Fish(fishReproductionTime));
                 reproduced = true;
             } else {
                 reproductionTime--;
@@ -182,14 +183,12 @@ public class PredatorPreyGrid extends Grid{
      * They also have a reproductionTime parameter which represents the number of chronons they take to reproduce.
      */
     class Shark {
-        private int reproductionTime;
-        private int sharkEnergy;
-        private int maxSharkEnergy;
+        private double reproductionTime;
+        private double sharkEnergy;
+        private double maxSharkEnergy;
         private boolean reproduced;
-        public Shark() {
-            this(DEFAULT_MAX_SHARK_ENERGY, DEFAULT_SHARK_REPRODUCTION_TIME);
-        }
-        public Shark(int energy, int reproduction) {
+
+        public Shark(double energy, double reproduction) {
             sharkEnergy = energy;
             maxSharkEnergy = energy;
             reproductionTime = reproduction;
@@ -211,7 +210,7 @@ public class PredatorPreyGrid extends Grid{
             sharkMap.remove(currentHashCode);
             if(fishMap.containsKey(newHashCode)) {
                 fishMap.remove(newHashCode);
-                sharkEnergy += DEFAULT_ENERGY_FROM_EATING_FISH;
+                sharkEnergy += energyGainedFromFish;
                 if(sharkEnergy > maxSharkEnergy) {
                     sharkEnergy = maxSharkEnergy;
                 }
@@ -231,8 +230,8 @@ public class PredatorPreyGrid extends Grid{
 
         private void reproduceIfPossible(int currentHashCode, HashMap<Integer, Shark> sharkMap) {
             if(reproductionTime <= 0) {
-                reproductionTime = DEFAULT_SHARK_REPRODUCTION_TIME;
-                sharkMap.put(currentHashCode, new Shark());
+                reproductionTime = sharkReproductionTime;
+                sharkMap.put(currentHashCode, new Shark(maxSharkEnergy, sharkReproductionTime));
                 reproduced = true;
             } else {
                 reproductionTime--;
@@ -325,6 +324,31 @@ public class PredatorPreyGrid extends Grid{
                     getGrid()[i][j].setRandStartState();
                 }
             }
+        }
+    }
+
+    private void determineParameters() {
+        if(getParameterValues().size() > 0) {
+            for(String s : getParameterValues().keySet()) {
+                if(s.equals("SharkReproductionCycle")) {
+                    sharkReproductionTime = getParameterValues().get(s);
+                } else if (s.equals("EnergyFromEatingFish")) {
+                    energyGainedFromFish = getParameterValues().get(s);
+                } else if (s.equals("FishReproductionCycle")) {
+                    fishReproductionTime = getParameterValues().get(s);
+                } else if (s.equals("SharkEnergy")) {
+                    maxSharkEnergy = getParameterValues().get(s);
+                }
+            }
+        }
+        if(fishReproductionTime <= 0) {
+            fishReproductionTime = DEFAULT_FISH_REPRODUCTION_TIME;
+        } else if (sharkReproductionTime <= 0) {
+            sharkReproductionTime = DEFAULT_SHARK_REPRODUCTION_TIME;
+        } else if (energyGainedFromFish <= 0) {
+            energyGainedFromFish = DEFAULT_ENERGY_FROM_EATING_FISH;
+        } else if (maxSharkEnergy <= 0) {
+            maxSharkEnergy = DEFAULT_MAX_SHARK_ENERGY;
         }
     }
 }
