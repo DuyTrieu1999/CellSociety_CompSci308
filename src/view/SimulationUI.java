@@ -35,6 +35,7 @@ public class SimulationUI {
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
     private static final String ERROR_TESTING = "XMLErrorTesting.xml";
+    private static final String ROCK_PAPER_SCISSORS_XML = "RockPaperScissors.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String RESOURCE_PATH = "data";
     private static final String DEFAULT_FILE_NAME = "";
@@ -181,6 +182,7 @@ public class SimulationUI {
         cb.getItems().add(myResources.getString("WaTor"));
         cb.getItems().add(myResources.getString("Fire"));
         cb.getItems().add(myResources.getString("Segg"));
+        cb.getItems().add(myResources.getString("RPS"));
         cb.setValue(myResources.getString("GOL"));
         cb.setOnAction(e -> getChoice(cb));
         return cb;
@@ -271,6 +273,13 @@ public class SimulationUI {
                 myGrid = new SegGrid(SCHELLING_SEGREGATION_XML, gridSize, cellType);
             } else {
                 myGrid = new SegGrid(filename, gridSize, cellType);
+            }
+        }
+        if (simuName.equals(myResources.getString("RPS"))) {
+            if(filename.equals(DEFAULT_FILE_NAME)) {
+                myGrid = new RockPaperScissorsGrid(ROCK_PAPER_SCISSORS_XML, gridSize, cellType);
+            } else {
+                myGrid = new RockPaperScissorsGrid(filename, gridSize, cellType);
             }
         }
         for (int i=0; i<myGrid.getRowNum();i++) {

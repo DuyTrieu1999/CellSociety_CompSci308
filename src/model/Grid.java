@@ -13,6 +13,7 @@ public class Grid {
     private static final String FIRE_SIM_STRING = "Spreading of Fire";
     private static final String WATOR_SIM_STRING = "Wa-Tor World model";
     private static final String SEGREGATION_SIM_STRING = "Schelling's Model of Segregation";
+    private static final String RPS_SIM_STRING = "Rock Paper Scissors";
 
     private XMLReader reader;
     private Cell[][] grid;
@@ -31,11 +32,11 @@ public class Grid {
     public Grid (String filename, int size, String cellType) {
         this.cellType = cellType;
         reader = new XMLReader();
-        this.size = size;
-        grid = new Cell[size][size];
         configFileName = filename;
         defaultFileName = DEFAULT_XML_FILE;
         loadConfig(configFileName, defaultFileName);
+        size = reader.determineGridSize();
+        grid = new Cell[size][size];
         fillGrid();
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
@@ -165,6 +166,9 @@ public class Grid {
                                 if (gridType.equals(SEGREGATION_SIM_STRING)) {
                                     grid[i][j] = new SegCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
                                 }
+                                if (gridType.equals(RPS_SIM_STRING)) {
+                                    grid[i][j] = new RockPaperScissorsCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                                }
                                 int newCount = cellTypeCount.get(s) - 1;
                                 StateENUM state = StateENUM.valueOf(s);
                                 grid[i][j].setStartState(state);
@@ -195,7 +199,9 @@ public class Grid {
                 if (gridType.equals(SEGREGATION_SIM_STRING)) {
                     grid[i][j] = new SegCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
                 }
-
+                if (gridType.equals(RPS_SIM_STRING)) {
+                    grid[i][j] = new RockPaperScissorsCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
+                }
                 grid[i][j].setRandStartState();
             }
         }

@@ -27,9 +27,7 @@ public class XMLReader {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbf.newDocumentBuilder();
-            System.out.println("All fine");
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
-            System.out.println("Really fine");
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
             if(!xmlDocument.getDocumentElement().getTagName().equals("simulation")) {
@@ -60,7 +58,7 @@ public class XMLReader {
                     totalCells += Integer.parseInt(cellNumber);
                 }
             }
-            int size = determineGridSize(0);
+            int size = determineGridSize();
             if( Math.pow(size, 2) > totalCells && counts.size() > 0) {
                 throw new Exception("Wrong number of cells");
             }
@@ -91,7 +89,7 @@ public class XMLReader {
         }
 
     }
-    protected int determineGridSize (int size) {
+    protected int determineGridSize() {
         try {
             NodeList gridSize = xmlDocument.getElementsByTagName("size");
             for (int i = 0; i < gridSize.getLength(); i++) {
@@ -104,15 +102,15 @@ public class XMLReader {
                     }
                 }
             }
-            return size;
+            return 20;
         } catch (Exception e) {
             System.out.println("Could not determine grid size from file. Will keep original value.");
-            return size;
+            return 20;
         }
     }
     protected void loadSave(ArrayList<String> save) {
         try {
-            int size = determineGridSize(0);
+            int size = determineGridSize();
             NodeList xmlSave = xmlDocument.getElementsByTagName("save");
             for (int i = 0; i < xmlSave.getLength(); i++) {
                 Node xmlNode = xmlSave.item(i);

@@ -13,7 +13,11 @@ public enum States {
     BURNING,
     FISH,
     SHARK,
-    WATER;
+    WATER,
+    WHITESPACE,
+    RED,
+    BLUE,
+    GREEN;
 
     public static Color stateColor(States state) {
         switch(state) {
