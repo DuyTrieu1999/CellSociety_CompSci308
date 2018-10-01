@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class Grid {
     private static final double MAX_GRID_PANE_SIZE = 360;
-    private static final String DEFAULT_XML_FILE = "Game_Of_life.xml";
+    private static final String DEFAULT_XML_FILE = "Game_Of_Life.xml";
     private static final String GOL_SIM_STRING = "Game of Life";
     private static final String FIRE_SIM_STRING = "Spreading of Fire";
     private static final String WATOR_SIM_STRING = "Wa-Tor World model";
@@ -51,9 +51,11 @@ public class Grid {
         reader.loadDoc(fileName, defaultFile);
         simType = reader.readSimType();
         simDescription = reader.readDescription();
-        reader.addParameters(parameterValues);
-        reader.addCell(states, counts);
-        reader.loadSave(saveState);
+        if(reader.canRead()) {
+            reader.addParameters(parameterValues);
+            reader.addCell(states, counts);
+            reader.loadSave(saveState);
+        }
     }
     public void changeConfig (String configName) {
         configFileName = configName;
@@ -193,6 +195,7 @@ public class Grid {
                 if (gridType.equals(SEGREGATION_SIM_STRING)) {
                     grid[i][j] = new SegCell(i, j, MAX_GRID_PANE_SIZE / this.getColNum(), getCellType());
                 }
+
                 grid[i][j].setRandStartState();
             }
         }

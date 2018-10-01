@@ -286,7 +286,6 @@ public class SimulationUI {
         File defaultFile = new File(RESOURCE_PATH);
         fileChooser.setInitialDirectory(defaultFile);
         File file = fileChooser.showSaveDialog(new Stage());
-        System.out.println(myGrid.getSimType());
         if (file != null) {
             try {
                 xmlSave.createSave(file.getPath(), myGrid.getSimType(), gridSize, myGrid.getParameterValues(), myGrid.createSaveState());

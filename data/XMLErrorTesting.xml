@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <simulation>
+    <description></description>
     <grid>
         <size>20</size>
     </grid>

@@ -20,28 +20,26 @@ public class XMLReader {
      */
 
     private Document xmlDocument;
+    private boolean readable;
     protected void loadDoc (String fileName, String defaultFile) {
+        readable = true;
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbf.newDocumentBuilder();
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
-            if(!xmlDocument.getDocumentElement().getTagName().equals("simulation") && !fileName.equals(defaultFile)) {
+            if(!xmlDocument.getDocumentElement().getTagName().equals("simulation")) {
                 throw new IOException("Wrong type of configuration file.");
             }
         }
-        catch (ParserConfigurationException | SAXException e) {
+        catch (ParserConfigurationException | SAXException | IOException e) {
             System.out.println("Configuration file not found. Using default file instead.");
             if (!fileName.equals(defaultFile)) {
                 loadDoc(defaultFile, defaultFile);
+            } else {
+                readable = false;
             }
-            e.printStackTrace();
-        } catch (IOException f) {
-            if (!fileName.equals(defaultFile)) {
-                loadDoc(defaultFile, defaultFile);
-            }
-            f.printStackTrace();
         }
     }
     protected void addCell (ArrayList<String> state, ArrayList<Integer> counts) {
@@ -70,28 +68,37 @@ public class XMLReader {
         }
     }
     protected void addParameters (TreeMap<String, Double> paramMap) {
-        NodeList parameterList = xmlDocument.getElementsByTagName("parameter");
-        for(int i = 0; i < parameterList.getLength(); i++) {
-            Node xmlNode = parameterList.item(i);
-            Element parameter = (Element) xmlNode;
-            String paramName = parameter.getElementsByTagName("variable_name").item(0).getTextContent();
-            String paramValString = parameter.getElementsByTagName("variable_value").item(0).getTextContent();
-            double paramVal = Double.parseDouble(paramValString);
-            if(paramName != null && !(paramVal < 0)) {
-                paramMap.put(paramName, paramVal);
+        try {
+            NodeList parameterList = xmlDocument.getElementsByTagName("parameter");
+            for(int i = 0; i < parameterList.getLength(); i++) {
+                Node xmlNode = parameterList.item(i);
+                if(xmlNode instanceof  Element) {
+                    Element parameter = (Element) xmlNode;
+                    String paramName = parameter.getElementsByTagName("variable_name").item(0).getTextContent();
+                    String paramValString = parameter.getElementsByTagName("variable_value").item(0).getTextContent();
+                    double paramVal = Double.parseDouble(paramValString);
+                    if(paramName != null && !(paramVal < 0)) {
+                        paramMap.put(paramName, paramVal);
+                    }
+                }
             }
+        } catch (Exception e) {
+            System.out.println("An error occurred");
+            paramMap.clear();
         }
+
     }
     protected int determineGridSize (int size) {
         try {
             NodeList gridSize = xmlDocument.getElementsByTagName("size");
             for (int i = 0; i < gridSize.getLength(); i++) {
                 Node xmlNode = gridSize.item(i);
-                Element xmlElement = (Element) xmlNode;
-                if (xmlElement.getTagName().equals("size")) {
-                    String sizeString = xmlElement.getTextContent();
-                    size = Integer.parseInt(sizeString);
-                    return size;
+                if(xmlNode instanceof Element) {
+                    Element xmlElement = (Element) xmlNode;
+                    if (xmlElement.getTagName().equals("size")) {
+                        String sizeString = xmlElement.getTextContent();
+                        return Integer.parseInt(sizeString);
+                    }
                 }
             }
             return size;
@@ -127,9 +134,17 @@ public class XMLReader {
         }
     }
     protected String readSimType() {
-        Element simulation = xmlDocument.getDocumentElement();
-        Attr nameOfSim = simulation.getAttributeNode("name");
-        return nameOfSim.getValue();
+        try {
+            Element simulation = xmlDocument.getDocumentElement();
+            Attr nameOfSim = simulation.getAttributeNode("name");
+            if(nameOfSim == null) {
+                throw new Exception("No simulation type exists.");
+            }
+            return nameOfSim.getValue();
+        } catch (Exception e) {
+            System.out.println("Error was thrown, switching to default simulation.");
+            return "Game of Life";
+        }
     }
     protected String readDescription() {
         try {
@@ -142,13 +157,17 @@ public class XMLReader {
                 Node descriptionNode = descriptionNodeList.item(i);
                 if(descriptionNode instanceof Element) {
                     Element descriptionElement = (Element) descriptionNode;
-                    String description = descriptionElement.getTextContent();
-                    return description;
+                    if(descriptionElement.getTagName().equals("description")) {
+                        return descriptionElement.getTextContent();
+                    }
                 }
             }
             return "This is the default description. Hello World!";
         } catch (Exception e) {
             return "This is the default description. Hello World!";
         }
+    }
+    protected boolean canRead() {
+        return readable;
     }
 }
