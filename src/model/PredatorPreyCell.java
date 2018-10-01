@@ -1,10 +1,8 @@
 package model;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 /**
  * This class implements the Wa-Tor World of predator-prey relationships model.
