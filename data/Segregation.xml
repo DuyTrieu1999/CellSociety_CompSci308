@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Schelling's Model of Segregation" author="team8">
+    <description>This simulation attempts to realize how agents will naturally seek to segregate.</description>
     <parameter>
         <variable_name>thresholdToCauseSegregation</variable_name>
         <variable_value>0.3</variable_value>
