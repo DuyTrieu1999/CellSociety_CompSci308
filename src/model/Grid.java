@@ -263,4 +263,5 @@ public class Grid {
     public void setSize(int newSize) {
         size = newSize;
     }
+    public String getSimDescription() { return simDescription; }
 }

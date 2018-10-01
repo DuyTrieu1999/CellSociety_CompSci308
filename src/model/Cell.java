@@ -123,5 +123,6 @@ public abstract class Cell extends Polygon {
     public ArrayList<StateENUM> getCellStateEnums() {
         return cellStateEnums;
     }
+    public String getCellType() {return cellType;}
 }
 
