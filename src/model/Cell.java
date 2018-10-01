@@ -30,6 +30,7 @@ public abstract class Cell extends Polygon {
     public int getColPos() {
         return colPos;
     }
+    public String getCellType() {return cellType;}
     public ArrayList<Cell> getNeighbors () {
         return neighbors;
     }
