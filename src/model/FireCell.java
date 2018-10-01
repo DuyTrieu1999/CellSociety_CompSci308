@@ -16,7 +16,6 @@ import java.util.Random;
 public class FireCell extends Cell {
     private StateENUM[] fireCellStates = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
-    private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
     private double probCatch;
 
     public FireCell(int row, int col, double width, String cellType) {

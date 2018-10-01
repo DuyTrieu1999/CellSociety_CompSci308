@@ -25,13 +25,11 @@ public class XMLReader {
     protected void loadDoc (String fileName, String defaultFile) {
         readable = true;
         try {
-            File file = new File(fileName);
-            if(!file.exists()) {
-                throw new FileNotFoundException("File does not exist.");
-            }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbf.newDocumentBuilder();
+            System.out.println("All fine");
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
+            System.out.println("Really fine");
             doc.getDocumentElement().normalize();
             xmlDocument = doc;
             if(!xmlDocument.getDocumentElement().getTagName().equals("simulation")) {
