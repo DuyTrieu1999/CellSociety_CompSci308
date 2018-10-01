@@ -229,9 +229,6 @@ public class Grid {
     }
     public Cell[][] getGrid() {return this.grid;}
 
-    public boolean outOfBounds (int row, int col) {
-        return (row < 0 || row > getRowNum() || col < 0 || col > getColNum());
-    }
     protected double getMaxGridPaneSize() {
         return MAX_GRID_PANE_SIZE;
     }
