@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding ="utf-8"?>
 <simulation name="Game of Life" author="team8">
     <!--This XML file sets up the initial configuration for John Horton Conway's Game of Life. Example format is shown below.-->
+    <description>Conway's Game of Life is meant to act as the initial testing ground for basic Cellular Automata simulations in this project.</description>
     <grid>
         <size>20</size>
     </grid>
@@ -11,5 +12,13 @@
     <cell>
         <cell_state>DEAD</cell_state>
         <cell_number>200</cell_number>
+    </cell>
+    <cell>
+        <cell_state>YELLOW</cell_state>
+        <cell_number>100</cell_number>
+    </cell>
+    <cell>
+        <cell_state>RED</cell_state>
+        <cell_number>100</cell_number>
     </cell>
 </simulation>
