@@ -28,7 +28,7 @@ public class SliderUI extends VBox {
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
         slider.setSnapToTicks(true);
-        slider.setPadding(new Insets(0, 10, 0, 10));
+        slider.setPadding(new Insets(0, SceneENUM.HBOX_GRID.getVal(), 0, SceneENUM.HBOX_GRID.getVal()));
 
         nameLabel = new Label(name + ": ");
         valueText = new TextField(String.format("%.2f", slider.getValue()));

@@ -6,9 +6,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -19,6 +16,7 @@ public class XMLReader {
      * Source code copied from https://www.tutorialspoint.com/java_xml/java_dom_parse_document.htm
      * @author Austin Kao, Duy Trieu
      */
+    private static final int DEFAULT_GRID_SIZE = 20;
 
     private Document xmlDocument;
     private boolean readable;
@@ -59,7 +57,7 @@ public class XMLReader {
                 }
             }
             int size = determineGridSize();
-            if( Math.pow(size, 2) > totalCells && counts.size() > 0) {
+            if( Math.pow(size, 2) > totalCells && !counts.isEmpty()) {
                 throw new Exception("Wrong number of cells");
             }
         } catch (Exception e) {
@@ -102,10 +100,10 @@ public class XMLReader {
                     }
                 }
             }
-            return 20;
+            return DEFAULT_GRID_SIZE;
         } catch (Exception e) {
             System.out.println("Could not determine grid size from file. Will keep original value.");
-            return 20;
+            return DEFAULT_GRID_SIZE;
         }
     }
     protected void loadSave(ArrayList<String> save) {

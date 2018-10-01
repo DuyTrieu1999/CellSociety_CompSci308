@@ -22,7 +22,6 @@ import java.util.TreeMap;
  * @author Austin Kao
  */
 public class XMLSaveBuilder {
-    private Document saveDocument;
 
     public void createSave(String filePath, String sim, int gridSize, TreeMap<String, Double> parameterValues, ArrayList<String> saveState) {
         try {
@@ -31,7 +30,7 @@ public class XMLSaveBuilder {
             }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbf.newDocumentBuilder();
-            saveDocument = dBuilder.newDocument();
+            Document saveDocument = dBuilder.newDocument();
             Element root = saveDocument.createElement("simulation");
             saveDocument.appendChild(root);
             Attr authorAttribute = saveDocument.createAttribute("author");

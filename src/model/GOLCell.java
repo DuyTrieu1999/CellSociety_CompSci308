@@ -20,7 +20,10 @@ import java.util.Random;
  */
 
 public class GOLCell extends Cell {
-
+    private static final int TWO = 2;
+    private static final int THREE =3;
+    private static final int FOUR = 4;
+    private static final int SIX = 6;
     private StateENUM[] gameOfLifeCellStates = {StateENUM.ALIVE, StateENUM.DEAD};
     private StateENUM[] hexStates = {StateENUM.YELLOW, StateENUM.ALIVE, StateENUM.RED};
 
@@ -49,22 +52,22 @@ public class GOLCell extends Cell {
             }
         }
         if(this.getCellType().equals("Rectangle") || this.getCellType().equals("Triangle")) {
-            if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2 || numAlive > 3)) {
+            if (this.getCurrState() == StateENUM.ALIVE && (numAlive < TWO || numAlive > THREE)) {
                 this.setNextState(StateENUM.DEAD);
-            } else if (this.getCurrState() == StateENUM.DEAD && numAlive == 3) {
+            } else if (this.getCurrState() == StateENUM.DEAD && numAlive == THREE) {
                 this.setNextState(StateENUM.ALIVE);
             } else {
                 this.setNextState(this.getCurrState());
             }
             this.setFill(this.getStateColor(this.getNextState()));
         }else if(this.getCellType().equals("Hexagon")) {
-            if (this.getCurrState() == StateENUM.DEAD && numAlive == 4) {
+            if (this.getCurrState() == StateENUM.DEAD && numAlive == FOUR) {
                 this.setNextState(StateENUM.YELLOW);
-            } else if (this.getCurrState() == StateENUM.YELLOW && (numAlive == 6 || numAlive <= 4)) {
+            } else if (this.getCurrState() == StateENUM.YELLOW && (numAlive == SIX || numAlive <= FOUR)) {
                 this.setNextState(StateENUM.RED);
-            } else if (this.getCurrState() == StateENUM.RED && (numAlive == 4)) {
+            } else if (this.getCurrState() == StateENUM.RED && (numAlive == FOUR)) {
                 this.setNextState(StateENUM.YELLOW);
-            } else if (this.getCurrState() == StateENUM.RED && (numAlive == 1 || numAlive == 2)) {
+            } else if (this.getCurrState() == StateENUM.RED && (numAlive == 1 || numAlive == TWO)) {
                 this.setNextState(this.getCurrState());
             } else {
                 this.setNextState(StateENUM.DEAD);

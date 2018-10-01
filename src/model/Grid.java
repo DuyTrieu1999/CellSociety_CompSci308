@@ -1,6 +1,9 @@
 package model;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * The Grid class is the super class for all other simulation grids. The Grid class acts as the grid for the Game of Life simulation by default.
@@ -10,7 +13,6 @@ public class Grid {
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String DEFAULT_XML_FILE = "Game_Of_Life.xml";
     private static final String GOL_SIM_STRING = "Game of Life";
-    private static final String GOL_HEX_SIM_STRING = "Game of Life";
     private static final String FIRE_SIM_STRING = "Spreading of Fire";
     private static final String WATOR_SIM_STRING = "Wa-Tor World model";
     private static final String SEGREGATION_SIM_STRING = "Schelling's Model of Segregation";
@@ -101,14 +103,14 @@ public class Grid {
     }
 
     public void fillGrid() {
-        if(saveState.size() > 0) {
+        if(!saveState.isEmpty()) {
             setUpSavedGrid(simType);
         } else {
             int cellCount = 0;
             for(int i = 0; i < counts.size(); i++) {
                 cellCount += counts.get(i);
             }
-            if (counts.size() > 0 && states.size() > 0 && counts.size() == states.size() && Math.pow(size, 2) <= cellCount) {
+            if (!counts.isEmpty() && !states.isEmpty() && counts.size() == states.size() && Math.pow(size, 2) <= cellCount) {
                 setUpGridFromXMLConfig(simType);
             } else {
                 System.out.println("Switching to random cell setup");
