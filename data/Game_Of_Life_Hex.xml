@@ -6,7 +6,7 @@
         <size>20</size>
     </grid>
     <cell>
-        <cell_state>ALIVE</cell_state>
+        <cell_state>DEAD</cell_state>
         <cell_number>200</cell_number>
     </cell>
     <cell>
