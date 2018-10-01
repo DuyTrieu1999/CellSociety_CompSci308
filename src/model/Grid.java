@@ -78,6 +78,7 @@ public class Grid {
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
                 grid[i][j].setCurrState(grid[i][j].getNextState());
+                grid[i][j].setFill(grid[i][j].getStateColor(grid[i][j].getCurrState()));
             }
         }
     }
@@ -235,6 +236,7 @@ public class Grid {
         return grid[row][col];
     }
     public Cell[][] getGrid() {return this.grid;}
+
     protected double getMaxGridPaneSize() {
         return MAX_GRID_PANE_SIZE;
     }
@@ -269,4 +271,5 @@ public class Grid {
     public void setSize(int newSize) {
         size = newSize;
     }
+    public String getSimDescription() { return simDescription; }
 }

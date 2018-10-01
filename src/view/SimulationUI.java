@@ -10,13 +10,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 import model.Cell;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
@@ -89,8 +89,7 @@ public class SimulationUI {
         makeLoadButton();
         myRoot.getChildren().add(buttonContainer);
         changeSpeed();
-        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
-        simulationGraph = new GraphSimu(simuMap);
+        simulationGraph = new GraphSimu(myGrid);
         myRoot.getChildren().add(simulationGraph);
         myRoot.getChildren().add(myGridPane);
         return myScene;
@@ -116,7 +115,6 @@ public class SimulationUI {
                 SceneENUM.SPEED_SLIDER_MIN.getVal(), SceneENUM.SPEED_SLIDER_MAX.getVal());
         speedSlider.setTextField();
     }
-
     private void makeAllButton () {
         HBox hbox1 = new HBox(SceneENUM.HBOX_GRID.getVal());
         HBox hbox2 = new HBox(SceneENUM.HBOX_GRID.getVal());
@@ -173,10 +171,10 @@ public class SimulationUI {
             cellType = "Triangle";
         }
         if (hexagonCellButton.isSelected()) {
+            System.out.println("hexagon selected");
             cellType = "Hexagon";
         }
     }
-
     private ChoiceBox makeChoiceBox () {
         ChoiceBox<String> cb = new ChoiceBox<>();
         cb.getItems().add(myResources.getString("GOL"));
@@ -201,8 +199,7 @@ public class SimulationUI {
         myGrid.setSize(gridSize);
         addGridPane();
         addCellToGrid(simuName, filename);
-        TreeMap<StateENUM, Integer> simuMap = myGrid.getPopulationMap();
-        simulationGraph = new GraphSimu(simuMap);
+        simulationGraph = new GraphSimu(myGrid);
         myRoot.getChildren().add(myGridPane);
         myRoot.getChildren().add(simulationGraph);
         pauseSim();
@@ -304,7 +301,7 @@ public class SimulationUI {
             try {
                 xmlSave.createSave(file.getPath(), myGrid.getSimType(), gridSize, myGrid.getParameterValues(), myGrid.createSaveState());
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Invalid save");
             }
         }
     }
@@ -321,7 +318,7 @@ public class SimulationUI {
                 simulationName = myGrid.getSimType();
                 setSimulation(simulationName, file.getName());
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Invalid save");
             }
         }
     }

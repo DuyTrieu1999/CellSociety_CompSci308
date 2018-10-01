@@ -20,6 +20,7 @@ import java.util.Random;
  */
 
 public class GOLCell extends Cell {
+
     private StateENUM[] gameOfLifeCellStates = {StateENUM.ALIVE, StateENUM.DEAD};
     private StateENUM[] hexStates = {StateENUM.YELLOW, StateENUM.ALIVE, StateENUM.RED};
 

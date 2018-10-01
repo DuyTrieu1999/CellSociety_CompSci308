@@ -27,6 +27,7 @@ public class RockPaperScissorsCell extends Cell{
         int rn = new Random().nextInt(neighborList.size());
         Cell neighbor = neighborList.get(rn);
         if(!(neighbor instanceof RockPaperScissorsCell)) {
+            System.out.println("Error");
             this.setNextState(this.getCurrState());
             return;
         }
@@ -35,6 +36,8 @@ public class RockPaperScissorsCell extends Cell{
             if(chosenOne.getCurrState() != StateENUM.WHITESPACE) {
                 this.setNextState(chosenOne.getCurrState());
                 this.setLevel(chosenOne.getLevel() + 1);
+            } else {
+                this.setNextState(this.getCurrState());
             }
         }
         updateLevel(this, chosenOne, this.getCurrState(), chosenOne.getCurrState());
@@ -44,6 +47,8 @@ public class RockPaperScissorsCell extends Cell{
         } else if(chosenOne.getLevel() > MAX_LEVEL) {
             chosenOne.setLevel(MAX_LEVEL);
             chosenOne.setNextState(this.getCurrState());
+        } else {
+            this.setNextState(this.getCurrState());
         }
     }
 
@@ -58,6 +63,7 @@ public class RockPaperScissorsCell extends Cell{
         } else {
             rps1.setLevel(rps1.getLevel() + 1);
             rps2.setLevel(rps2.getLevel() - 1);
+            rps2.setNextState(state2);
         }
     }
 

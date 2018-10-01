@@ -4,9 +4,10 @@ import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import model.StateENUM;
+import model.Grid;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -18,21 +19,23 @@ import java.util.TreeMap;
 public class GraphSimu extends VBox {
     final NumberAxis xAxis = new NumberAxis();
     final NumberAxis yAxis = new NumberAxis();
-    public LineChart simuChart;
+    private LineChart simuChart;
     private ArrayList<StateENUM> cellStates;
     private ArrayList<XYChart.Series<Number, Number>> dataArray = new ArrayList<>();
     private double sequence = 0;
     private double y = 10;
     private final int MAX_DATA_POINTS = 10;
-    protected HBox layoutBox;
+    private VBox layoutBox;
+    private Text textarea;
 
-    public GraphSimu (TreeMap<StateENUM, Integer> populationMap) {
+    public GraphSimu (Grid myGrid) {
+        TreeMap<StateENUM, Integer> populationMap = myGrid.getPopulationMap();
         cellStates = new ArrayList<>(populationMap.keySet());
         for (int i=0; i<cellStates.size(); i++) {
             dataArray.add(getSeries(cellStates.get(i).toString()));
         }
         simuChart.getData().addAll(dataArray);
-        addLayout();
+        addLayout(myGrid.getSimDescription());
         updateGraph(populationMap);
     }
     public XYChart.Series<Number, Number> getSeries (String name) {
@@ -47,13 +50,16 @@ public class GraphSimu extends VBox {
         series.getData().add(new XYChart.Data<>(++sequence, y));
         return series;
     }
-    public void addLayout () {
-        layoutBox = new HBox();
-        layoutBox.getChildren().add(simuChart);
+    public void addLayout (String description) {
+        layoutBox = new VBox();
+        textarea = new Text(description);
+        simuChart.setPrefWidth(SceneENUM.GRID_WIDTH.getVal());
+        simuChart.setPrefHeight(SceneENUM.GRAPH_HEIGHT.getVal());
+        layoutBox.getChildren().addAll(simuChart, textarea);
         layoutBox.setPadding(new Insets(SceneENUM.PADDING.getVal()));
         this.getChildren().add(layoutBox);
         this.setPadding(new Insets(SceneENUM.HBOX_GRID.getVal()));
-        this.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 2.3*SceneENUM.BUTTON_GRID.getVal());
+        this.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 2*SceneENUM.BUTTON_GRID.getVal());
     }
 
     public void updateGraph (TreeMap<StateENUM, Integer> populationMap) {
@@ -67,5 +73,8 @@ public class GraphSimu extends VBox {
                 xAxis.setUpperBound(xAxis.getUpperBound() + 1);
             }
         }
+    }
+    public void addDescription (String description) {
+
     }
 }
