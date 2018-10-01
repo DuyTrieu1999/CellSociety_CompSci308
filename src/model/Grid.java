@@ -228,6 +228,7 @@ public class Grid {
         return grid[row][col];
     }
     public Cell[][] getGrid() {return this.grid;}
+
     protected double getMaxGridPaneSize() {
         return MAX_GRID_PANE_SIZE;
     }
@@ -262,4 +263,5 @@ public class Grid {
     public void setSize(int newSize) {
         size = newSize;
     }
+    public String getSimDescription() { return simDescription; }
 }

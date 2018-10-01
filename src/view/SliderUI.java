@@ -23,7 +23,7 @@ public class SliderUI extends VBox {
         slider.setValue(val);
         slider.setMin(min);
         slider.setMax(max);
-        slider.setMajorTickUnit(1);
+        slider.setMajorTickUnit((max-min)/8);
         slider.setMinorTickCount(0);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
