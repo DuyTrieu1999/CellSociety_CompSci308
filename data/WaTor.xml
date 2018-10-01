@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding ="UTF-8"?>
 <simulation name="Wa-Tor World model" author="team8">
+    <description>The Wa-Tor World is a world filled with fish and sharks.</description>
     <parameter>
         <variable_name>SharkReproductionCycle</variable_name>
         <variable_value>6</variable_value>
