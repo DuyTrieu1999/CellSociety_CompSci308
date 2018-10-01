@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -24,6 +25,10 @@ public class XMLReader {
     protected void loadDoc (String fileName, String defaultFile) {
         readable = true;
         try {
+            File file = new File(fileName);
+            if(!file.exists()) {
+                throw new FileNotFoundException("File does not exist.");
+            }
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbf.newDocumentBuilder();
             Document doc = dBuilder.parse(this.getClass().getClassLoader().getResourceAsStream(fileName));
