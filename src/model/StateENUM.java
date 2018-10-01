@@ -17,7 +17,6 @@ public enum StateENUM {
     SHARK,
     WATER,
     WHITESPACE,
-    RED,
     BLUE,
     GREEN;
 }
