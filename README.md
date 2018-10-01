@@ -9,14 +9,14 @@ Names: Duy Trieu, Samuel Appiah-Kubi, Austin Kao
 
 Start Date: 09/17/2018
 
-Finish Date: 09/24/2018
+Finish Date: 10/01/2018
 
 Hours Spent: 85 Hours(altogether)
 
 ### Primary Roles
 Duy Trieu: SimulationUI and Models
 Samuel Appiah-Kubi: Simulation Backend and Models
-Austin Kao: Simulation Backend and XML
+Austin Kao: Simulation Backend, Models and XML
 
 ### Resources Used
 https://en.wikipedia.org/wiki/Wa-Tor
@@ -32,11 +32,11 @@ Data files needed: Game_of_Life.xml, WaTor.xml, Segregation.xml, Spreading_Fire.
 
 Interesting data files: None
 
-Features implemented: Slider Feature
+Features implemented: Slider, GraphUI, Simulation Description
 
-Assumptions or Simplifications: In FireCell, assume fire starts at multiple random locations at the same time
+Assumptions or Simplifications: The graph displays timestep data regardless of the aggregated data.
 
-Known Bugs: Incomplete logic and implementation in PredatorPrey Cell and Grid
+Known Bugs: None
 
 Extra credit: None
 
