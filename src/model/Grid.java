@@ -10,6 +10,7 @@ public class Grid {
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String DEFAULT_XML_FILE = "Game_Of_Life.xml";
     private static final String GOL_SIM_STRING = "Game of Life";
+    private static final String GOL_HEX_SIM_STRING = "Game of Life";
     private static final String FIRE_SIM_STRING = "Spreading of Fire";
     private static final String WATOR_SIM_STRING = "Wa-Tor World model";
     private static final String SEGREGATION_SIM_STRING = "Schelling's Model of Segregation";

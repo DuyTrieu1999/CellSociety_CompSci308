@@ -18,5 +18,9 @@ public enum StateENUM {
     WATER,
     WHITESPACE,
     BLUE,
-    GREEN;
+    GREEN,
+    HOME,
+    ANT,
+    FOOD,
+    TERRAIN;
 }
