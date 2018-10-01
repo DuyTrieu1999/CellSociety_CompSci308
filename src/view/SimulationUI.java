@@ -5,16 +5,16 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
-import model.Cell;
 
 import java.io.File;
 import java.util.ResourceBundle;
@@ -35,11 +35,11 @@ public class SimulationUI {
     private static final String WA_TOR_WORLD_XML = "WaTor.xml";
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
-    private static final String ERROR_TESTING = "XMLErrorTesting.xml";
     private static final String ROCK_PAPER_SCISSORS_XML = "RockPaperScissors.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String RESOURCE_PATH = "data";
     private static final String DEFAULT_FILE_NAME = "";
+    private static final int THREE = 3;
 
     protected RadioButton rectangleCellButton;
     protected RadioButton triangleCellButton;
@@ -229,7 +229,7 @@ public class SimulationUI {
         buttonContainer.setPadding(buttonPane);
         buttonContainer.setMaxWidth(SceneENUM.BUTTON_GRID.getVal());
         buttonContainer.setMinWidth(SceneENUM.BUTTON_GRID.getVal());
-        buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - 3*SceneENUM.BUTTON_GRID.getVal());
+        buttonContainer.setLayoutX(SceneENUM.SCENE_WIDTH.getVal() - THREE*SceneENUM.BUTTON_GRID.getVal());
     }
     private void addGridPane () {
         myGridPane = new GridPane();

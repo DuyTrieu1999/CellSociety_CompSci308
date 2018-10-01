@@ -24,7 +24,7 @@ public class CellTypeButton {
         hexagonCellButton = new RadioButton(myResources.getString("Hexagon"));
 
         radioGroup = new ToggleGroup();
-        radioBox = new HBox(30);
+        radioBox = new HBox(SceneENUM.CELL_TYPE_BOX.getVal());
         radioBox.getChildren().add(rectangleCellButton);
         rectangleCellButton.setToggleGroup(radioGroup);
         radioBox.getChildren().add(triangleCellButton);

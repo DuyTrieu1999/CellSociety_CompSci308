@@ -18,7 +18,8 @@ public enum SceneENUM {
     SPEED_SLIDER_MAX(2),
     SPEED_SLIDER_MIN(1),
     SPEED_SLIDER_VAL(1),
-    GRID_PANE_PADDING(60);
+    GRID_PANE_PADDING(60),
+    CELL_TYPE_BOX(30);
 
 
     double sceneVal;

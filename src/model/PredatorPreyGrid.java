@@ -1,5 +1,6 @@
 package model;
 
+
 import java.util.*;
 
 /**
@@ -7,10 +8,10 @@ import java.util.*;
  * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
-    private final double DEFAULT_SHARK_REPRODUCTION_TIME = 6;
-    private final double DEFAULT_MAX_SHARK_ENERGY = 2;
-    private final double DEFAULT_ENERGY_FROM_EATING_FISH = 2;
-    private final double DEFAULT_FISH_REPRODUCTION_TIME = 2;
+    private static final double DEFAULT_SHARK_REPRODUCTION_TIME = 6;
+    private static final double DEFAULT_MAX_SHARK_ENERGY = 2;
+    private static final double DEFAULT_ENERGY_FROM_EATING_FISH = 2;
+    private static final double DEFAULT_FISH_REPRODUCTION_TIME = 2;
     private double fishReproductionTime;
     private double sharkReproductionTime;
     private double maxSharkEnergy;
@@ -250,7 +251,7 @@ public class PredatorPreyGrid extends Grid{
      */
     @Override
     public void storeNeighbors (Cell cell) {
-        ArrayList<Cell> cellNeighbours = new ArrayList<Cell>();
+        ArrayList<Cell> cellNeighbours = new ArrayList<>();
         if(cell.getRowPos()<this.getRowNum() - 1) {
             cellNeighbours.add(this.getGrid()[cell.getRowPos()+1][cell.getColPos()]);
         }

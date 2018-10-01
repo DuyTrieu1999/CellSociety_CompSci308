@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.StateENUM;
@@ -25,8 +26,6 @@ public class GraphSimu extends VBox {
     private double sequence = 0;
     private double y = 10;
     private final int MAX_DATA_POINTS = 10;
-    private VBox layoutBox;
-    private Text textarea;
 
     public GraphSimu (Grid myGrid) {
         TreeMap<StateENUM, Integer> populationMap = myGrid.getPopulationMap();
@@ -51,8 +50,8 @@ public class GraphSimu extends VBox {
         return series;
     }
     public void addLayout (String description) {
-        layoutBox = new VBox();
-        textarea = new Text(description);
+        VBox layoutBox = new VBox();
+        Text textarea = new Text(description);
         simuChart.setPrefWidth(SceneENUM.GRID_WIDTH.getVal());
         simuChart.setPrefHeight(SceneENUM.GRAPH_HEIGHT.getVal());
         layoutBox.getChildren().addAll(simuChart, textarea);
@@ -73,8 +72,5 @@ public class GraphSimu extends VBox {
                 xAxis.setUpperBound(xAxis.getUpperBound() + 1);
             }
         }
-    }
-    public void addDescription (String description) {
-
     }
 }
