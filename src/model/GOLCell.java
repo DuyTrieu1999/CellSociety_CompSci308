@@ -20,10 +20,13 @@ import java.util.Random;
  */
 
 public class GOLCell extends Cell {
-    private StateENUM[] states = {StateENUM.ALIVE, StateENUM.DEAD};
+    private StateENUM[] gameOfLifeCellStates = {StateENUM.ALIVE, StateENUM.DEAD};
 
-    public GOLCell(int row, int col, double width) {
-        super(row, col, width);
+    public GOLCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
+        for(int i = 0; i < gameOfLifeCellStates.length; i++) {
+            getCellStateEnums().add(gameOfLifeCellStates[i]);
+        }
     }
 
     @Override
@@ -31,18 +34,40 @@ public class GOLCell extends Cell {
         int numAlive = 0;
         ArrayList<Cell> currNeighbors = this.getNeighbors();
         for (Cell neighbor : currNeighbors) {
-            if (neighbor.getCurrState() == StateENUM.ALIVE) {
+            if (neighbor.getCurrState() == StateENUM.ALIVE || neighbor.getCurrState() == StateENUM.YELLOW) {
                 numAlive++;
+            } else if(neighbor.getCurrState() == StateENUM.RED) {
+                numAlive += 2;
             }
         }
-        if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2 || numAlive > 3)) {
-            this.setNextState(StateENUM.DEAD);
-        } else if (this.getCurrState() == StateENUM.DEAD && numAlive == 3) {
-            this.setNextState(StateENUM.ALIVE);
-        } else {
-            this.setNextState(this.getCurrState());
+        var shape = 0;
+        switch(shape) {
+            case 0: //Square Shape
+                if (this.getCurrState() == StateENUM.ALIVE && (numAlive < 2 || numAlive > 3)) {
+                    this.setNextState(StateENUM.DEAD);
+                } else if (this.getCurrState() == StateENUM.DEAD && numAlive == 3) {
+                    this.setNextState(StateENUM.ALIVE);
+                } else {
+                    this.setNextState(this.getCurrState());
+                }
+                this.setFill(this.getStateColor(this.getNextState()));
+                return;
+            case 1: //Hexagonal Shape
+                if (this.getCurrState() == StateENUM.DEAD && numAlive == 4) {
+                    this.setNextState(StateENUM.YELLOW);
+                } else if (this.getCurrState() == StateENUM.YELLOW && (numAlive == 6 || numAlive >= 1 || numAlive <= 4)) {
+                    this.setNextState(StateENUM.RED);
+                } else if (this.getCurrState() == StateENUM.RED && (numAlive == 4)) {
+                    this.setNextState(StateENUM.YELLOW);
+                } else if (this.getCurrState() == StateENUM.RED && (numAlive == 1 || numAlive == 2)) {
+                    this.setNextState(this.getCurrState());
+                } else {
+                    this.setNextState(StateENUM.DEAD);
+                }
+                this.setFill(this.getStateColor(this.getNextState()));
+                return;
         }
-        this.setFill(this.getStateColor(this.getNextState()));
+
     }
 
     @Override
@@ -55,12 +80,5 @@ public class GOLCell extends Cell {
             default:
                 return null;
         }
-    }
-
-    @Override
-    public void setStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
     }
 }

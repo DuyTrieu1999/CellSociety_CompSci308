@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding ="UTF-8"?>
-<simulation name="Segregation" author="team8">
-    <variables>
-        <variable>name = "neighborSimilar" value = "0.3"</variable>
-    </variables>
-    <Grid>
+<simulation name="Schelling's Model of Segregation" author="team8">
+    <parameter>
+        <variable_name>thresholdToCauseSegregation</variable_name>
+        <variable_value>0.3</variable_value>
+    </parameter>
+    <grid>
         <size>20</size>
-    </Grid>
-    <Cells>
+    </grid>
+    <cell_types>
         <cell>
-            <cell_state>Vacant</cell_state>
-            <cell_percent>50</cell_percent>
+            <cell_state>VACANT</cell_state>
+            <cell_number>150</cell_number>
         </cell>
         <cell>
-            <cell_state>Agent 1</cell_state>
-            <cell_number>25</cell_number>
+            <cell_state>AGENT1</cell_state>
+            <cell_number>125</cell_number>
         </cell>
         <cell>
-            <cell_state>Agent 2</cell_state>
-            <cell_number>25</cell_number>
+            <cell_state>AGENT2</cell_state>
+            <cell_number>125</cell_number>
         </cell>
-    </Cells>
+    </cell_types>
 </simulation>

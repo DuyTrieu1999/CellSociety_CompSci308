@@ -16,52 +16,36 @@ import javafx.scene.shape.Rectangle;
  */
 
 public class SegCell extends Cell{
-    private boolean satisfied;
-    private double myThreshold = 0.3;
-    private double numAlike;
-    private double agentNeighbors;
-    private StateENUM[] states = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
+    private boolean hasMoved;
+    private boolean moveByAgent1;
+    private boolean moveByAgent2;
+    private StateENUM[] segregationCellStates = {StateENUM.VACANT, StateENUM.AGENT2, StateENUM.AGENT1};
 
-    public SegCell(int row, int col, double width) {
-        super(row, col, width);
-        satisfied = true;
+    public SegCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
+        hasMoved = false;
+        moveByAgent1 = false;
+        moveByAgent2 = false;
+        for(int i = 0; i < segregationCellStates.length; i++) {
+            getCellStateEnums().add(segregationCellStates[i]);
+        }
     }
 
-    //For this simulation, will need to determine the individual satisfaction of cells before updating and moving cells.
-    @Override
-    public boolean isSatisfied() {
-        ArrayList<Cell> currNeighbors = this.getNeighbors();
-        numAlike = 0;
-        agentNeighbors = 0;
-        for(Cell neighbor : currNeighbors) {
-            if(neighbor.getCurrState() == StateENUM.AGENT1 || neighbor.getCurrState() == StateENUM.AGENT2) {
-                agentNeighbors++;
-            }
-            if(this.getCurrState() == neighbor.getCurrState()) {
-                numAlike++;
-            }
-        }
-        if(myThreshold >= numAlike/agentNeighbors) {
-            satisfied = true;
-        } else {
-            satisfied = false;
-        }
-        return satisfied;
-    }
-    // updateCell() assumes that there are only two types of agents
     @Override
     public void updateCell() {
-        if(!satisfied) {
+        if(hasMoved) {
             this.setNextState(StateENUM.VACANT);
-            this.setCurrState(StateENUM.VACANT);
+            hasMoved = false;
+        } else if(moveByAgent1) {
+            this.setNextState(StateENUM.AGENT1);
+            moveByAgent1 = false;
+        } else if(moveByAgent2) {
+            this.setNextState(StateENUM.AGENT2);
+            moveByAgent2 = false;
         } else {
             this.setNextState(this.getCurrState());
         }
         this.setFill(getStateColor(this.getNextState()));
-    }
-
-    public void setThreshold(double threshold) {
-        myThreshold = threshold;
     }
 
     @Override
@@ -79,14 +63,17 @@ public class SegCell extends Cell{
     }
 
     @Override
-    public void setStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
+    public void setHasMoved(boolean value) {
+        hasMoved = value;
     }
 
     @Override
-    public void setSatisfaction(boolean value) {
-        satisfied = value;
+    public void setMoveByAgent1(boolean value) {
+        moveByAgent1 = value;
+    }
+
+    @Override
+    public void setMoveByAgent2(boolean value) {
+        moveByAgent2 = value;
     }
 }

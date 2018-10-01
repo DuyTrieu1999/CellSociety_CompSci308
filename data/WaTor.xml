@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding ="UTF-8"?>
-<simulation name="WaTor" author="team8">
-    <variables>
-        <variable>name = "sharkReproductionCycle" value="5"</variable>
-        <variable>name = "sharkEnergy" value="3"</variable>
-        <variable>name = "fishReproductionCycle" value="3"</variable>
-        <variable>name = "fishEnergyGained" value="2"</variable>
-    </variables>
-    <Grid>
+<simulation name="Wa-Tor World model" author="team8">
+    <parameter>
+        <variable_name>SharkReproductionCycle</variable_name>
+        <variable_value>6</variable_value>
+    </parameter>
+    <parameter>
+        <variable_name>EnergyFromEatingFish</variable_name>
+        <variable_value>2</variable_value>
+    </parameter>
+    <parameter>
+        <variable_name>FishReproductionCycle</variable_name>
+        <variable_value>2</variable_value>
+    </parameter>
+    <parameter>
+        <variable_name>SharkEnergy</variable_name>
+        <variable_value>3</variable_value>
+    </parameter>
+    <grid>
         <size>20</size>
-    </Grid>
-    <Cells>
-        <cell>
-            <cell_state>Water</cell_state>
-            <cell_percent>60</cell_percent>
-        </cell>
-        <cell>
-            <cell_state>Fish</cell_state>
-            <cell_percent>30</cell_percent>
-        </cell>
-        <cell>
-            <cell_state>Shark</cell_state>
-            <cell_percent>10</cell_percent>
-        </cell>
-    </Cells>
+    </grid>
+    <cell>
+        <cell_state>WATER</cell_state>
+        <cell_number>150</cell_number>
+    </cell>
+    <cell>
+        <cell_state>FISH</cell_state>
+        <cell_number>150</cell_number>
+    </cell>
+    <cell>
+        <cell_state>SHARK</cell_state>
+        <cell_number>100</cell_number>
+    </cell>
 </simulation>

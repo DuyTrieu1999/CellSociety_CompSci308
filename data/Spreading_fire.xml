@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding ="UTF-8"?>
-<simulation name="Spreading_fire" author="team8">
-    <variables>
-        <variable> name = "probOfCatchingFire" value = "0.15"</variable>
-    </variables>
-    <Grid>
-        <size>15</size>
-    </Grid>
-    <Cells>
+<simulation name="Spreading of Fire" author="team8">
+    <description>This simulation tries to capture how a wildfire spreads in a particular ecosystem.</description>
+    <parameter>
+        <variable_name>probabilityOfCatchingFire</variable_name>
+        <variable_value>0.75</variable_value>
+    </parameter>
+    <grid>
+        <size>20</size>
+    </grid>
+    <cell_types>
         <cell>
-            <cell_state>Deforested</cell_state>
-            <cell_percent>20</cell_percent>
-        </cell>
-        <cell>
-            <cell_state>Tree</cell_state>
-            <cell_number>60</cell_number>
-        </cell>
-        <cell>
-            <cell_state>Burning</cell_state>
+            <cell_state>DEFORESTED</cell_state>
             <cell_number>20</cell_number>
         </cell>
-    </Cells>
+        <cell>
+            <cell_state>TREE</cell_state>
+            <cell_number>360</cell_number>
+        </cell>
+        <cell>
+            <cell_state>BURNING</cell_state>
+            <cell_number>20</cell_number>
+        </cell>
+    </cell_types>
 </simulation>

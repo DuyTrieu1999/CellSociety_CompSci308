@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- *
+ * This class layouts the slider to control properties in the simulations
  * @author duytrieu
  */
 public class SliderUI extends VBox {
@@ -23,11 +23,11 @@ public class SliderUI extends VBox {
         slider.setValue(val);
         slider.setMin(min);
         slider.setMax(max);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(0);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
         slider.setSnapToTicks(true);
-        slider.setMajorTickUnit((max - min) / 8);
-        slider.setMinorTickCount(0);
         slider.setPadding(new Insets(0, 10, 0, 10));
 
         nameLabel = new Label(name + ": ");
@@ -35,8 +35,7 @@ public class SliderUI extends VBox {
 
         layoutBox = new HBox();
         layoutBox.getChildren().addAll(slider, valueText);
-        layoutBox.setPadding(new Insets(10, 0, 10, 0));
-        this.setPadding(new Insets(10, 10, 10, 10));
+        layoutBox.setPadding(new Insets(SceneENUM.HBOX_GRID.getVal(), 0, SceneENUM.HBOX_GRID.getVal(), 0));
         this.getChildren().add(nameLabel);
         this.getChildren().add(layoutBox);
     }
@@ -48,16 +47,6 @@ public class SliderUI extends VBox {
                 valueText.textProperty().bind(slider.valueProperty().asString("%.0f"));
             }
         });
-    }
-
-    public void setVal (int val) {
-        this.slider.setValue(val);
-    }
-    public double getMax () {
-        return this.slider.getMax();
-    }
-    public double getMin () {
-        return this.slider.getMin();
     }
     public double getVal () {
         return this.slider.getValue();

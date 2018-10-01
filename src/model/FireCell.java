@@ -1,7 +1,6 @@
 package model;
 
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,14 +14,16 @@ import java.util.Random;
  * @author Austin Kao
  */
 public class FireCell extends Cell {
-    private double probCatch = 0.15; //Probability of catching a fire
+    private StateENUM[] fireCellStates = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
     private boolean hasNeighborFire; //Check for a neighboring cell on fire
     private StateENUM[] states = {StateENUM.DEFORESTED, StateENUM.TREE, StateENUM.BURNING};
 
-    public FireCell(int row, int col, double width) {
-        super(row, col, width);
+    public FireCell(int row, int col, double width, String cellType) {
+        super(row, col, width, cellType);
         hasNeighborFire = false;
-        probCatch = 1;
+        for(int i = 0; i < fireCellStates.length; i++) {
+            getCellStateEnums().add(fireCellStates[i]);
+        }
     }
 
     @Override
@@ -49,6 +50,7 @@ public class FireCell extends Cell {
         this.setFill(getStateColor(this.getNextState()));
     }
 
+    @Override
     public void setProbCatch(double probability) {
         probCatch = probability;
     }
@@ -65,12 +67,5 @@ public class FireCell extends Cell {
             default:
                 return Color.BLACK;
         }
-    }
-
-    @Override
-    public void setStartState() {
-        int rand = new Random().nextInt(states.length);
-        this.setCurrState(states[rand]);
-        this.setFill(getStateColor(this.getCurrState()));
     }
 }

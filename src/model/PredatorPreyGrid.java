@@ -1,99 +1,140 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * This class implements the grid for the Wa-Tor World of Predator Prey Relationships
  * @author Austin Kao, Duy Trieu
  */
 public class PredatorPreyGrid extends Grid{
-    private final int SHARK_REPRODUCTION_CYCLE_WAIT = 5;
-    private final int MAX_SHARK_ENERGY = 3;
-    private final int FISH_REPRODUCTION_CYCLE_WAIT = 3;
-    private final int ENERGY_FROM_EATING_FISH = 2;
+    private final double DEFAULT_SHARK_REPRODUCTION_TIME = 6;
+    private final double DEFAULT_MAX_SHARK_ENERGY = 2;
+    private final double DEFAULT_ENERGY_FROM_EATING_FISH = 2;
+    private final double DEFAULT_FISH_REPRODUCTION_TIME = 2;
+    private double fishReproductionTime;
+    private double sharkReproductionTime;
+    private double maxSharkEnergy;
+    private double energyGainedFromFish;
 
-    private HashMap<Integer, Fish> poorInnocentLittleFishies; //Rename? lol
-    private HashMap<Integer, Shark> sharks;
+    private HashMap<Integer, Fish> livingFish;
+    private HashMap<Integer, Shark> livingSharks;
 
-    public PredatorPreyGrid(int size) {
-        super(size);
-        poorInnocentLittleFishies = new HashMap<>();
-        sharks = new HashMap<Integer, Shark>();
-        for (int i=0; i<this.getRowNum(); i++) {
-            for (int j=0; j<this.getColNum(); j++) {
-                if(getGrid()[i][j].getCurrState() == StateENUM.FISH) {
-                    poorInnocentLittleFishies.put(hashCode(i,j), new Fish());
-                } else if(getGrid()[i][j].getCurrState() == StateENUM.SHARK) {
-                    sharks.put(hashCode(i,j), new Shark());
+    public PredatorPreyGrid(String filename, int size, String cellType) {
+        super(filename, size, cellType);
+        livingFish = new HashMap<>();
+        livingSharks = new HashMap<>();
+        determineParameters();
+        for (int i = 0; i < this.getRowNum(); i++) {
+            for (int j = 0; j < this.getColNum(); j++) {
+                if (getGrid()[i][j].getCurrState() == StateENUM.FISH) {
+                    livingFish.put(hashCode(i, j), new Fish(fishReproductionTime));
+                } else if (getGrid()[i][j].getCurrState() == StateENUM.SHARK) {
+                    livingSharks.put(hashCode(i, j), new Shark(maxSharkEnergy, sharkReproductionTime));
                 }
             }
         }
     }
 
     /**
-     * Make updateGrid() conform to the rules of the simulation
-     * Sharks move before fish so that the fish that are eaten by sharks don't move.
+     * updateGrid() has three phases.
+     * These phases are based on the simulation described by A.K. Dewdney,
+     * in his article for Scientific American "Sharks and Fish Wage an Ecological War on the Toroidal Planet Wa-Tor".
+     * In the first phase, fish move and breed
+     * In the second phase, sharks move and eat fish.
+     * In the third phase, the fish and shark movements are displayed on the grid.
      */
     @Override
     public void updateGrid() {
-        for (int i=0; i<this.getRowNum(); i++) {
-            for (int j=0; j<this.getColNum(); j++) {
-                if(getGrid()[i][j].getCurrState() == StateENUM.SHARK) {
-                    getGrid()[i][j].updateCell();
-                    if(getGrid()[i][j].isMoving()) {
-                        PredatorPreyCell nextLocation = getGrid()[i][j].getMove();
-                        Shark currentShark = sharks.get(hashCode(i,j));
-                        if(getGrid()[i][j].isEating()) {
-                            poorInnocentLittleFishies.remove(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()));
-                            nextLocation.setCurrState(StateENUM.WATER);
-                            currentShark.setSharkEnergy(currentShark.getSharkEnergy()+ENERGY_FROM_EATING_FISH);
-                        }
-                        sharks.remove(hashCode(i,j));
-                        if(currentShark.getReproductionTime() <= 0) {
-                            currentShark.setReproductionTime(SHARK_REPRODUCTION_CYCLE_WAIT);
-                            sharks.put(hashCode(i,j), new Shark());
-                        } else {
-                            currentShark.setReproductionTime(currentShark.getReproductionTime()-1);
-                        }
-                        sharks.put(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()), currentShark);
-                    } else {
-                        Shark currentShark = sharks.get(hashCode(i,j));
-                        if(currentShark.getReproductionTime() != 0) {
-                            currentShark.setReproductionTime(currentShark.getReproductionTime() - 1);
-                            currentShark.setSharkEnergy(currentShark.getSharkEnergy() - 1);
+        Cell currentCell;
+        Set<Integer> currentLivingFish = new HashSet<>(livingFish.keySet());
+        for(int hashCode : currentLivingFish) {
+            int row = hashCode / getRowNum();
+            int col = Math.floorMod(hashCode, getRowNum());
+            Fish currentFish = livingFish.get(hashCode);
+            currentCell = getGrid()[row][col];
+            ArrayList<Cell> neighborList = currentCell.getNeighbors();
+            boolean canMove = false;
+            for(Cell neighbor : neighborList) {
+                int neighborHashCode = hashCode(neighbor.getRowPos(), neighbor.getColPos());
+                if(!livingSharks.containsKey(neighborHashCode) && !livingFish.containsKey(neighborHashCode)) {
+                    canMove = true;
+                }
+            }
+            if (canMove) {
+                boolean determinedMove = false;
+                while (!determinedMove) {
+                    int rn = new Random().nextInt(neighborList.size());
+                    int newHashCode = hashCode(neighborList.get(rn).getRowPos(), neighborList.get(rn).getColPos());
+                    if(!livingSharks.containsKey(newHashCode) && !livingFish.containsKey(newHashCode)) {
+                        determinedMove = true;
+                        currentFish.updateMovingFish(hashCode, newHashCode, livingFish);
+                        neighborList.get(rn).setHasFish(true);
+                        if(livingFish.get(newHashCode).hasReproduced()) {
+                            currentCell.setHasFish(true);
                         }
                     }
+                }
+            } else {
+                currentFish.updateUnmovingFish();
+                currentCell.setHasFish(true);
+            }
+        }
+        Set<Integer> currentLivingSharks = new HashSet<>(livingSharks.keySet());
+        for(int hashCode : currentLivingSharks) {
+            int row = hashCode / getRowNum();
+            int col = Math.floorMod(hashCode, getRowNum());
+            Shark currentShark = livingSharks.get(hashCode);
+            currentCell = getGrid()[row][col];
+            ArrayList<Cell> neighborList = currentCell.getNeighbors();
+            boolean canMove = false;
+            boolean canEat = false;
+            for(Cell neighbor : neighborList) {
+                int neighborHashCode = hashCode(neighbor.getRowPos(), neighbor.getColPos());
+                if(livingFish.containsKey(neighborHashCode)) {
+                    canMove = true;
+                    canEat = true;
+                } else if (!livingSharks.containsKey(neighborHashCode)) {
+                    canMove = true;
+                }
+            }
+            if (canMove) {
+                boolean determinedMove = false;
+                while (!determinedMove) {
+                    int rn = new Random().nextInt(neighborList.size());
+                    int newHashCode = hashCode(neighborList.get(rn).getRowPos(), neighborList.get(rn).getColPos());
+                    if(canEat) {
+                        if(livingFish.containsKey(newHashCode)) {
+                            determinedMove = true;
+                            currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
+                            neighborList.get(rn).setHasShark(true);
+                            neighborList.get(rn).setHasFish(false);
+                            if(livingSharks.get(newHashCode).hasReproduced()) {
+                                currentCell.setHasShark(true);
+                            }
+                        }
+                    } else if(!livingSharks.containsKey(newHashCode)) {
+                        determinedMove = true;
+                        currentShark.updateMovingShark(hashCode, newHashCode, livingSharks, livingFish);
+                        if(livingSharks.containsKey(newHashCode)) {
+                            neighborList.get(rn).setHasShark(true);
+                            if(livingSharks.get(newHashCode).hasReproduced()) {
+                                currentCell.setHasShark(true);
+                            }
+                        }
+                    }
+                }
+            } else {
+                currentShark.updateUnmovingShark(hashCode, livingSharks);
+                if(livingSharks.containsKey(hashCode)) {
+                    currentCell.setHasShark(true);
                 }
             }
         }
         for (int i=0; i<this.getRowNum(); i++) {
             for (int j=0; j<this.getColNum(); j++) {
-                if(getGrid()[i][j].getCurrState() == StateENUM.FISH) {
-                    getGrid()[i][j].updateCell();
-                    if(getGrid()[i][j].isMoving()) {
-                        PredatorPreyCell nextLocation = getGrid()[i][j].getMove();
-                        Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
-                        poorInnocentLittleFishies.remove(hashCode(i,j));
-                        if(currentFish.getReproductionTime() <= 0) {
-                            currentFish.setReproductionTime(SHARK_REPRODUCTION_CYCLE_WAIT);
-                            poorInnocentLittleFishies.put(hashCode(i,j), new Fish());
-                        } else {
-                            currentFish.setReproductionTime(currentFish.getReproductionTime()-1);
-                        }
-                        poorInnocentLittleFishies.put(hashCode(nextLocation.getRowPos(),nextLocation.getColPos()), currentFish);
-                    } else {
-                        Fish currentFish = poorInnocentLittleFishies.get(hashCode(i,j));
-                        if(currentFish.getReproductionTime() != 0) {
-                            currentFish.setReproductionTime(currentFish.getReproductionTime() - 1);
-                        }
-                    }
-                }
-            }
-        }
-        for (int i=0; i<this.getRowNum(); i++) {
-            for (int j=0; j<this.getColNum(); j++) {
-                getGrid()[i][j].setCurrState(getGrid()[i][j].getNextState());
+                currentCell = getGrid()[i][j];
+                currentCell.updateCell();
+                currentCell.setCurrState(currentCell.getNextState());
             }
         }
     }
@@ -109,60 +150,99 @@ public class PredatorPreyGrid extends Grid{
      * At each chronon, if a fish survives long enough, it will reproduce by leaving a new fish in the cell it leaves behind.
      */
     class Fish {
-        private int reproductionTime;
-        public Fish() {
-            reproductionTime = FISH_REPRODUCTION_CYCLE_WAIT;
-        }
-        public Fish(int reproduction) {
+        private double reproductionTime;
+        private boolean reproduced;
+
+        public Fish(double reproduction) {
             reproductionTime = reproduction;
+            reproduced = false;
         }
-        public int getReproductionTime() {
-            return reproductionTime;
+
+        public void updateUnmovingFish() {
+            if(reproductionTime > 0) {
+                reproductionTime--;
+                reproduced = false;
+            }
         }
-        public void setReproductionTime(int reproductionTime) {
-            this.reproductionTime = reproductionTime;
+        public void updateMovingFish(int currentHashCode, int newHashCode, HashMap<Integer, Fish> fishMap) {
+            fishMap.remove(currentHashCode);
+            if(reproductionTime <= 0) {
+                reproductionTime = fishReproductionTime;
+                fishMap.put(currentHashCode, new Fish(fishReproductionTime));
+                reproduced = true;
+            } else {
+                reproductionTime--;
+                reproduced = false;
+            }
+            fishMap.put(newHashCode, this);
+        }
+
+        public boolean hasReproduced() {
+            return reproduced;
         }
     }
     /**
      * The Shark class is intended to represent a shark in the simulation
-     * Shark have a sharkEnergy parameter which represents the number of chronons they can continue living for without eating fish before dying
+     * Shark have a sharkEnergy parameter which represents the number of chronons they can continue living for without eating fish before dying.
      * They also have a reproductionTime parameter which represents the number of chronons they take to reproduce.
      */
     class Shark {
-        private int reproductionTime;
-        private int sharkEnergy;
-        private boolean hasDied;
-        public Shark() {
-            sharkEnergy = MAX_SHARK_ENERGY;
-            reproductionTime = SHARK_REPRODUCTION_CYCLE_WAIT;
-        }
-        public Shark(int energy, int reproduction) {
+        private double reproductionTime;
+        private double sharkEnergy;
+        private double maxSharkEnergy;
+        private boolean reproduced;
+
+        public Shark(double energy, double reproduction) {
             sharkEnergy = energy;
+            maxSharkEnergy = energy;
             reproductionTime = reproduction;
         }
-        public int getReproductionTime() {
-            return reproductionTime;
-        }
-        public int getSharkEnergy() {
-            return sharkEnergy;
-        }
-        public void setReproductionTime(int reproductionTime) {
-            this.reproductionTime = reproductionTime;
-        }
-        public void setSharkEnergy(int energy) {
-            if(energy < MAX_SHARK_ENERGY) {
-                this.sharkEnergy = energy;
+
+        public void updateUnmovingShark(int currentHashCode, HashMap<Integer, Shark> sharkMap) {
+            if(sharkEnergy > 0) {
+                sharkEnergy--;
+                reproduced = false;
+                if(reproductionTime > 0) {
+                    reproductionTime--;
+                }
             } else {
-                this.sharkEnergy = MAX_SHARK_ENERGY;
+                sharkMap.remove(currentHashCode);
             }
         }
-        public boolean isDead() {
-            if(getSharkEnergy() <= 0) {
-                return true;
-            } else return false;
+
+        public void updateMovingShark(int currentHashCode, int newHashCode, HashMap<Integer, Shark> sharkMap, HashMap<Integer, Fish> fishMap) {
+            sharkMap.remove(currentHashCode);
+            if(fishMap.containsKey(newHashCode)) {
+                fishMap.remove(newHashCode);
+                sharkEnergy += energyGainedFromFish;
+                if(sharkEnergy > maxSharkEnergy) {
+                    sharkEnergy = maxSharkEnergy;
+                }
+                reproduceIfPossible(currentHashCode, sharkMap);
+                sharkMap.put(newHashCode, this);
+            } else if(sharkEnergy > 0) {
+                sharkEnergy--;
+                reproduceIfPossible(currentHashCode, sharkMap);
+                sharkMap.put(newHashCode, this);
+            } else {
+                sharkMap.remove(currentHashCode);
+            }
+        }
+        public boolean hasReproduced() {
+            return reproduced;
+        }
+
+        private void reproduceIfPossible(int currentHashCode, HashMap<Integer, Shark> sharkMap) {
+            if(reproductionTime <= 0) {
+                reproductionTime = sharkReproductionTime;
+                sharkMap.put(currentHashCode, new Shark(maxSharkEnergy, sharkReproductionTime));
+                reproduced = true;
+            } else {
+                reproductionTime--;
+                reproduced = false;
+            }
         }
     }
-
     /**
      * The world of Wa-Tor is a torus, and wraps left to right, top to bottom.
      * This means that any fish or shark that moves right at the rightmost square ends up on the leftmost square in the same row.
@@ -198,13 +278,28 @@ public class PredatorPreyGrid extends Grid{
         cell.setNeighbors(cellNeighbours);
     }
 
-    @Override
-    public void fillGrid() {
-        for (int i = 0; i<this.getRowNum(); i++) {
-            for (int j = 0; j<this.getColNum(); j++) {
-                this.getGrid()[i][j] = new PredatorPreyCell(i, j, getMaxGridPaneSize() / this.getColNum());
-                this.getGrid()[i][j].setStartState();
+    private void determineParameters() {
+        if(getParameterValues().size() > 0) {
+            for(String s : getParameterValues().keySet()) {
+                if(s.equals("SharkReproductionCycle")) {
+                    sharkReproductionTime = getParameterValues().get(s);
+                } else if (s.equals("EnergyFromEatingFish")) {
+                    energyGainedFromFish = getParameterValues().get(s);
+                } else if (s.equals("FishReproductionCycle")) {
+                    fishReproductionTime = getParameterValues().get(s);
+                } else if (s.equals("SharkEnergy")) {
+                    maxSharkEnergy = getParameterValues().get(s);
+                }
             }
+        }
+        if(fishReproductionTime <= 0) {
+            fishReproductionTime = DEFAULT_FISH_REPRODUCTION_TIME;
+        } else if (sharkReproductionTime <= 0) {
+            sharkReproductionTime = DEFAULT_SHARK_REPRODUCTION_TIME;
+        } else if (energyGainedFromFish <= 0) {
+            energyGainedFromFish = DEFAULT_ENERGY_FROM_EATING_FISH;
+        } else if (maxSharkEnergy <= 0) {
+            maxSharkEnergy = DEFAULT_MAX_SHARK_ENERGY;
         }
     }
 }
