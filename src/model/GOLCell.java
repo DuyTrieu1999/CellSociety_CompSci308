@@ -20,11 +20,21 @@ import java.util.Random;
  */
 
 public class GOLCell extends Cell {
-    private StateENUM[] standardStates = {StateENUM.ALIVE, StateENUM.DEAD};
+
+    private StateENUM[] gameOfLifeCellStates = {StateENUM.ALIVE, StateENUM.DEAD};
     private StateENUM[] hexStates = {StateENUM.YELLOW, StateENUM.ALIVE, StateENUM.RED};
 
     public GOLCell(int row, int col, double width, String cellType) {
         super(row, col, width, cellType);
+        if(this.getCellType().equals("Rectangle") || this.getCellType().equals("Triangle")) {
+            for (int i = 0; i < gameOfLifeCellStates.length; i++) {
+                getCellStateEnums().add(gameOfLifeCellStates[i]);
+            }
+        } else {
+            for (int i = 0; i < hexStates.length; i++) {
+                getCellStateEnums().add(hexStates[i]);
+            }
+        }
     }
 
     @Override
@@ -82,13 +92,11 @@ public class GOLCell extends Cell {
     @Override
     public void setRandStartState() {
         if(this.getCellType().equals("Rectangle") || this.getCellType().equals("Triangle")) {
-            this.setCurrState(standardStates[new Random().nextInt(standardStates.length)]);
+            this.setCurrState(gameOfLifeCellStates[new Random().nextInt(gameOfLifeCellStates.length)]);
             this.setFill(getStateColor(this.getCurrState()));
         }else if(this.getCellType().equals("Hexagon")) {
             this.setCurrState(hexStates[new Random().nextInt(hexStates.length)]);
             this.setFill(getStateColor(this.getCurrState()));
         }
-
-
     }
 }

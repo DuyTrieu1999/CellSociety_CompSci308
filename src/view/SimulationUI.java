@@ -31,10 +31,12 @@ public class SimulationUI {
     private double MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private double SECOND_DELAY = 100.0/ FRAMES_PER_SECOND;
     private static final String GAME_OF_LIFE_XML = "Game_Of_Life.xml";
+    private static final String HEX_GAME_OF_LIFE_XML = "Game_Of_Life_Hex.xml";
     private static final String WA_TOR_WORLD_XML = "WaTor.xml";
     private static final String SCHELLING_SEGREGATION_XML = "Segregation.xml";
     private static final String SPREADING_FIRE_XML = "Spreading_fire.xml";
     private static final String ERROR_TESTING = "XMLErrorTesting.xml";
+    private static final String ROCK_PAPER_SCISSORS_XML = "RockPaperScissors.xml";
     private static final double MAX_GRID_PANE_SIZE = 360;
     private static final String RESOURCE_PATH = "data";
     private static final String DEFAULT_FILE_NAME = "";
@@ -179,6 +181,7 @@ public class SimulationUI {
         cb.getItems().add(myResources.getString("WaTor"));
         cb.getItems().add(myResources.getString("Fire"));
         cb.getItems().add(myResources.getString("Segg"));
+        cb.getItems().add(myResources.getString("RPS"));
         cb.setValue(myResources.getString("GOL"));
         cb.setOnAction(e -> getChoice(cb));
         return cb;
@@ -244,7 +247,11 @@ public class SimulationUI {
         getCellType();
         if (simuName.equals(myResources.getString("GOL"))) {
             if(filename.equals(DEFAULT_FILE_NAME)) {
-                myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
+                if(!cellType.equals("Hexagon")) {
+                    myGrid = new Grid(GAME_OF_LIFE_XML, gridSize, cellType);
+                } else {
+                    myGrid = new Grid(HEX_GAME_OF_LIFE_XML, gridSize, cellType);
+                }
             } else {
                 myGrid = new Grid(filename, gridSize, cellType);
             }
@@ -270,6 +277,13 @@ public class SimulationUI {
                 myGrid = new SegGrid(filename, gridSize, cellType);
             }
         }
+        if (simuName.equals(myResources.getString("RPS"))) {
+            if(filename.equals(DEFAULT_FILE_NAME)) {
+                myGrid = new RockPaperScissorsGrid(ROCK_PAPER_SCISSORS_XML, gridSize, cellType);
+            } else {
+                myGrid = new RockPaperScissorsGrid(filename, gridSize, cellType);
+            }
+        }
         for (int i=0; i<myGrid.getRowNum();i++) {
             for(int j=0;j<myGrid.getColNum();j++) {
                 Cell cell = myGrid.getCell(i,j);
@@ -280,22 +294,22 @@ public class SimulationUI {
     private void saveFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save File As");
-//        File defaultFile = new File(RESOURCE_PATH);
-//        fileChooser.setInitialDirectory(defaultFile);
+        File defaultFile = new File(RESOURCE_PATH);
+        fileChooser.setInitialDirectory(defaultFile);
         File file = fileChooser.showSaveDialog(new Stage());
         if (file != null) {
             try {
                 xmlSave.createSave(file.getPath(), myGrid.getSimType(), gridSize, myGrid.getParameterValues(), myGrid.createSaveState());
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Invalid save");
             }
         }
     }
     private void openFileChooser() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
-//        File defaultFile = new File(RESOURCE_PATH);
-//        fileChooser.setInitialDirectory(defaultFile);
+        File defaultFile = new File(RESOURCE_PATH);
+        fileChooser.setInitialDirectory(defaultFile);
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
             try {
@@ -304,7 +318,7 @@ public class SimulationUI {
                 simulationName = myGrid.getSimType();
                 setSimulation(simulationName, file.getName());
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Invalid save");
             }
         }
     }

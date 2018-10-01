@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation name="Rock Paper Scissors" author="team8">
+    <description>This is the Rock Paper Scissors simulation description</description>
+    <grid>
+        <size>20</size>
+    </grid>
+    <cell>
+        <cell_state>WHITESPACE</cell_state>
+        <cell_number>370</cell_number>
+    </cell>
+    <cell>
+        <cell_state>RED</cell_state>
+        <cell_number>10</cell_number>
+    </cell>
+    <cell>
+        <cell_state>BLUE</cell_state>
+        <cell_number>10</cell_number>
+    </cell>
+    <cell>
+        <cell_state>GREEN</cell_state>
+        <cell_number>10</cell_number>
+    </cell>
+</simulation>
