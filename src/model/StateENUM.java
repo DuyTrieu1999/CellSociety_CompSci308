@@ -15,5 +15,9 @@ public enum StateENUM {
     BURNING,
     FISH,
     SHARK,
-    WATER;
+    WATER,
+    HOME,
+    ANT,
+    FOOD,
+    TERRAIN
 }
